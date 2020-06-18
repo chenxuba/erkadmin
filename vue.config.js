@@ -40,7 +40,7 @@ module.exports = {
     proxy: {
       //配置跨域
       '/api': {
-        target: "https://muyue.it98k.cn",//测试服接口地址
+        target: "http://api.it98k.cn",//测试服接口地址
         ws: true,
         changOrigin: true,
         pathRewrite: {

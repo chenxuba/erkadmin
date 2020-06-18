@@ -9,11 +9,11 @@
               <h3 class="title">后台管理</h3>
             </div>
 
-            <el-form-item prop="phone">
+            <el-form-item prop="username">
               <span class="svg-container">
                 <svg-icon icon-class="user" />
               </span>
-              <el-input ref="phone" v-model="loginForm.phone" placeholder="Phone" name="phone" type="text" tabindex="1" auto-complete="on" />
+              <el-input ref="username" v-model="loginForm.username" placeholder="username" name="username" type="text" tabindex="1" auto-complete="on" />
             </el-form-item>
 
             <el-form-item prop="password">
@@ -25,7 +25,15 @@
                 <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
               </span>
             </el-form-item>
-
+            <!-- 验证码区域 -->
+            <!-- <el-form-item prop="captcha">
+              <span class="svg-container">
+                <svg-icon icon-class="user" />
+              </span>
+              <el-input ref="captcha" v-model="loginForm.captcha" placeholder="captcha" name="captcha" type="text" tabindex="1" auto-complete="on">
+              </el-input>
+              <img :src="captcha" alt="" class="captcha" @click="changeImgCode">
+            </el-form-item> -->
             <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
           </el-form>
@@ -34,7 +42,7 @@
       <video :style="fixStyle" autoplay loop muted class="fillWidth" v-on:canplay="canplay">
         <source src="../../assets/de53d3cabf8a44391ff4a3f174e20c60764157b0979b2adca08618bc95813b6592fcf750992521c1790e181d662f0846.mp4" type="video/mp4" />
         浏览器不支持 video 标签，建议升级浏览器。
-        <source src="../../assets/de53d3cabf8a44391ff4a3f174e20c60764157b0979b2adca08618bc95813b6592fcf750992521c1790e181d662f0846.mp4" type="video/webm"/>
+        <source src="../../assets/de53d3cabf8a44391ff4a3f174e20c60764157b0979b2adca08618bc95813b6592fcf750992521c1790e181d662f0846.mp4" type="video/webm" />
         浏览器不支持 video 标签，建议升级浏览器。
       </video>
       <div class="poster hidden" v-if="!vedioCanPlay">
@@ -45,6 +53,15 @@
 </template>
 
 <style scoped lang="scss">
+.captcha {
+  position: absolute;
+  right: 0;
+  height: 100%;
+  border-radius: 0 4px 4px 0;
+  &:hover {
+    cursor: pointer;
+  }
+}
 $bg: #2d3a4b;
 $dark_gray: #889aa4;
 $light_gray: #eee;
@@ -112,6 +129,7 @@ $light_gray: #eee;
 </style>
 
 <script>
+// import { captcha } from "@/api/user";
 export default {
   name: 'login',
   data() {
@@ -129,16 +147,26 @@ export default {
         callback()
       }
     }
+    // const validateCaptcha = (rule, value, callback) => {
+    //   if ((value === '')) {
+    //     callback(new Error('验证码不能为空'))
+    //   } else {
+    //     callback()
+    //   }
+    // }
     return {
       vedioCanPlay: false,
       fixStyle: '',
+      captcha: "",//验证码图片
       loginForm: {
-        phone: '17601241636',
-        password: '111111'
+        username: 'admin',
+        password: '123456',
+        // captcha: ""
       },
       loginRules: {
-        phone: [{ required: true, trigger: 'blur', validator: validateUsername }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        // captcha: [{ required: true, trigger: 'blur', validator: validateCaptcha }],
       },
       loading: false,
       passwordType: 'password',
@@ -174,7 +202,18 @@ export default {
           return false
         }
       })
-    }
+    },
+    // getCaptcha() {
+    //   captcha().then(res => {
+    //     if (res.code == 0) {
+    //       this.captcha = res.data.image
+    //     }
+    //   })
+    // },
+    // 点击图片修改图片src
+    // changeImgCode() {
+    //   this.getCaptcha()
+    // },
   },
   mounted: function () {
     window.onresize = () => {
@@ -204,6 +243,7 @@ export default {
       }
     }
     window.onresize()
+    // this.getCaptcha()
   },
   watch: {
     $route: {

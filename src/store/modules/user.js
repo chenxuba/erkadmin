@@ -47,24 +47,16 @@ const mutations = {
 
 const actions = {
   // user login
-  login({
-    commit
-  }, userInfo) {
-    const {
-      phone,
-      password
+  login({commit}, userInfo) {
+    const {username,password,// captcha
     } = userInfo // 解构出用户名和密码
     return new Promise((resolve, reject) => {
       // 执行登录请求
-      login({
-        phone: phone.trim(),
-        password: password
+      login({username: username.trim(),password: password,// captcha: captcha
       }).then(response => {
-        const {
-          data
-        } = response
-        commit("SET_TOKEN", data.info.token)
-        setToken(data.info.token)
+        const {data} = response
+        commit("SET_TOKEN", data.token)
+        setToken(data.token)
         resolve()
       }).catch(error => {
         reject(error)
@@ -73,16 +65,10 @@ const actions = {
   },
 
   // get user info 获取到用户信息
-  getInfo({
-    commit,
-    state
-  }) {
+  getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo(state.token).then(response => {
-        const {
-          data
-        } = response
-
+      getInfo({token:state.token}).then(response => {
+        const { data } = response
         if (!data) {
           reject('验证失败，请重新登录')
         }
@@ -158,7 +144,7 @@ const actions = {
             "children": [{
               "path": "/information",
               "name": "information",
-              "component": "dashboard/index",
+              "component": "training/course",
               "meta": {
                 "title": "机构信息",
                 "icon": "table"
@@ -306,17 +292,11 @@ const actions = {
           hidden: true
         })
         // 获取到用户信息
-        console.log(data)
-        console.log(menus)
-        const {
-          nickname,
-          headimg,
-          is_vip
-        } = data.member_info // 解构出名字和头像
+        const {nickname,avatar,username} = data // 解构出名字和头像
         commit("SET_NAME", nickname) // 触发vuex SET_NAME 保存名字到vuex
-        commit("SET_AVATAR", headimg) // 触发vuex SET_AVATAR 保存头像到vuex
+        commit("SET_AVATAR", avatar) // 触发vuex SET_AVATAR 保存头像到vuex
         commit("SET_MENUS", menus) // 触发vuex SET_MENUS 保存路由表到vuex
-        commit("SET_ROLES", is_vip)
+        commit("SET_ROLES", username)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -325,10 +305,7 @@ const actions = {
   },
 
   // user logout
-  logout({
-    commit,
-    state
-  }) {
+  logout({commit,state}) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
         removeToken() // must remove  token  first
@@ -342,9 +319,7 @@ const actions = {
   },
 
   // remove token
-  resetToken({
-    commit
-  }) {
+  resetToken({ commit }) {
     return new Promise(resolve => {
       removeToken() // must remove  token  first
       commit('RESET_STATE')

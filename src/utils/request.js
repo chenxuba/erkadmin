@@ -19,7 +19,7 @@ service.interceptors.request.use(
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
-      config.headers['Token'] = getToken()
+      config.headers['token'] = getToken()
     }
     return config
   },
@@ -46,9 +46,9 @@ service.interceptors.response.use(
     const res = response.data
     // if the custom code is not 20000, it is judged as an error.
     // 拦截异常
-    if (res.code !== '200') {
+    if (res.code !== 0) {
       Message({
-        message: res.msg || 'Error',
+        message: res.message || 'Error',
         type: 'error',
         duration: 5 * 1000
       })
