@@ -10,10 +10,15 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
+// 引入相关文件
+import '../public/UEditor/ueditor.config'
+import '../public/UEditor/ueditor.all.min.js'
+import '../public/UEditor/lang/zh-cn/zh-cn.js'
+import '../public/UEditor/dialogs/xiumi-ue-dialog-v5'
+import '../public/UEditor/dialogs/xiumi-ue-v5.css'
 
 import '@/icons' // icon
 import '@/permission' // permission control
-
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

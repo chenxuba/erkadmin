@@ -130,7 +130,7 @@ const actions = {
             {
               "path": "/administrator",
               "name": "administrator",
-              "component": "dashboard/index",
+              "component": "ueditor/index",
               "meta": {
                 "title": "用户管理",
                 "icon": "table"
