@@ -139,7 +139,7 @@ const actions = {
             {
               "path": "/settings",
               "name": "settings",
-              "component": "dashboard/index",
+              "component": "training/type",
               "meta": {
                 "title": "系统参数",
                 "icon": "table"
