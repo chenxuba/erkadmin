@@ -5,7 +5,7 @@ import {
 } from 'element-ui'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import {getToken} from '@/utils/auth' // get token from cookie
+import { getToken } from '@/utils/auth' // get token from cookie
 import getPageTitle from '@/utils/get-page-title'
 import Layout from '@/layout'
 const _import = require('./router/_import_' + process.env.NODE_ENV) // 获取组件的方法
@@ -47,7 +47,7 @@ router.beforeEach(async (to, from, next) => {
           }
           const menus = filterAsyncRouter(store.getters.menus) // 1.过滤路由
           console.log(menus);
-          
+
           router.addRoutes(menus) // 2.动态添加路由
           global.antRouter = menus // 3.将路由数据传递给全局变量，做侧边栏菜单渲染工作
           next({
@@ -93,11 +93,18 @@ function filterAsyncRouter(asyncRouterMap) {
         route.component = _import(route.component) // 导入组件
       }
     }
+    if (route.hidden) {
+      if (route.hidden === 'true') {
+        route.hidden = true
+      } else if (route.hidden === 'false') {
+        route.hidden = false
+      }
+    }
     if (route.children && route.children.length) {
       route.children = filterAsyncRouter(route.children)
     }
     return true
   })
-  
+
   return accessedRouters
 }

@@ -175,7 +175,7 @@ const actions = {
               "component": "dashboard/index",
               "meta": {
                 "title": "会员卡管理",
-                "icon": "table"
+                "icon": "table",
               }
             },
             {
@@ -273,11 +273,22 @@ const actions = {
                 "path": "/stationLetter",
                 "name": "stationLetter",
                 "component": "dashboard/index",
+                "hidden":'true',
                 "meta": {
                   "title": "站内信管理",
                   "icon": "table"
                 }
-              }
+              },
+              {
+                "path": "/hidden",
+                "name": "hidden",
+                "component": "dashboard/index",
+                "hidden":'true',
+                "meta": {
+                  "title": "不可见路由",
+                  "icon": "table",
+                }
+              },
             ]
           }
         ]

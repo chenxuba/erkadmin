@@ -41,7 +41,7 @@
             <template slot-scope="scope">
               <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
               <el-button size="mini" type="danger" icon="el-icon-delete">删除</el-button>
-              <el-button size="mini" type="warning" icon="el-icon-view">查看课件</el-button>
+              <el-button size="mini" type="warning" icon="el-icon-view" @click="seeCourseItem">查看课件</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -50,7 +50,7 @@
       </el-card>
     </el-col>
     <!-- 新增弹窗 -->
-    <!-- <DialogMenu :dialogMenu="dialogMenu" :formData="formData"></DialogMenu> -->
+    <DialogCourse :dialogMenu="dialogMenu" :formData="formData"></DialogCourse>
   </div>
 </template>
 
@@ -87,19 +87,68 @@ export default {
           "type_name": "中级认证",
           "thumb": "<img src='http://erkong.ybc365.com/940a4202003201655408246.png' width='68'>"
         }
-      ]
+      ],
+      dialogMenu: {
+        show: false,
+        title: "",
+        option: ""
+      },
+      formData: {
+        type: [],
+        course_price: "",
+        sort: "",
+        zhengshu_price: "",
+        false_number: "",
+        tuozhan_number: "",
+        imgUrl: "",
+      }
     }
   },
   methods: {
     handleAdd() {
-
+      this.dialogMenu = {
+        show: true,
+        title: "创建课程",
+        option: "add",
+      };
+      this.formData = {
+        type: [],
+        course_price: '',
+        sort: "",
+        zhengshu_price: "",
+        false_number: "",
+        tuozhan_number: "",
+        imgUrl: "",
+      }
     },
     refresh() {
 
     },
-    handleEdit() {
-
+    handleEdit(row) {
+      this.dialogMenu = {
+        show: true,
+        title: "编辑课程",
+        option: "edit",
+      };
+      this.formData = {
+        type: [],
+        course_price: row.course_price,
+        sort: row.sort,
+        zhengshu_price: row.certificate_price,
+        false_number: row.click_number,
+        tuozhan_number:row.expand_number,
+        imgUrl: row.course_thumb,
+      }
+    },
+    // 查看课件
+    seeCourseItem(){
+      this.$router.push('/dashboard')
     }
+  },
+  components: {
+    DialogCourse: resolve => {
+      require(['@/components/training/course/DialogCourse.vue'], resolve)
+    },
   },
 }
 </script>

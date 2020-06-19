@@ -194,8 +194,6 @@ export default {
   methods: {
     // 编辑
     handleEdit(index,row) {
-      console.log(row);
-      
       this.dialogMenu = {
         show: true,
         title: "编辑分类",

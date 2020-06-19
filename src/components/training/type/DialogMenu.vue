@@ -41,7 +41,6 @@ export default {
   },
   data() {
     return {
-      hideUpload: false,
       key: 'file',
       rules: {
         type_name: [
