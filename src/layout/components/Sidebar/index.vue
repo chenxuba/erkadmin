@@ -32,7 +32,7 @@ export default {
       'roles'
     ]),
     routes() {
-      console.log(this.$router.options.routes.concat(global.antRouter));
+      console.log(this.roles);
       
       return this.$router.options.routes.concat(global.antRouter)
     },

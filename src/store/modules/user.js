@@ -67,7 +67,7 @@ const actions = {
   // get user info 获取到用户信息
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getInfo({token:state.token}).then(response => {
+      getInfo().then(response => {
         const { data } = response
         if (!data) {
           reject('验证失败，请重新登录')
@@ -147,6 +147,16 @@ const actions = {
               "component": "training/course",
               "meta": {
                 "title": "机构信息",
+                "icon": "table"
+              }
+            },
+            {
+              "path": "/courseitem",
+              "name": "courseitem",
+              "component": "training/courseitem",
+              "hidden":'true',
+              "meta": {
+                "title": "课件列表",
                 "icon": "table"
               }
             },
@@ -273,24 +283,16 @@ const actions = {
                 "path": "/stationLetter",
                 "name": "stationLetter",
                 "component": "dashboard/index",
-                "hidden":'true',
+                "hidden":'false',
                 "meta": {
                   "title": "站内信管理",
                   "icon": "table"
                 }
               },
-              {
-                "path": "/hidden",
-                "name": "hidden",
-                "component": "dashboard/index",
-                "hidden":'true',
-                "meta": {
-                  "title": "不可见路由",
-                  "icon": "table",
-                }
-              },
+              
             ]
-          }
+          },
+          
         ]
         //如果需要404 页面，请在此处添加
         menus.push({
