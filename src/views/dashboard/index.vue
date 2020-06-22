@@ -1,19 +1,74 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">
-      <el-card>
-        <el-table :data="data" style="width: 100%" :row-class-name="tableRowClassName">
-          <el-table-column type="index">
-          </el-table-column>
-          <el-table-column prop="date" label="日期">
-          </el-table-column>
-          <el-table-column prop="name" label="姓名">
-          </el-table-column>
-          <el-table-column prop="address" label="地址">
-          </el-table-column>
-        </el-table>
-      </el-card>
-    </div>
+    <!-- 经营概况 -->
+    <el-card>
+      <h1>经营概况</h1>
+      <ul>
+        <li v-for="item in 8" :key="item">
+          <p>
+            <span>今日收入(元)</span>
+            <span>
+              <el-tooltip content="Top center" placement="top">
+                <i class="el-icon-warning"></i>
+              </el-tooltip>
+            </span>
+          </p>
+          <div class="num">9</div>
+        </li>
+      </ul>
+    </el-card>
+    <!-- 常用模块 -->
+    <el-card style="margin-top:20px;">
+      <h1>常用模块</h1>
+      <div class="ul">
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+      </div>
+      <div class="ul two">
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+      </div>
+    </el-card>
+    <!-- 知识产品 -->
+    <el-card style="margin-top:20px;">
+      <h1>知识产品</h1>
+      <div class="ul">
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+      </div>
+    </el-card>
+    <!-- 营销管理 -->
+    <el-card style="margin-top:20px;">
+      <h1>营销管理</h1>
+      <div class="ul">
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+      </div>
+      <div class="ul two">
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu">类别管理</el-button>
+      </div>
+    </el-card>
   </div>
 </template>
 
@@ -24,42 +79,17 @@ export default {
   name: 'Dashboard',
   data() {
     return {
-      data: [{
-        date: '2016-05-02',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-04',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-01',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }, {
-        date: '2016-05-03',
-        name: '王小虎',
-        address: '上海市普陀区金沙江路 1518 弄'
-      }]
+
     }
   },
   computed: {
-    ...mapGetters([
-      'name'
-    ])
+
   },
   mounted() {
 
   },
   methods: {
-    tableRowClassName({ row, rowIndex }) {
-      if (rowIndex === 0) {
-        return 'warning-row'
-      } else if (rowIndex === 2) {
-        return 'success-row'
-      }
-      return ''
-    }
+
   }
 }
 </script>
@@ -67,11 +97,59 @@ export default {
 <style lang="scss" scoped>
 .dashboard {
   &-container {
-    margin: 30px;
-  }
-  &-text {
-    font-size: 30px;
-    line-height: 46px;
+    margin: 10px;
+    h1 {
+      font-size: 16px;
+      margin: 0;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+      font-weight: 600;
+    }
+    ul {
+      padding: 15px;
+      box-sizing: border-box;
+      display: flex;
+      flex-wrap: wrap;
+      li {
+        width: 200px;
+        height: 70px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        flex: 0 0 17.5%;
+        margin-right: 2.5%;
+        margin-bottom: 20px;
+        padding: 10px 15px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        p {
+          display: flex;
+          justify-content: space-between;
+          font-size: 14px;
+          color: #7e848b;
+          font-weight: 600;
+          i {
+            cursor: pointer;
+          }
+        }
+        .num {
+          color: #2593fc;
+          font-size: 20px;
+          font-weight: 600;
+        }
+      }
+    }
+    .ul {
+      padding: 15px;
+      .el-button {
+        margin-bottom: 20px;
+      }
+    }
+    .two {
+      padding-top: 0;
+      margin-top: -10px;
+    }
   }
 }
 </style>

@@ -149,7 +149,7 @@ export default {
     // 查看课件
     seeCourseItem(row) {
       this.$router.push({
-        path: "/courseitem",
+        path: "/training/courseitem",
         query: {
           id: row.id,
           type:row.type_name

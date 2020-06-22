@@ -1,6 +1,6 @@
 <template>
   <div class="dialogmenu">
-    <el-dialog :title="dialogMenu.title" :visible.sync="dialogMenu.show" :close-on-click-modal="false" :close-on-press-escape="false" :modal-append-to-body="false">
+    <el-dialog :title="dialogMenu.title" :visible.sync="dialogMenu.show" @open='openDialog' :close-on-click-modal="false" :close-on-press-escape="false" :modal-append-to-body="false">
       <el-form ref="form" :inline="true" :model="formData" :rules="rules" size="small" label-width="80px">
         <!-- 菜单类型 type -->
         <el-form-item label="菜单类型" prop="type">
@@ -11,7 +11,7 @@
           </el-radio-group>
         </el-form-item>
         <!-- 点击选择图标 icon -->
-        <el-form-item v-show="formData.type !== '3'" label="菜单图标" prop="icon">
+        <el-form-item v-if="formData.type != '3'" label="菜单图标" prop="icon">
           <el-popover placement="bottom-start" width="450" trigger="click" @show="$refs['iconSelect'].reset()">
             <IconSelect ref="iconSelect" @selected="selected" />
             <el-input slot="reference" v-model="formData.icon" style="width: 450px;" placeholder="点击选择图标" readonly>
@@ -21,14 +21,14 @@
           </el-popover>
         </el-form-item>
         <!-- 菜单是否可见 hidden -->
-        <el-form-item v-show="formData.type !== '3'" label="菜单可见" prop="hidden">
+        <el-form-item v-if="formData.type != '3'" label="菜单可见" prop="hidden">
           <el-radio-group v-model="formData.hidden" size="mini">
             <el-radio-button label="1">是</el-radio-button>
             <el-radio-button label="0">否</el-radio-button>
           </el-radio-group>
         </el-form-item>
         <!-- 菜单标题  title -->
-        <el-form-item v-if="formData.type !== '3'" label="菜单标题" prop="title">
+        <el-form-item v-if="formData.type != '3'" label="菜单标题" prop="title">
           <el-input v-model="formData.title" :style="formData.type == '0' ? 'width: 450px' : 'width: 178px'" placeholder="菜单标题" />
         </el-form-item>
         <!-- 按钮名称 title -->
@@ -36,33 +36,33 @@
           <el-input v-model="formData.title" placeholder="按钮名称" style="width: 178px;" />
         </el-form-item>
         <!-- 权限标识 permission -->
-        <el-form-item v-show="formData.type == '3'" label="权限标识" prop="permission">
+        <el-form-item v-if="formData.type == '3'" label="权限标识" prop="permission">
           <el-input v-model="formData.permission" placeholder="权限标识" style="width: 178px;" />
         </el-form-item>
         <!-- 路由地址 path -->
-        <el-form-item v-if="formData.type !== '3'" label="路由地址" prop="path">
-          <el-input v-model="formData.path" placeholder="路由地址" style="width: 178px;" />
+        <el-form-item v-if="formData.type != '3'" label="路由地址" prop="path">
+          <el-input v-model="formData.path" placeholder="路由地址（/:path）" style="width: 178px;" />
         </el-form-item>
         <!-- 菜单排序  menuSort-->
         <el-form-item label="菜单排序" prop="menuSort">
           <el-input-number v-model.number="formData.menuSort" placeholder='数字越大越靠前' :min="0" :max="999" controls-position="right" style="width: 178px;" />
         </el-form-item>
         <!-- 组件名称 componentName-->
-        <el-form-item v-show="formData.type == '2'" label="组件名称" prop="componentName">
+        <el-form-item v-if="formData.type == '2'" label="组件名称" prop="componentName">
           <el-input v-model="formData.componentName" style="width: 178px;" placeholder="匹配组件内Name字段" />
         </el-form-item>
         <!-- 组件路径 component-->
-        <el-form-item v-show="formData.type == '2'" label="组件路径" prop="component">
-          <el-input v-model="formData.component" style="width: 178px;" placeholder="组件路径" />
+        <el-form-item v-if="formData.type == '2'" label="组件路径" prop="component">
+          <el-input v-model="formData.component" style="width: 178px;" placeholder="组件路径（path/path）" />
         </el-form-item>
         <!-- 选择上级类目 pid 这里注意 formData.ptitle -->
         <el-form-item label="上级类目" prop="pid">
-          <SelectTree :options='options' @getValue='getValue' @getValueTitle='getValueTitle' :label='formData.ptitle'></SelectTree>
+          <SelectTree :options='options' @getValue='getValue'  :label='ptitle'></SelectTree>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="quxiao" size="small">取 消</el-button>
-        <el-button type="primary" @click="submit" size="small">确 定</el-button>
+        <el-button @click="cancel('form')" size="small">取 消</el-button>
+        <el-button type="primary" @click="submitForm('form')" size="small">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -80,14 +80,16 @@ export default {
   data() {
     return {
       rules: {
-        title: [
-          { required: true, message: '请输入标题', trigger: 'blur' }
-        ],
-        path: [
-          { required: true, message: '请输入地址', trigger: 'blur' }
-        ]
+        title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
+        path: [{ required: true, message: '请输入地址', trigger: 'blur' }],
+        icon: [{ required: true, message: '请选择图标', trigger: 'blur' }],
+        componentName: [{ required: true, message: '请输入组件名称', trigger: 'blur' }],
+        component: [{ required: true, message: '请输入组件路径', trigger: 'blur' }],
+        pid: [{ required: true, message: '请选择上级类目', trigger: 'blur' }],
+        permission: [{ required: true, message: '请输入权限标识', trigger: 'blur' }],
       },
-      options: []
+      options: [],
+      ptitle: "",//上级类目的名字
     }
   },
   methods: {
@@ -98,36 +100,56 @@ export default {
     // 改变上级菜单的id
     getValue(id) {
       this.formData.pid = id
-      console.log(id);
-
-    },
-    // 改变上级菜单的title
-    getValueTitle(title) {
-      this.formData.ptitle = title
     },
     // 提交请求
-    submit() {
+    submitForm(formName) {
+      this.$refs[formName].validate((valid) => {
+        if (valid) {
+          let data = {
+            type: this.formData.type,
+            permission: this.formData.permission,
+            icon: this.formData.icon,
+            hidden: this.formData.hidden,
+            title: this.formData.title,
+            path: this.formData.path,
+            component: this.formData.component == '' && this.formData.type == 1 ? 'Layout' : this.formData.component,
+            sort: this.formData.sort,
+            name: this.formData.componentName,
+            pid: this.formData.pid,
+          }
+          addmenu(data).then(res => {
+            this.$message.success('添加成功')
+            this.dialogMenu.show = false
+            this.$emit('addOk')
+          })
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
       console.log(this.formData);
-      let data = {
-        type: this.formData.type,
-        permission: this.formData.permission,
-        icon: this.formData.icon,
-        hidden: this.formData.hidden,
-        title: this.formData.title,
-        path: this.formData.path,
-        component: this.formData.component  == '' && this.formData.type == 1 ? 'Layout' : this.formData.component,
-        sort: this.formData.sort,
-        name: this.formData.componentName,
-        pid: this.formData.pid,
-      }
-      addmenu(data).then(res => {
-        console.log(res);
-        this.$message.success('添加成功')
-        this.dialogMenu.show = false
-      })
+
     },
-    quxiao() {
+    // 取消
+    cancel(formName) {
+      this.$refs[formName].resetFields();
       this.dialogMenu.show = false
+    },
+    // 打开弹窗触发的方法，渲染上级类目的名字
+    openDialog() {
+      this.options.map(item => {
+        if (this.formData.pid == item.id) {
+          this.ptitle = item.authName
+        }
+        if (item.children) {
+          item.children.map(items => {
+            if (this.formData.pid == items.id) {
+              this.ptitle = items.authName
+            }
+          })
+        }
+       
+      })
     }
   },
   components: {
@@ -156,9 +178,12 @@ export default {
           })
         }
         this.options.push(obj)
+        console.log(this.options);
+
       })
       let arr = { id: 0, authName: '顶级目录' }
       this.options.unshift(arr)
+      this.formData.ptitle = '顶级目录'
     })
   },
   computed: {

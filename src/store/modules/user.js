@@ -1,7 +1,8 @@
 import {
   login,
   logout,
-  getInfo
+  getInfo,
+  getAntRouter
 } from '@/api/user'
 import {
   getToken,
@@ -47,14 +48,15 @@ const mutations = {
 
 const actions = {
   // user login
-  login({commit}, userInfo) {
-    const {username,password,// captcha
+  login({ commit }, userInfo) {
+    const { username, password,// captcha
     } = userInfo // 解构出用户名和密码
     return new Promise((resolve, reject) => {
       // 执行登录请求
-      login({username: username.trim(),password: password,// captcha: captcha
+      login({
+        username: username.trim(), password: password,// captcha: captcha
       }).then(response => {
-        const {data} = response
+        const { data } = response
         commit("SET_TOKEN", data.token)
         setToken(data.token)
         resolve()
@@ -72,24 +74,10 @@ const actions = {
         if (!data) {
           reject('验证失败，请重新登录')
         }
-        // 模拟请求数据
-        const { list } = data.menus.data
-        const menus = list
-        //如果需要404 页面，请在此处添加
-        menus.push({
-          path: "/404",
-          component: "404",
-          hidden: true
-        }, {
-          path: "*",
-          redirect: "/404",
-          hidden: true
-        })
         // 获取到用户信息
-        const {nickname,avatar,username} = data // 解构出名字和头像
+        const { nickname, avatar, username } = data // 解构出名字和头像
         commit("SET_NAME", nickname) // 触发vuex SET_NAME 保存名字到vuex
         commit("SET_AVATAR", avatar) // 触发vuex SET_AVATAR 保存头像到vuex
-        commit("SET_MENUS", menus) // 触发vuex SET_MENUS 保存路由表到vuex
         commit("SET_ROLES", username)
         resolve(data)
       }).catch(error => {
@@ -97,9 +85,36 @@ const actions = {
       })
     })
   },
-
+  // 获取路由表
+  getAntRouter({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      getAntRouter().then(response => {
+        const { list } = response.data
+        if (!list) {
+          reject('验证失败，请重新登录')
+        }
+        const menus = list
+        //如果需要404 页面，请在此处添加
+        menus.push(
+          {
+            path: "/404",
+            component: "404",
+            hidden: true
+          },
+          {
+            path: "*",
+            redirect: "/404",
+            hidden: true
+          })
+        commit("SET_MENUS", menus) // 触发vuex SET_MENUS 保存路由表到vuex
+        resolve(list)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
   // user logout
-  logout({commit,state}) {
+  logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
         removeToken() // must remove  token  first

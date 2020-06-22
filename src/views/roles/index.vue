@@ -26,7 +26,7 @@
         <div slot="header" class="clearfix">
           <span class="role-span">角色列表</span>
         </div>
-        <el-table ref="table" v-loading="loading" highlight-current-row style="width: 100%;" :data="data" @selection-change="selectionChangeHandler" @current-change="handleCurrentChange">
+        <el-table ref="table" v-loading="loading" size='small' highlight-current-row style="width: 100%;" :data="data" @selection-change="selectionChangeHandler" @current-change="handleCurrentChange">
           <el-table-column type="expand" width="55">
             <template slot-scope="scope">
               <el-row :class="['bdbottom','vcenter',index === 0 ? 'bdtop' : '']" v-for="(item1,index) in scope.row.children" :key="index">
