@@ -109,7 +109,7 @@ export default {
   },
   components: {
     DialogUser: resolve => {
-      require(['@/components/user/DialogUser.vue'], resolve)
+      require(['@/components/System/user/DialogUser.vue'], resolve)
     },
   },
 }

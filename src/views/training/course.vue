@@ -159,7 +159,7 @@ export default {
   },
   components: {
     DialogCourse: resolve => {
-      require(['@/components/training/course/DialogCourse.vue'], resolve)
+      require(['@/components/Training/course/DialogCourse.vue'], resolve)
     },
   },
 }

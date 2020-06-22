@@ -292,7 +292,7 @@ export default {
   },
   components: {
     DialogMenu: resolve => {
-      require(['@/components/training/type/DialogMenu.vue'], resolve)
+      require(['@/components/Training/type/DialogMenu.vue'], resolve)
     },
   },
 }

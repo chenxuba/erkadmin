@@ -168,7 +168,7 @@ export default {
   },
   components: {
     DialogMenu: resolve => {
-      require(['@/components/menu/DialogMenu.vue'], resolve)
+      require(['@/components/System/menu/DialogMenu.vue'], resolve)
     },
   },
   computed: {

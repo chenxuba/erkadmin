@@ -183,7 +183,7 @@ export default {
   },
   components: {
     DialogCourseitem: resolve => {
-      require(['@/components/training/courseitem/DialogCourseitem.vue'], resolve)
+      require(['@/components/Training/courseitem/DialogCourseitem.vue'], resolve)
     },
   },
 }

@@ -214,13 +214,11 @@ export default {
   display: block;
 }
 .video-avatar {
-  width: 400px;
-  height: 200px;
+  width: 200px;
+  height: 100px;
 }
 .video-btn{
   margin-bottom: 10px;
 }
-video{
-  width: 100px;
-}
+
 </style>

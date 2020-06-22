@@ -157,7 +157,7 @@ export default {
       require(['@/components/IconSelect/index.vue'], resolve)
     },
     SelectTree: resolve => {
-      require(['@/components/menu/SelectTree.vue'], resolve)
+      require(['@/components/System/menu/SelectTree.vue'], resolve)
     },
   },
   mounted() {
