@@ -46,7 +46,7 @@
         浏览器不支持 video 标签，建议升级浏览器。
       </video>
       <div class="poster hidden" v-if="!vedioCanPlay">
-        <img :style="fixStyle" src="../../assets/404_images/404.png" alt="">
+        <!-- <img :style="fixStyle" src="../../assets/404_images/404.png" alt=""> -->
       </div>
     </div>
   </div>

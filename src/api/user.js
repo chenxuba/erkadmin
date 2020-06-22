@@ -30,3 +30,19 @@ export function captcha(data) {
     data
   })
 }
+// 动态路由
+export function getAntRouter() {
+  return request({
+    url: '/menu',
+    method: 'get',
+  })
+}
+
+//新增菜单
+export function addmenu(data) {
+  return request({
+    url: '/menu',
+    method: 'post',
+    data
+  })
+}

@@ -46,6 +46,14 @@ module.exports = {
         pathRewrite: {
           '^/api': ''
         }
+      },
+      '/app': {
+        target: "http://muyue.it98k.cn",//测试服接口地址
+        ws: true,
+        changOrigin: true,
+        pathRewrite: {
+          '^/app': ''
+        }
       }
     }
   },

@@ -2,21 +2,16 @@
   <div class="dialogmenu">
     <el-dialog :title="dialogMenu.title" :visible.sync="dialogMenu.show" :close-on-click-modal="false" :close-on-press-escape="false" :modal-append-to-body="false">
       <el-form ref="form" :inline="true" :model="formData" :rules="rules" size="small" label-width="80px">
-        <!-- 菜单类型 -->
+        <!-- 菜单类型 type -->
         <el-form-item label="菜单类型" prop="type">
-          <el-radio-group v-model="formData.type" size="mini" style="width: 178px" v-if="dialogMenu.option == 'edit'">
-            <el-radio-button label="0" v-if="formData.type == 0">目录</el-radio-button>
-            <el-radio-button label="1" v-if="formData.type == 1">菜单</el-radio-button>
-            <el-radio-button label="2" v-if="formData.type == 2">按钮</el-radio-button>
-          </el-radio-group>
-          <el-radio-group v-model="formData.type" size="mini" style="width: 178px" v-if="dialogMenu.option == 'add'">
-            <el-radio-button label="0">目录</el-radio-button>
-            <el-radio-button label="1">菜单</el-radio-button>
-            <el-radio-button label="2">按钮</el-radio-button>
+          <el-radio-group v-model="formData.type" size="mini" style="width: 178px">
+            <el-radio-button label="1">目录</el-radio-button>
+            <el-radio-button label="2">菜单</el-radio-button>
+            <el-radio-button label="3">按钮</el-radio-button>
           </el-radio-group>
         </el-form-item>
-        <!-- 点击选择图标 -->
-        <el-form-item v-show="formData.type.toString() !== '2'" label="菜单图标" prop="icon">
+        <!-- 点击选择图标 icon -->
+        <el-form-item v-show="formData.type !== '3'" label="菜单图标" prop="icon">
           <el-popover placement="bottom-start" width="450" trigger="click" @show="$refs['iconSelect'].reset()">
             <IconSelect ref="iconSelect" @selected="selected" />
             <el-input slot="reference" v-model="formData.icon" style="width: 450px;" placeholder="点击选择图标" readonly>
@@ -25,37 +20,44 @@
             </el-input>
           </el-popover>
         </el-form-item>
-        <!-- 菜单标题 -->
-        <el-form-item v-if="formData.type.toString() !== '2'" label="菜单标题" prop="title">
-          <el-input v-model="formData.title" :style="formData.type.toString() === '0' ? 'width: 450px' : 'width: 178px'" placeholder="菜单标题" />
+        <!-- 菜单是否可见 hidden -->
+        <el-form-item v-show="formData.type !== '3'" label="菜单可见" prop="hidden">
+          <el-radio-group v-model="formData.hidden" size="mini">
+            <el-radio-button label="1">是</el-radio-button>
+            <el-radio-button label="0">否</el-radio-button>
+          </el-radio-group>
         </el-form-item>
-        <!-- 按钮名称 -->
-        <el-form-item v-if="formData.type.toString() === '2'" label="按钮名称" prop="title">
+        <!-- 菜单标题  title -->
+        <el-form-item v-if="formData.type !== '3'" label="菜单标题" prop="title">
+          <el-input v-model="formData.title" :style="formData.type == '0' ? 'width: 450px' : 'width: 178px'" placeholder="菜单标题" />
+        </el-form-item>
+        <!-- 按钮名称 title -->
+        <el-form-item v-if="formData.type == '3'" label="按钮名称" prop="title">
           <el-input v-model="formData.title" placeholder="按钮名称" style="width: 178px;" />
         </el-form-item>
-        <!-- 权限标识 -->
-        <el-form-item v-show="formData.type.toString() !== '0'" label="权限标识" prop="permission">
-          <el-input v-model="formData.permission" :disabled="formData.iframe" placeholder="权限标识" style="width: 178px;" />
+        <!-- 权限标识 permission -->
+        <el-form-item v-show="formData.type == '3'" label="权限标识" prop="permission">
+          <el-input v-model="formData.permission" placeholder="权限标识" style="width: 178px;" />
         </el-form-item>
-        <!-- 路由地址 -->
-        <el-form-item v-if="formData.type.toString() !== '2'" label="路由地址" prop="path">
+        <!-- 路由地址 path -->
+        <el-form-item v-if="formData.type !== '3'" label="路由地址" prop="path">
           <el-input v-model="formData.path" placeholder="路由地址" style="width: 178px;" />
         </el-form-item>
-        <!-- 菜单排序 -->
+        <!-- 菜单排序  menuSort-->
         <el-form-item label="菜单排序" prop="menuSort">
           <el-input-number v-model.number="formData.menuSort" placeholder='数字越大越靠前' :min="0" :max="999" controls-position="right" style="width: 178px;" />
         </el-form-item>
-        <!-- 组件名称 -->
-        <el-form-item v-show="!formData.iframe && formData.type.toString() === '1'" label="组件名称" prop="componentName">
+        <!-- 组件名称 componentName-->
+        <el-form-item v-show="formData.type == '2'" label="组件名称" prop="componentName">
           <el-input v-model="formData.componentName" style="width: 178px;" placeholder="匹配组件内Name字段" />
         </el-form-item>
-        <!-- 组件路径 -->
-        <el-form-item v-show="!formData.iframe && formData.type.toString() === '1'" label="组件路径" prop="component">
+        <!-- 组件路径 component-->
+        <el-form-item v-show="formData.type == '2'" label="组件路径" prop="component">
           <el-input v-model="formData.component" style="width: 178px;" placeholder="组件路径" />
         </el-form-item>
-        <!-- 选择上级类目 -->
+        <!-- 选择上级类目 pid 这里注意 formData.ptitle -->
         <el-form-item label="上级类目" prop="pid">
-          <SelectTree :options='options' @getValue='getValue' @getValueTitle='getValueTitle'  :label='formData.ptitle'></SelectTree>
+          <SelectTree :options='options' @getValue='getValue' @getValueTitle='getValueTitle' :label='formData.ptitle'></SelectTree>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -67,7 +69,8 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { addmenu, getAntRouter } from "@/api/user";
+import { mapGetters } from 'vuex'
 export default {
   name: 'dialogmenu',
   props: {
@@ -95,16 +98,35 @@ export default {
     // 改变上级菜单的id
     getValue(id) {
       this.formData.pid = id
+      console.log(id);
+
     },
     // 改变上级菜单的title
-    getValueTitle(title){
-       this.formData.ptitle = title
+    getValueTitle(title) {
+      this.formData.ptitle = title
     },
     // 提交请求
-    submit(){
+    submit() {
       console.log(this.formData);
+      let data = {
+        type: this.formData.type,
+        permission: this.formData.permission,
+        icon: this.formData.icon,
+        hidden: this.formData.hidden,
+        title: this.formData.title,
+        path: this.formData.path,
+        component: this.formData.component  == '' && this.formData.type == 1 ? 'Layout' : this.formData.component,
+        sort: this.formData.sort,
+        name: this.formData.componentName,
+        pid: this.formData.pid,
+      }
+      addmenu(data).then(res => {
+        console.log(res);
+        this.$message.success('添加成功')
+        this.dialogMenu.show = false
+      })
     },
-    quxiao(){
+    quxiao() {
       this.dialogMenu.show = false
     }
   },
@@ -117,16 +139,38 @@ export default {
     },
   },
   mounted() {
-    axios.get("/api/roles.json").then(res => {
+    getAntRouter().then(res => {
+      res.data.list.map(item => {
+        let obj = {}
+        obj.id = item.id,
+          obj.authName = item.meta.title,
+          obj.pid = item.pid
+        obj.children = []
+        if (item.children) {
+          item.children.map(value => {
+            let obj2 = {}
+            obj2.id = value.id
+            obj2.pid = value.pid
+            obj2.authName = value.meta.title
+            obj.children.push(obj2)
+          })
+        }
+        this.options.push(obj)
+      })
       let arr = { id: 0, authName: '顶级目录' }
-      res.data.data.unshift(arr)
-      this.options = res.data.data;
-      console.log(this.options);
-    });
+      this.options.unshift(arr)
+    })
   },
+  computed: {
 
+  },
 }
 </script>
 
 <style lang="scss" scoped>
+.dialogmenu {
+  /deep/ .el-dialog {
+    overflow: hidden;
+  }
+}
 </style>

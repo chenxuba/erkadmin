@@ -73,8 +73,54 @@ const actions = {
           reject('验证失败，请重新登录')
         }
         // 模拟请求数据
-        const { list } = data.menus.data
-        const menus = list
+        const menus = [
+          // {
+          //   "path": '/',
+          //   "component": "Layout",
+          //   "redirect": '/dashboard',
+          //   "children": [{
+          //     "path": 'dashboard',
+          //     "name": 'Dashboard',
+          //     "component": "dashboard/index",
+          //     "meta": { "title": '首页', "icon": 'dashboard', "affix": "true" } // affix: true 固定 不能被关闭的tabs
+          //   }]
+          // },
+          {
+            "path": "/system",
+            "redirect": "/menu",
+            "component": "Layout",
+            "hidden":"0",
+            "meta": {
+              "title": "系统管理",
+              "icon": "form"
+            },
+            "children": [{
+              "path": "/menu",
+              "name": "menu",
+              "component": "menu/index",
+              "hidden":"0",
+              "meta": {
+                "title": "菜单管理",
+                "icon": "table",
+                "roles": ["edit", "delete", "add", "role"]
+              }
+            },
+            {
+              "path": "/roles",
+              "name": "roles",
+              "component": "roles/index",
+              "hidden":"0",
+              "meta": {
+                "title": "角色管理",
+                "icon": "table",
+                "roles": ["edit", "delete", "add", "role"]
+              }
+            }
+            ]
+          },
+          
+          
+        ]
         //如果需要404 页面，请在此处添加
         menus.push({
           path: "/404",

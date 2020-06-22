@@ -9,7 +9,7 @@
           <span class='filter-item'>
             <el-button size="mini" type="success" icon="el-icon-search">搜索</el-button>
             <el-button size="mini" type="warning" icon="el-icon-refresh-left">重置</el-button>
-            <el-button size="mini" type="primary" icon="el-icon-plus" v-permission="['add']" @click="handleAdd()">新增</el-button>
+            <el-button size="mini" type="primary" icon="el-icon-plus" @click="handleAdd()">新增</el-button>
           </span>
         </span>
         <span>
@@ -26,15 +26,15 @@
         <el-table ref="table" v-loading="loading" lazy :load="getMenus" :data="data" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" row-key="id" @select="selectChange" @select-all="selectAllChange" @selection-change="selectionChangeHandler">
           <!-- <el-table-column type="selection" width="55" /> -->
           <el-table-column type="index" width="55" label="#" />
-          <el-table-column :show-overflow-tooltip="true" label="菜单标题" width="125px" prop="title" />
+          <el-table-column :show-overflow-tooltip="true" label="菜单标题" width="125px" prop="meta.title" />
           <el-table-column prop="icon" label="图标" align="center" width="60px">
             <template slot-scope="scope">
-              <svg-icon :icon-class="scope.row.icon ? scope.row.icon : ''" />
+              <svg-icon :icon-class="scope.row.meta.icon ? scope.row.meta.icon : ''" />
             </template>
           </el-table-column>
           <el-table-column prop="menuSort" align="center" label="排序">
             <template slot-scope="scope">
-              {{ scope.row.menuSort }}
+              {{ scope.row.sort }}
             </template>
           </el-table-column>
           <el-table-column :show-overflow-tooltip="true" prop="permission" label="权限标识">
@@ -47,15 +47,15 @@
               {{ scope.row.component == null ? '-' : scope.row.component }}
             </template>
           </el-table-column>
-          <el-table-column prop="createTime" label="创建日期">
+          <el-table-column prop="create_time" label="创建日期">
             <template slot-scope="scope">
-              <span>{{ (scope.row.createTime) }}</span>
+              <span>{{ (scope.row.create_time) }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" fixed="right">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)" v-permission="['edit']">编辑</el-button>
-              <el-button size="mini" type="danger" icon="el-icon-delete" v-permission="['delete']">删除</el-button>
+              <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
+              <el-button size="mini" type="danger" icon="el-icon-delete">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -70,31 +70,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import axios from "axios";
+import { getAntRouter } from "@/api/user";
 export default {
   name: 'roles',
   data() {
     return {
-      data: [
-        {
-          "createTime": '2020-02-02 12:00',
-          "id": 1,
-          "type": 0,
-          "title": "系统管理",
-          "menuSort": 1,
-          "path": "system",
-          "subCount": 7,
-          "icon": "zhifubao",
-          "label": "系统管理",
-          "iframe": false,
-          "hasChildren": true,
-          "permission": null,
-          "component": null,
-          "componentName": null,
-          "pid": 0,
-          "ptitle": "顶级目录"
-        }
-      ],//顶级菜单数据
+      data: [],//顶级菜单数据
       rolesName: "",
       loading: false,
       dialogMenu: {
@@ -102,24 +83,15 @@ export default {
         title: "",
         option: "edit"
       },
-      formData: {
-        title: "",
-        type: "",
-        icon: "",
-        iframe: "",
-        path: "",
-        componentName: "",
-        component: "",
-        permission: "",
-        pid: "",
-        menuSort: "",
-        ptitle: ""
-      },
+      formData: {},
     }
   },
 
   mounted() {
+    getAntRouter().then(res => {
 
+      this.data = res.data.list
+    })
   },
   methods: {
     //搜索角色
@@ -137,6 +109,21 @@ export default {
     getMenus(tree, treeNode, resolve) {
       const params = { pid: tree.id }
       console.log(params);
+      // setTimeout(() => {
+      //   resolve([
+      //     {
+      //       id: 31,
+      //       date: '2016-05-01',
+      //       name: '王小虎',
+      //       address: '上海市普陀区金沙江路 1519 弄'
+      //     }, {
+      //       id: 32,
+      //       date: '2016-05-01',
+      //       name: '王小虎',
+      //       address: '上海市普陀区金沙江路 1519 弄'
+      //     }
+      //   ])
+      // }, 100)
     },
     // 新增
     handleAdd() {
@@ -147,20 +134,19 @@ export default {
       };
       this.formData = {
         title: "",
-        type: "0",
+        type: "1",
         icon: "",
-        iframe: false,
         path: "",
         componentName: "",
         component: "",
         permission: "",
         pid: "",
-        menuSort: ""
+        menuSort: "",
+        hidden: '1'
       };
     },
     // 编辑
     handleEdit(row) {
-      console.log(row);
       this.dialogMenu = {
         show: true,
         title: "编辑菜单",
@@ -170,7 +156,6 @@ export default {
         title: row.title,
         type: row.type,
         icon: row.icon,
-        iframe: false,
         path: row.path,
         componentName: row.componentName,
         component: row.component,
@@ -185,6 +170,11 @@ export default {
     DialogMenu: resolve => {
       require(['@/components/menu/DialogMenu.vue'], resolve)
     },
+  },
+  computed: {
+    // ...mapGetters([
+    //   'menus'
+    // ])
   },
 }
 </script>

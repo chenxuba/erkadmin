@@ -47,7 +47,7 @@ router.beforeEach(async (to, from, next) => {
           }
           const menus = filterAsyncRouter(store.getters.menus) // 1.过滤路由
           console.log(menus);
-
+          
           router.addRoutes(menus) // 2.动态添加路由
           global.antRouter = menus // 3.将路由数据传递给全局变量，做侧边栏菜单渲染工作
           next({
@@ -86,6 +86,8 @@ router.afterEach(() => {
 // // 遍历后台传来的路由字符串，转换为组件对象
 function filterAsyncRouter(asyncRouterMap) {
   const accessedRouters = asyncRouterMap.filter(route => {
+    console.log(route);
+    
     if (route.component) {
       if (route.component === 'Layout') {
         route.component = Layout
@@ -94,10 +96,10 @@ function filterAsyncRouter(asyncRouterMap) {
       }
     }
     if (route.hidden) {
-      if (route.hidden === 'true') {
-        route.hidden = true
-      } else if (route.hidden === 'false') {
+      if (route.hidden == '1') {
         route.hidden = false
+      } else if (route.hidden == '0') {
+        route.hidden = true
       }
     }
     if (route.children && route.children.length) {

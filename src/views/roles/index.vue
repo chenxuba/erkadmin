@@ -9,7 +9,7 @@
           <span class='filter-item'>
             <el-button size="mini" type="success" icon="el-icon-search">搜索</el-button>
             <el-button size="mini" type="warning" icon="el-icon-refresh-left">重置</el-button>
-            <el-button size="mini" type="primary" icon="el-icon-plus" v-permission="['add']">新增</el-button>
+            <el-button size="mini" type="primary" icon="el-icon-plus">新增</el-button>
           </span>
         </span>
         <span>
@@ -75,9 +75,9 @@
           </el-table-column>
           <el-table-column label="操作" align="center" fixed="right" width="300">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" icon="el-icon-edit" v-permission="['edit']">编辑</el-button>
-              <el-button size="mini" type="danger" icon="el-icon-delete" v-permission="['delete']">删除</el-button>
-              <el-button size="mini" type="warning" icon="el-icon-s-tools" v-permission="['role']" @click="showSetRolesDialog(scope.row )">分配权限</el-button>
+              <el-button size="mini" type="primary" icon="el-icon-edit">编辑</el-button>
+              <el-button size="mini" type="danger" icon="el-icon-delete" >删除</el-button>
+              <el-button size="mini" type="warning" icon="el-icon-s-tools"  @click="showSetRolesDialog(scope.row )">分配权限</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -118,9 +118,9 @@ export default {
   },
 
   mounted() {
-    axios.get("/api/people.json").then(res => {
-      this.data = res.data.data;
-    })
+    // axios.get("/app/people.json").then(res => {
+    //   this.data = res.data.data;
+    // })
   },
   methods: {
     //搜索角色
@@ -139,10 +139,10 @@ export default {
     },
     // 展示分配权限的弹窗
     showSetRolesDialog(role) {
-      axios.get("/api/roles.json").then(res => {
-        console.log(res);
-        this.rolesList = res.data.data;
-      })
+      // axios.get("/app/roles.json").then(res => {
+      //   console.log(res);
+      //   this.rolesList = res.data.data;
+      // })
       //递归获取三级节点的id
       this.getLeafKeys(role, this.defKeys)
       this.rolesDialogVisible = true
@@ -162,7 +162,7 @@ export default {
     },
     refresh() {
       this.loading = true;
-      axios.get("/api/people.json").then(res => {
+      axios.get("/app/people.json").then(res => {
         this.data = res.data.data;
         setTimeout(() => {
           this.loading = false;
