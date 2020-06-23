@@ -9,7 +9,7 @@
           <el-button size="mini" type="danger" icon="el-icon-refresh">刷新</el-button>
         </el-col>
       </el-row>
-      <el-table :data="tableData" style="width: 100%;margin-bottom: 20px;" row-key="id" border :tree-props="{children: 'children', hasChildren: 'hasChildren'}" :row-class-name="tableRowClassName" v-if="isShowTable">
+      <el-table :data="tableData" size='small' style="width: 100%;margin-bottom: 20px;" row-key="id" border :tree-props="{children: 'children', hasChildren: 'hasChildren'}" :row-class-name="tableRowClassName" v-if="isShowTable">
         <el-table-column type="index" label="#" width="50">
         </el-table-column>
         <el-table-column prop="id" label="分类ID">

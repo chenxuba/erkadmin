@@ -57,7 +57,7 @@
         </el-form-item>
         <!-- 选择上级类目 pid 这里注意 formData.ptitle -->
         <el-form-item label="上级类目" prop="pid">
-          <SelectTree :options='options' @getValue='getValue'  :label='ptitle'></SelectTree>
+          <SelectTree :options='options' @getValue='getValue' :label='ptitle'></SelectTree>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -69,7 +69,8 @@
 </template>
 
 <script>
-import { addmenu, getAntRouter } from "@/api/user";
+// import { addmenu, getAntRouter } from "@/api/user";
+import { editmenu, getAntRouter, addmenu } from "@/api/system/index";
 import { mapGetters } from 'vuex'
 export default {
   name: 'dialogmenu',
@@ -117,11 +118,22 @@ export default {
             name: this.formData.componentName,
             pid: this.formData.pid,
           }
-          addmenu(data).then(res => {
-            this.$message.success('添加成功')
-            this.dialogMenu.show = false
-            this.$emit('addOk')
-          })
+          if (this.dialogMenu.option == 'add') {
+            console.log(1111);
+            
+            addmenu(data).then(res => {
+              this.$message.success('添加成功')
+              this.dialogMenu.show = false
+              this.$emit('addOk')
+            })
+          } else {
+            editmenu(this.formData.id, data).then(res => {
+              this.$message.success('编辑成功')
+              this.dialogMenu.show = false
+              this.$emit('addOk')
+            })
+          }
+
         } else {
           console.log('error submit!!');
           return false;
@@ -148,7 +160,7 @@ export default {
             }
           })
         }
-       
+
       })
     }
   },

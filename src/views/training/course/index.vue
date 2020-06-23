@@ -24,7 +24,7 @@
     <!--菜单管理-->
     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="margin-top: 20px">
       <el-card class="box-card" shadow="never">
-        <el-table ref="table" :data="data">
+        <el-table ref="table" :data="data" size='small'>
           <el-table-column label="ID" prop="id" width="100" />
           <el-table-column prop="type_name" label="类别">
             <template slot-scope="scope">

@@ -45,7 +45,8 @@
           </el-table-column>
           <el-table-column :show-overflow-tooltip="true" prop="component" label="组件路径">
             <template slot-scope="scope">
-              {{ scope.row.component == '' ? '-' : scope.row.component }}
+              <span v-if="scope.row.component == 'Layout'">-</span>
+              <span v-else>{{ scope.row.component == '' ? '-' : scope.row.component }}</span>
             </template>
           </el-table-column>
           <el-table-column prop="create_time" label="创建日期">
@@ -53,7 +54,7 @@
               <span>{{ (scope.row.create_time) }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" align="center" fixed="right">
+          <el-table-column label="操作" align="center" width="200px">
             <template slot-scope="scope">
               <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
               <el-button size="mini" type="danger" icon="el-icon-delete">删除</el-button>
@@ -143,6 +144,7 @@ export default {
         option: "edit"
       };
       this.formData = {
+        id:row.id,
         title: row.meta.title,
         type: row.type,
         icon: row.meta.icon,

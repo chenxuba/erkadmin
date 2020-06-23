@@ -11,12 +11,6 @@
         <el-form-item label="昵称" prop="nickName">
           <el-input v-model="formData.nickName" placeholder="请输入昵称" />
         </el-form-item>
-        <el-form-item label="性别">
-          <el-radio-group v-model="formData.sex" style="width: 178px">
-            <el-radio label="男">男</el-radio>
-            <el-radio label="女">女</el-radio>
-          </el-radio-group>
-        </el-form-item>
         <el-form-item style="margin-bottom: 0;" label="角色" prop="roles">
           <el-select v-model="formData.roles" placeholder="请选择" style="width:179px">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">

@@ -25,7 +25,7 @@
     </div>
     <!--菜单管理-->
     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="margin-top: 20px">
-      <el-table ref="table" :data="data">
+      <el-table ref="table" :data="data" size='small'>
         <el-table-column label="ID" prop="id" width="50" />
         <el-table-column prop="type_name" label="分类" align="center" />
         <el-table-column prop="course_title" label="课程名称" width="300" align="center">
@@ -66,8 +66,6 @@
       <!--分页组件-->
       <!-- <pagination /> -->
     </el-col>
-    <!-- 新增弹窗 -->
-    <DialogCourseitem :dialogMenu="dialogMenu" :formData="formData"></DialogCourseitem>
     <!-- 视频预览弹窗 -->
     <el-dialog title="视频预览" :visible.sync="dialogVisible" width="50%" @close='closeVideo' :close-on-click-modal='false'>
       <div style="text-align: center;">
@@ -130,22 +128,28 @@ export default {
   },
   methods: {
     handleAdd() {
-      this.dialogMenu = {
-        show: true,
-        title: "创建课件",
-        option: "add",
-      };
-      this.formData = {
-        menu: "",
-        title: "",
-        desc: "",
-        imgUrl: "",
-        sort: 0,
-        is_up: "1",
-        type: "1",
-        teacher: "",
-        video: ""
-      }
+      // this.dialogMenu = {
+      //   show: true,
+      //   title: "创建课件",
+      //   option: "add",
+      // };
+      // this.formData = {
+      //   menu: "",
+      //   title: "",
+      //   desc: "",
+      //   imgUrl: "",
+      //   sort: 0,
+      //   is_up: "1",
+      //   type: "1",
+      //   teacher: "",
+      //   video: ""
+      // }
+      this.$router.push({
+        path: '/training/addCourseItem',
+        query: {
+          type: this.type
+        }
+      })
     },
     refresh() {
 
@@ -162,29 +166,33 @@ export default {
       }
     },
     handleEdit(row) {
-      this.dialogMenu = {
-        show: true,
-        title: "编辑课件",
-        option: "edit",
-      };
-      this.formData = {
-        menu:row.type_name,
-        title: row.course_name,
-        desc: row.course_desc,
-        imgUrl:row.course_thumb,
-        sort: row.sort,
-        is_up: row.disabled,
-        type: row.course_type,
-        teacher: row.teacher_name,
-        video: row.link_url
-      }
+      // this.dialogMenu = {
+      //   show: true,
+      //   title: "编辑课件",
+      //   option: "edit",
+      // };
+      // this.formData = {
+      //   menu:row.type_name,
+      //   title: row.course_name,
+      //   desc: row.course_desc,
+      //   imgUrl:row.course_thumb,
+      //   sort: row.sort,
+      //   is_up: row.disabled,
+      //   type: row.course_type,
+      //   teacher: row.teacher_name,
+      //   video: row.link_url
+      // }
+      this.$router.push({
+        path: '/training/editCourseItem/' + row.id,
+        query: {
+          type: this.type,
+        }
+      })
     },
 
   },
   components: {
-    DialogCourseitem: resolve => {
-      require(['@/components/Training/courseitem/DialogCourseitem.vue'], resolve)
-    },
+
   },
 }
 </script>
@@ -220,7 +228,8 @@ export default {
       h2 {
         margin: 0;
         margin-left: 10px;
-        font-weight: 100;
+        font-weight: 300;
+        font-size: 24px;
       }
     }
   }

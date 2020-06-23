@@ -33,7 +33,7 @@ export function captcha(data) {
 // 动态路由
 export function getAntRouter(data) {
   return request({
-    url:"/menu",
+    url: "/menu",
     method: 'get',
     params: data
   })

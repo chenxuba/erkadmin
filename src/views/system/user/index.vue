@@ -27,7 +27,6 @@
           <el-table-column type="index" label="#" width="55" />
           <el-table-column :show-overflow-tooltip="true" prop="username" label="用户名" />
           <el-table-column :show-overflow-tooltip="true" prop="nickName" label="昵称" />
-          <el-table-column prop="sex" label="性别" />
           <el-table-column :show-overflow-tooltip="true" prop="phone" width="100" label="电话" />
           <el-table-column label="状态" align="center" prop="enabled">
             <template slot-scope="scope">
@@ -102,7 +101,6 @@ export default {
         username: "",
         phone: "",
         nickName: "",
-        sex: '男',
         enabled: '1'
       };
     }

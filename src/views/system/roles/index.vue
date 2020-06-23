@@ -9,7 +9,7 @@
           <span class='filter-item'>
             <el-button size="mini" type="success" icon="el-icon-search">搜索</el-button>
             <el-button size="mini" type="warning" icon="el-icon-refresh-left">重置</el-button>
-            <el-button size="mini" type="primary" icon="el-icon-plus">新增</el-button>
+            <el-button size="mini" type="primary" icon="el-icon-plus" @click="hanldAdd">新增</el-button>
           </span>
         </span>
         <span>
@@ -32,7 +32,7 @@
               <el-row :class="['bdbottom','vcenter',index === 0 ? 'bdtop' : '']" v-for="(item1,index) in scope.row.children" :key="index">
                 <!-- 渲染一级权限 -->
                 <el-col :span="5">
-                  <el-tag>{{item1.authName}}
+                  <el-tag>{{item1.meta.title}}
                     <el-popconfirm title="确定删除此权限吗？" @onConfirm='removeById(scope.row,item1.id)'>
                       <i class="el-icon-close" slot="reference"></i>
                     </el-popconfirm>
@@ -65,19 +65,25 @@
             </template>
           </el-table-column>
           <el-table-column type="index" width="55" label="#" />
-          <el-table-column prop="roleName" label="名称" />
-          <el-table-column prop="dataScope" label="数据权限" />
-          <el-table-column :show-overflow-tooltip="true" prop="roleDesc" label="描述" />
-          <el-table-column :show-overflow-tooltip="true" prop="createTime" label="创建日期">
+          <el-table-column prop="title" label="名称" />
+          <el-table-column :show-overflow-tooltip="true" prop="desc" label="描述" />
+          <el-table-column :show-overflow-tooltip="true" prop="desc" label="是否启用">
             <template slot-scope="scope">
-              <span>{{ (scope.row.createTime) }}</span>
+              <el-switch v-model="scope.row.status" @change='hanldChange(scope.row)' :active-value="1" :inactive-value="0" active-color="#13ce66" inactive-color="#ff4949">
+              </el-switch>
             </template>
           </el-table-column>
+          <el-table-column :show-overflow-tooltip="true" prop="create_time" label="创建日期">
+            <template slot-scope="scope">
+              <span>{{ (scope.row.create_time) }}</span>
+            </template>
+          </el-table-column>
+
           <el-table-column label="操作" align="center" fixed="right" width="300">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" icon="el-icon-edit">编辑</el-button>
-              <el-button size="mini" type="danger" icon="el-icon-delete" >删除</el-button>
-              <el-button size="mini" type="warning" icon="el-icon-s-tools"  @click="showSetRolesDialog(scope.row )">分配权限</el-button>
+              <el-button size="mini" type="primary" icon="el-icon-edit" @click="hanldEdit(scope.row)">编辑</el-button>
+              <el-button size="mini" type="danger" icon="el-icon-delete">删除</el-button>
+              <el-button size="mini" type="warning" icon="el-icon-s-tools" @click="showSetRolesDialog(scope.row)">分配权限</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -88,18 +94,19 @@
     <!-- 分配权限dialog -->
     <el-dialog title="分配权限" :visible.sync="rolesDialogVisible" width="50%" @close="colseDialog">
       <!-- 树形控件 -->
-      <el-tree :data="rolesList" show-checkbox :props="treeProps" node-key="id" default-expand-all :default-checked-keys='defKeys'></el-tree>
+      <el-tree :data="rolesList" show-checkbox :props="treeProps" node-key="id" default-expand-all :default-checked-keys='defKeys' ref='treeRef'></el-tree>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="rolesDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="rolesDialogVisible = false">确 定</el-button>
+        <el-button @click="rolesDialogVisible = false" size="small">取 消</el-button>
+        <el-button type="primary" @click="PostAuthorize" size="small">确 定</el-button>
       </span>
     </el-dialog>
+    <DialogRoles :dialogRoles="dialogRoles" :formData="formData" @addOk="getRoles"></DialogRoles>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import axios from "axios";
+import { getRole, getAntRouter, PutRoleStatus, PostAuthorize } from "@/api/system/index";
 export default {
   name: 'roles',
   data() {
@@ -110,42 +117,45 @@ export default {
       loading: false,
       rolesDialogVisible: false,
       treeProps: {
-        label: "authName",
+        label: function (data, node) {
+          return data.meta.title;
+        },
         children: "children"
       },
-      defKeys: []
+      defKeys: [],
+      dialogRoles: {
+        show: false
+      },
+      formData: {},
+      roleId:"",//当前要分配权限的角色id
     }
   },
 
   mounted() {
-    // axios.get("/app/people.json").then(res => {
-    //   this.data = res.data.data;
-    // })
+    this.getRoles()
   },
   methods: {
     //搜索角色
-    toQuery() {
-
-    },
-    selectionChangeHandler() {
-
-    },
-    handleCurrentChange() {
-
-    },
+    toQuery() { },
+    selectionChangeHandler() { },
+    handleCurrentChange() { },
     //根据id删除对应对权限
     removeById(row, id) {
       alert(row.id)
     },
     // 展示分配权限的弹窗
     showSetRolesDialog(role) {
-      // axios.get("/app/roles.json").then(res => {
-      //   console.log(res);
-      //   this.rolesList = res.data.data;
-      // })
-      //递归获取三级节点的id
-      this.getLeafKeys(role, this.defKeys)
       this.rolesDialogVisible = true
+      this.roleId = role.id
+      getAntRouter({ type: 2 }).then(res => {
+        if (res.code == 0) {
+          this.rolesList = res.data.list;
+        }
+      })
+      //递归获取三级节点的id
+      console.log(this.defKeys);
+
+      this.getLeafKeys(role, this.defKeys)
     },
     //通过递归的形式，获取角色下多有三级权限的id，并保存到defkeys 数组中
     getLeafKeys(node, arr) {
@@ -156,20 +166,77 @@ export default {
       node.children.forEach(item => {
         this.getLeafKeys(item, arr)
       });
+
     },
+    // 关闭分配权限弹窗触发
     colseDialog() {
       this.defKeys = []
     },
+    // 刷新
     refresh() {
-      this.loading = true;
-      axios.get("/app/people.json").then(res => {
-        this.data = res.data.data;
-        setTimeout(() => {
-          this.loading = false;
-        }, 500);
+      this.getRoles()
+    },
+    // 增加
+    hanldAdd() {
+      this.dialogRoles = {
+        show: true,
+        title: "新增角色",
+        option: "add"
+      };
+      this.formData = {
+        name: "",
+        desc: "",
+        status: 1,//默认开启
+      };
+    },
+    //获取列表
+    getRoles() {
+      this.loading = true
+      getRole().then(res => {
+        console.log(res);
+        if (res.code == 0) {
+          this.data = res.data.list
+          this.loading = false
+        }
       })
+    },
+    //是否启用
+    hanldChange(row) {
+      PutRoleStatus(row.id, row.status).then(res => {
+        if (res.code == 0) {
+          this.$message.warning('切换状态成功')
+        }
+      })
+    },
+    //分配权限
+    PostAuthorize() {
+      const keys = [...this.$refs.treeRef.getCheckedKeys(),...this.$refs.treeRef.getHalfCheckedKeys()];
+      const idStr = keys.join(",")
+      console.log(idStr);
+      PostAuthorize(this.roleId,{rules:idStr}).then(res=>{
+        console.log(res);
+      })
+    },
+    //编辑角色
+    hanldEdit(row){
+      this.dialogRoles = {
+        show: true,
+        title: "编辑角色",
+        option: "edit"
+      };
+      this.formData = {
+        id:row.id,
+        name: row.title,
+        desc: row.desc,
+        status: row.status,
+      };
     }
-  }
+  },
+  components: {
+    DialogRoles: resolve => {
+      require(['@/components/System/roles/DialogRoles.vue'], resolve)
+    },
+  },
 }
 </script>
 
