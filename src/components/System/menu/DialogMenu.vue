@@ -83,10 +83,10 @@ export default {
       rules: {
         title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
         path: [{ required: true, message: '请输入地址', trigger: 'blur' }],
-        icon: [{ required: true, message: '请选择图标', trigger: 'blur' }],
+        icon: [{ required: true, message: '请选择图标', trigger: 'change' }],
         componentName: [{ required: true, message: '请输入组件名称', trigger: 'blur' }],
         component: [{ required: true, message: '请输入组件路径', trigger: 'blur' }],
-        pid: [{ required: true, message: '请选择上级类目', trigger: 'blur' }],
+        ptitle: [{ required: true, message: '请选择上级类目', trigger: 'blur' }],
         permission: [{ required: true, message: '请输入权限标识', trigger: 'blur' }],
       },
       options: [],
@@ -96,6 +96,8 @@ export default {
   methods: {
     // 选中图标
     selected(name) {
+      console.log(name);
+      
       this.formData.icon = name
     },
     // 改变上级菜单的id
@@ -119,8 +121,6 @@ export default {
             pid: this.formData.pid,
           }
           if (this.dialogMenu.option == 'add') {
-            console.log(1111);
-            
             addmenu(data).then(res => {
               this.$message.success('添加成功')
               this.dialogMenu.show = false
@@ -139,8 +139,6 @@ export default {
           return false;
         }
       });
-      console.log(this.formData);
-
     },
     // 取消
     cancel(formName) {
@@ -190,12 +188,12 @@ export default {
           })
         }
         this.options.push(obj)
-        console.log(this.options);
 
       })
       let arr = { id: 0, authName: '顶级目录' }
       this.options.unshift(arr)
-      this.formData.ptitle = '顶级目录'
+      this.ptitle = '顶级目录'
+      this.formData.pid = 0
     })
   },
   computed: {

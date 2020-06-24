@@ -32,8 +32,8 @@
               <el-row :class="['bdbottom','vcenter',index === 0 ? 'bdtop' : '']" v-for="(item1,index) in scope.row.children" :key="index">
                 <!-- 渲染一级权限 -->
                 <el-col :span="5">
-                  <el-tag>{{item1.meta.title}}
-                    <el-popconfirm title="确定删除此权限吗？" @onConfirm='removeById(scope.row,item1.id)'>
+                  <el-tag>{{item1.title}}
+                    <el-popconfirm title="确定删除此权限吗？" @onConfirm='removeById(scope.row,item1)'>
                       <i class="el-icon-close" slot="reference"></i>
                     </el-popconfirm>
                   </el-tag>
@@ -44,8 +44,8 @@
                   <el-row v-for="(item2,i) in item1.children" :key="i" :class="['vcenter',i === 0 ? '': 'bdtop']">
                     <!-- 二级 -->
                     <el-col :span="6">
-                      <el-tag type="success">{{item2.authName}}
-                        <el-popconfirm title="确定删除此权限吗？" @onConfirm='removeById(scope.row,item2.id)'>
+                      <el-tag type="success">{{item2.title}}
+                        <el-popconfirm title="确定删除此权限吗？" @onConfirm='removeById(scope.row,item2)'>
                           <i class="el-icon-close" slot="reference"></i>
                         </el-popconfirm>
                       </el-tag>
@@ -53,8 +53,8 @@
                     </el-col>
                     <!-- 三级 -->
                     <el-col :span="18">
-                      <el-tag v-for="(item3,j) in item2.children" :key="j" type="warning">{{item3.authName}}
-                        <el-popconfirm title="确定删除此权限吗？" @onConfirm='removeById(scope.row,item3.id)'>
+                      <el-tag v-for="(item3,j) in item2.children" :key="j" type="warning">{{item3.title}}
+                        <el-popconfirm title="确定删除此权限吗？" @onConfirm='removeById(scope.row,item3)'>
                           <i class="el-icon-close" slot="reference"></i>
                         </el-popconfirm>
                       </el-tag>
@@ -94,7 +94,7 @@
     <!-- 分配权限dialog -->
     <el-dialog title="分配权限" :visible.sync="rolesDialogVisible" width="50%" @close="colseDialog">
       <!-- 树形控件 -->
-      <el-tree :data="rolesList" show-checkbox :props="treeProps" node-key="id" default-expand-all :default-checked-keys='defKeys' ref='treeRef'></el-tree>
+      <el-tree :data="rolesList"  show-checkbox :props="treeProps" node-key="id" default-expand-all :default-checked-keys='defKeys' ref='treeRef'></el-tree>
       <span slot="footer" class="dialog-footer">
         <el-button @click="rolesDialogVisible = false" size="small">取 消</el-button>
         <el-button type="primary" @click="PostAuthorize" size="small">确 定</el-button>
@@ -106,7 +106,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getRole, getAntRouter, PutRoleStatus, PostAuthorize } from "@/api/system/index";
+import { getRole, getAntRouter, PutRoleStatus, PostAuthorize,DeleteAuthorize } from "@/api/system/index";
 export default {
   name: 'roles',
   data() {
@@ -127,7 +127,7 @@ export default {
         show: false
       },
       formData: {},
-      roleId:"",//当前要分配权限的角色id
+      roleId: "",//当前要分配权限的角色id
     }
   },
 
@@ -139,9 +139,43 @@ export default {
     toQuery() { },
     selectionChangeHandler() { },
     handleCurrentChange() { },
-    //根据id删除对应对权限
-    removeById(row, id) {
-      alert(row.id)
+    //根据id删除对应的权限（包括子节点）
+    removeById(row, node) {
+      let roles = [node.id]
+      if (row.children) {
+        row.children.map(item => {
+          if (node.id == item.id) {
+            if (item.children) {
+              item.children.map(item2 => {
+                roles.push(item2.id)
+                if (item2.children) {
+                  item2.children.map(item3 => {
+                    roles.push(item3.id)
+                  })
+                }
+              })
+            }
+          }
+          if (item.children) {
+            item.children.map(items => {
+              if (node.id == items.id) {
+                if (items.children) {
+                  items.children.map(items2 => {
+                    roles.push(items2.id)
+                  })
+                }
+              }
+            })
+          }
+        })
+      }
+      DeleteAuthorize(row.id,{rules:roles.join(",")}).then(res=>{
+        if(res.code == 0){
+          this.$message.success('删除权限成功')
+          this.getRoles()
+        }
+      })
+
     },
     // 展示分配权限的弹窗
     showSetRolesDialog(role) {
@@ -150,10 +184,13 @@ export default {
       getAntRouter({ type: 2 }).then(res => {
         if (res.code == 0) {
           this.rolesList = res.data.list;
+          // this.defKeys = (role.rules).split(',')
+          // console.log(this.defKeys);
+
         }
       })
       //递归获取三级节点的id
-      console.log(this.defKeys);
+      // console.log(this.defKeys);
 
       this.getLeafKeys(role, this.defKeys)
     },
@@ -193,7 +230,6 @@ export default {
     getRoles() {
       this.loading = true
       getRole().then(res => {
-        console.log(res);
         if (res.code == 0) {
           this.data = res.data.list
           this.loading = false
@@ -210,22 +246,27 @@ export default {
     },
     //分配权限
     PostAuthorize() {
-      const keys = [...this.$refs.treeRef.getCheckedKeys(),...this.$refs.treeRef.getHalfCheckedKeys()];
+      const keys = [...this.$refs.treeRef.getCheckedKeys(), ...this.$refs.treeRef.getHalfCheckedKeys()];
       const idStr = keys.join(",")
       console.log(idStr);
-      PostAuthorize(this.roleId,{rules:idStr}).then(res=>{
+      PostAuthorize(this.roleId, { rules: idStr }).then(res => {
         console.log(res);
+        if(res.code == 0){
+          this.$message.success("分配权限成功")
+          this.rolesDialogVisible = false
+          this.getRoles()
+        }
       })
     },
     //编辑角色
-    hanldEdit(row){
+    hanldEdit(row) {
       this.dialogRoles = {
         show: true,
         title: "编辑角色",
         option: "edit"
       };
       this.formData = {
-        id:row.id,
+        id: row.id,
         name: row.title,
         desc: row.desc,
         status: row.status,

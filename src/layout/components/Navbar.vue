@@ -5,6 +5,9 @@
     <div class="right-menu">
       <template v-if="device!=='mobile'">
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
+        <!-- <el-tooltip content="布局大小" effect="dark" placement="bottom">
+          <size-select id="size-select" class="right-menu-item hover-effect" />
+        </el-tooltip> -->
       </template>
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
@@ -33,11 +36,14 @@ import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import { removeToken } from '@/utils/auth'
 import Screenfull from "@/components/Screenfull";　　　　// 添加部分
+import SizeSelect from '@/components/SizeSelect'
+
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    Screenfull
+    Screenfull,
+    SizeSelect,
   },
   computed: {
     ...mapGetters([
@@ -52,8 +58,8 @@ export default {
       this.$store.dispatch('app/toggleSideBar') // 收起侧边栏的方法
     },
     async logout() {
-      // await this.$store.dispatch('user/logout')
-      removeToken()
+      await this.$store.dispatch('user/logout')
+      // removeToken()
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     }
   }

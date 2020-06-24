@@ -39,6 +39,14 @@ export function getAntRouter(data) {
   })
 }
 
+// 动态路由
+export function DongtRouter() {
+  return request({
+    url: `/group/subMenu`,
+    method: 'get',
+  })
+}
+
 //新增菜单
 export function addmenu(data) {
   return request({

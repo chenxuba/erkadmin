@@ -2,7 +2,8 @@ import {
   login,
   logout,
   getInfo,
-  getAntRouter
+  getAntRouter,
+  DongtRouter
 } from '@/api/user'
 import {
   getToken,
@@ -88,7 +89,7 @@ const actions = {
   // 获取路由表
   getAntRouter({ commit, state }) {
     return new Promise((resolve, reject) => {
-      getAntRouter().then(response => {
+      DongtRouter().then(response => {
         const { list } = response.data
         if (!list) {
           reject('验证失败，请重新登录')
@@ -116,14 +117,11 @@ const actions = {
   // user logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
         removeToken() // must remove  token  first
         resetRouter()
         commit('RESET_STATE')
         resolve()
-      }).catch(error => {
-        reject(error)
-      })
+      
     })
   },
 

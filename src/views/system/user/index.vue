@@ -26,19 +26,19 @@
         <el-table ref="table" v-loading="loading" :data="data" style="width: 100%;" size='mini'>
           <el-table-column type="index" label="#" width="55" />
           <el-table-column :show-overflow-tooltip="true" prop="username" label="用户名" />
-          <el-table-column :show-overflow-tooltip="true" prop="nickName" label="昵称" />
-          <el-table-column :show-overflow-tooltip="true" prop="phone" width="100" label="电话" />
-          <el-table-column label="状态" align="center" prop="enabled">
+          <el-table-column :show-overflow-tooltip="true" prop="nickname" label="昵称" />
+          <!-- <el-table-column :show-overflow-tooltip="true" prop="phone" width="100" label="电话" /> -->
+          <el-table-column label="状态" align="center" prop="status">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.enabled" :disabled="user.id === scope.row.id" active-color="#409EFF" inactive-color="#F56C6C" @change="changeEnabled(scope.row, scope.row.enabled)" />
+              <el-switch v-model="scope.row.status" :active-value="1" :inactive-value="0" @change="changeEnabled(scope.row.uid, scope.row.status)" />
             </template>
           </el-table-column>
-          <el-table-column :show-overflow-tooltip="true" prop="createTime" width="135" label="创建日期">
+          <el-table-column :show-overflow-tooltip="true" prop="create_time" label="创建日期">
             <template slot-scope="scope">
-              <span>{{ parseTime(scope.row.createTime) }}</span>
+              <span>{{ (scope.row.create_time) }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="115" align="center" fixed="right">
+          <el-table-column label="操作" width="200" align="center" fixed="right">
             <template slot-scope="scope">
               <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
               <el-button size="mini" type="danger" icon="el-icon-delete">删除</el-button>
@@ -50,11 +50,12 @@
       </el-card>
     </el-col>
     <!-- 新增编辑弹窗 -->
-    <DialogUser :dialogUser="dialogUser" :formData="formData"></DialogUser>
+    <DialogUser :dialogUser="dialogUser" :formData="formData" @addok='getUser'></DialogUser>
   </div>
 </template>
 
 <script>
+import { getuser,PutUserStatus } from "@/api/system/index";
 export default {
   name: "user",
   data() {
@@ -74,7 +75,14 @@ export default {
     //刷新
     refresh() { },
     //切换状态
-    changeEnabled() { },
+    changeEnabled(id,value) {
+      console.log(id,value);
+      PutUserStatus(id,value).then(res=>{
+        if(res.code == 0){
+          this.$message.success("切换状态成功")
+        }
+      })
+     },
     //编辑
     handleEdit(row) {
       this.dialogUser = {
@@ -84,10 +92,10 @@ export default {
       };
       this.formData = {
         username: row.username,
-        phone: row.phone,
-        nickName: row.nickName,
-        sex: row.sex,
-        enabled: row.enabled
+        nickName: row.nickname,
+        enabled: row.status + '',
+        id: row.uid,
+        roleid: row.group_id
       };
     },
     //新增
@@ -99,16 +107,30 @@ export default {
       };
       this.formData = {
         username: "",
-        phone: "",
         nickName: "",
-        enabled: '1'
+        enabled: '1',
+        id: "",
+        roleid: ""
       };
+    },
+    //获取用户
+    getUser() {
+      this.loading = true
+      getuser().then(res => {
+        if (res.code == 0) {
+          this.data = res.data.list
+          this.loading = false
+        }
+      })
     }
   },
   components: {
     DialogUser: resolve => {
       require(['@/components/System/user/DialogUser.vue'], resolve)
     },
+  },
+  mounted() {
+    this.getUser();
   },
 }
 </script>
