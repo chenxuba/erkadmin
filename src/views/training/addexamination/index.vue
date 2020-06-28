@@ -236,36 +236,6 @@ export default {
       console.log(event.percent);
       this.percent = Math.floor(event.percent);
     },
-    // 视频上传前的钩子
-    beforeUploadVideo(file) {
-      const isLt200M = file.size / 1024 / 1024 < 200;
-      if (['video/mp4'].indexOf(file.type) == -1) { //'video/ogg', 'video/flv', 'video/avi', 'video/wmv', 'video/rmvb'
-        this.$message.error('请上传正确的视频格式');
-        return false;
-      }
-      if (!isLt200M) {
-        this.$message.error('上传视频大小不能超过200MB哦!');
-        return false;
-      }
-      this.isShowUploadVideo = false;
-    },
-    // 视频上传中的钩子
-    uploadVideoProcess(event, file, fileList) {
-      this.videoFlag = true;
-      this.videoUploadPercent = Math.floor(event.percent);
-    },
-    // 视频上传后的钩子
-    handleVideoSuccess(res, file) {
-      this.videoFlag = false;
-      this.videoUploadPercent = 0;
-      if (res.status == 0) {
-        this.formData.video = res.data.url;
-        this.videoName = file.name
-        this.$message.success("视频上传成功")
-      } else {
-        this.$message.error('视频上传失败，请重新上传！');
-      }
-    },
     //提交表单
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
@@ -277,7 +247,8 @@ export default {
           return false;
         }
       });
-    }
+    },
+    handleChange(){}
   },
   components: {
     VueUeditorWrap

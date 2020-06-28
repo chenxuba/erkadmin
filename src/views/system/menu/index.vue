@@ -9,7 +9,7 @@
           <span class='filter-item'>
             <el-button size="mini" type="success" icon="el-icon-search">搜索</el-button>
             <el-button size="mini" type="warning" icon="el-icon-refresh-left">重置</el-button>
-            <el-button size="mini" type="primary" icon="el-icon-plus" @click="handleAdd()">新增</el-button>
+            <el-button size="mini" type="primary" icon="el-icon-plus" @click="handleAdd()" v-permission="['add']">新增</el-button>
           </span>
         </span>
         <span>
@@ -38,7 +38,7 @@
               {{ scope.row.sort }}
             </template>
           </el-table-column>
-          <el-table-column :show-overflow-tooltip="true" prop="permission" label="权限标识">
+          <el-table-column :show-overflow-tooltip="true" prop="permission" label="权限标识" width="100">
             <template slot-scope="scope">
               {{ scope.row.permission == '' ? '-' : scope.row.permission }}
             </template>
@@ -49,15 +49,21 @@
               <span v-else>{{ scope.row.component == '' ? '-' : scope.row.component }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="create_time" label="创建日期">
+          <el-table-column prop="hidden" label="是否可见" width="100" align="center">
+            <template slot-scope="scope">
+              <el-switch v-model="scope.row.hidden" active-value="1" active-text="是" inactive-value="0" inactive-text="否">
+              </el-switch>
+            </template>
+          </el-table-column>
+          <el-table-column prop="create_time" label="创建日期" :show-overflow-tooltip="true">
             <template slot-scope="scope">
               <span>{{ (scope.row.create_time) }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="200px">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" icon="el-icon-delete">删除</el-button>
+              <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)" v-permission="['edit']">编辑</el-button>
+              <el-button size="mini" type="danger" icon="el-icon-delete" v-permission="['delete']">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -144,7 +150,8 @@ export default {
         option: "edit"
       };
       this.formData = {
-        id:row.id,
+        id: row.id,
+        hidden: row.hidden,
         title: row.meta.title,
         type: row.type,
         icon: row.meta.icon,
@@ -199,5 +206,33 @@ export default {
       }
     }
   }
+}
+/deep/ .el-switch__label--left {
+  position: relative;
+  left: 44px;
+  color: #fff;
+  z-index: -1111;
+  span {
+    font-size: 12px !important;
+  }
+}
+/deep/ .el-switch__label--right {
+  position: relative;
+  right: 44px;
+  color: #fff;
+  span {
+    font-size: 12px !important;
+  }
+  z-index: -1111;
+}
+/deep/ .el-switch__label--right.is-active {
+  z-index: 1111;
+  font-size: 12px !important;
+  color: #fff !important;
+}
+/deep/ .el-switch__label--left.is-active {
+  z-index: 1111;
+  font-size: 12px !important;
+  color: #9c9c9c !important;
 }
 </style>

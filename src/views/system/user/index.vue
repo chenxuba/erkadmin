@@ -38,7 +38,7 @@
               <span>{{ (scope.row.create_time) }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="200" align="center" fixed="right">
+          <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
               <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
               <el-button size="mini" type="danger" icon="el-icon-delete">删除</el-button>

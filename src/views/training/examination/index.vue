@@ -141,7 +141,14 @@ export default {
     // 删除
     hanlDelete(row) { },
     // 添加试题
-    hanlAdd(row) { },
+    hanlAdd(row) { 
+      this.$router.push({
+        path:"/training/questions/"+row.id,
+        query:{
+          type:row.name
+        }
+      })
+    },
     // 创建试卷
     addexamination(){
       this.$router.push('/training/addexamination')

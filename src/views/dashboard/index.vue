@@ -128,7 +128,7 @@ export default {
           justify-content: space-between;
           font-size: 14px;
           color: #7e848b;
-          font-weight: 600;
+          font-weight: 500;
           i {
             cursor: pointer;
           }
@@ -136,7 +136,7 @@ export default {
         .num {
           color: #2593fc;
           font-size: 20px;
-          font-weight: 600;
+          font-weight: 500;
         }
       }
     }
