@@ -1,7 +1,7 @@
 <template>
   <div class="dialoguser">
     <el-dialog :title="dialogUser.title" :visible.sync="dialogUser.show" :close-on-click-modal="false" :close-on-press-escape="false" :modal-append-to-body="false">
-      <el-form ref="form" :inline="true" :model="formData" :rules="rules" size="small" label-width="66px">
+      <el-form ref="form" :inline="true" v-if="formData.id != 1" :model="formData" :rules="rules" size="small" label-width="66px">
         <el-form-item label="用户名" prop="username">
           <el-input v-model="formData.username" placeholder="请输入用户名" />
         </el-form-item>
@@ -15,16 +15,17 @@
           </el-select>
         </el-form-item>
         <el-form-item label="状态">
-          <el-radio-group v-model="formData.enabled">
+          <el-radio-group v-model="formData.enabled" >
             <el-radio label="1">激活</el-radio>
             <el-radio label="0">禁用</el-radio>
           </el-radio-group>
         </el-form-item>
 
       </el-form>
+      <p style="text-align: center;" v-else>超级管理员不支持修改</p>
       <div slot="footer" class="dialog-footer">
         <el-button size="small" @click="hanldcancel">取消</el-button>
-        <el-button type="primary" size="small" @click="hanldconfirm('form')">确认</el-button>
+        <el-button type="primary" size="small" @click="hanldconfirm('form')" v-if="formData.id != 1">确认</el-button>
       </div>
     </el-dialog>
   </div>
@@ -65,7 +66,7 @@ export default {
       }
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (this.dialogUser.options == 'add') {
+          if (this.dialogUser.option == 'add') {
             adduser(data).then(res => {
               if (res.code == 0) {
                 this.$message.success("创建用户成功")
@@ -107,4 +108,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 </style>

@@ -1,6 +1,6 @@
 <template>
   <el-dialog :title="dialogMenu.title" :visible.sync="dialogMenu.show" width="60%">
-    <el-form ref="form" :model="formData" :rules="rules" size="small" label-width="80px">
+    <el-form ref="form" :model="formData" :rules="rules" size="small" label-width="130px">
       <!-- 父级分类 -->
       <el-form-item label="父级分类" prop="label">
         <el-input v-model="formData.label" placeholder="父级分类" disabled style="width: 200px;" />
@@ -17,9 +17,18 @@
         </el-upload>
       </el-form-item>
       <!-- 课程分类 -->
-      <el-form-item label="课程分类" prop="is_platform">
-        <el-radio v-model="formData.is_platform" label="0" border>平台课程</el-radio>
-        <el-radio v-model="formData.is_platform" label="1" border>其他</el-radio>
+       <el-form-item label="课程分类" prop="is_platform">
+        <el-radio-group v-model="formData.is_platform">
+          <el-radio-button label="0">平台课程</el-radio-button>
+          <el-radio-button label="1">其他</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
+      <!-- 是否是拓展课程 -->
+      <el-form-item label="是否是拓展课程" prop="is_tuozhan" v-if="formData.type == 3">
+        <el-radio-group v-model="formData.is_tuozhan">
+          <el-radio-button label="0">是</el-radio-button>
+          <el-radio-button label="1">否</el-radio-button>
+        </el-radio-group>
       </el-form-item>
       <!-- 排序 -->
       <el-form-item label="排序" prop="sort">
@@ -49,6 +58,9 @@ export default {
 
         is_platform: [
           { required: true, message: '请选择课程分类', trigger: 'blur' }
+        ],
+        is_tuozhan: [
+          { required: true, message: '请选择是否是拓展课程', trigger: 'blur' }
         ],
         sort: [
           { required: true, message: '请排序,数字越大越靠前', trigger: 'blur' }

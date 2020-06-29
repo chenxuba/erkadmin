@@ -18,7 +18,7 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary"  @click="hanldAdd(scope.$index, scope.row)">添加子类别</el-button>
+            <el-button size="mini" type="primary" @click="hanldAdd(scope.$index, scope.row)">添加子类别</el-button>
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
           </template>
@@ -54,6 +54,7 @@ export default {
           "view_number": 2,
           "is_course": "1",
           "pid": 0,
+          "label": "1",
           "name": "康复训练师",
           "children": [
             {
@@ -70,6 +71,7 @@ export default {
               "view_number": 16576,
               "is_course": "1",
               "pid": 1,
+              "label": "2",
               "name": "言语-语言 职业认证课程",
               "children": [
                 {
@@ -87,6 +89,7 @@ export default {
                   "is_course": "1",
                   "pid": 2,
                   "name": "初级认证",
+                  "label": "3",
                   "children": [
                     {
                       "id": 4,
@@ -102,6 +105,7 @@ export default {
                       "view_number": 0,
                       "is_course": "0",
                       "pid": 3,
+                      "label": "4",
                       "name": "基础课程",
                       "children": [
 
@@ -121,6 +125,7 @@ export default {
                       "view_number": 0,
                       "is_course": "1",
                       "pid": 3,
+                      "label": "4",
                       "name": "拓展课程",
                       "children": [
 
@@ -142,6 +147,7 @@ export default {
                   "view_number": 0,
                   "is_course": "1",
                   "pid": 2,
+                  "label": "3",
                   "name": "中级认证",
                   "children": [
                     {
@@ -158,6 +164,7 @@ export default {
                       "view_number": 0,
                       "is_course": "0",
                       "pid": 10,
+                      "label": "4",
                       "name": "基础课程",
                       "children": [
 
@@ -177,6 +184,7 @@ export default {
                       "view_number": 0,
                       "is_course": "1",
                       "pid": 10,
+                      "label": "4",
                       "name": "拓展课程",
                       "children": [
 
@@ -193,7 +201,7 @@ export default {
   },
   methods: {
     // 编辑
-    handleEdit(index,row) {
+    handleEdit(index, row) {
       this.dialogMenu = {
         show: true,
         title: "编辑分类",
@@ -205,7 +213,7 @@ export default {
         type_name: row.type_name,
         imgUrl: row.thumb,
         is_platform: row.is_platform + '',//转成字符串
-        sort:row.sort
+        sort: row.sort
       }
     },
     handleDelete() {
@@ -213,6 +221,8 @@ export default {
     },
     // 添加类别
     hanldAdd(index, row) {
+      console.log(row);
+      
       this.dialogMenu = {
         show: true,
         title: "添加分类",
@@ -224,7 +234,9 @@ export default {
         type_name: "",
         imgUrl: "",
         is_platform: "0",
-        sort: ""
+        sort: "",
+        is_tuozhan:"",
+        type:row.label
       }
     },
     //添加顶级类别

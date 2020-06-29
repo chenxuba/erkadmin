@@ -49,7 +49,7 @@
               <span v-else>{{ scope.row.component == '' ? '-' : scope.row.component }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="hidden" label="是否可见" width="100" align="center">
+          <el-table-column prop="hidden" label="是否可见" width="120" align="center">
             <template slot-scope="scope">
               <el-switch v-model="scope.row.hidden" active-value="1" active-text="是" inactive-value="0" inactive-text="否">
               </el-switch>

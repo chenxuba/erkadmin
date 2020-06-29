@@ -9,7 +9,7 @@
           <span class='filter-item'>
             <el-button size="mini" type="success" icon="el-icon-search">搜索</el-button>
             <el-button size="mini" type="warning" icon="el-icon-refresh-left">重置</el-button>
-            <el-button size="mini" type="primary" icon="el-icon-plus" @click="handleAdd()">新增</el-button>
+            <el-button size="mini" type="primary" icon="el-icon-plus" @click="handleAdd()" v-permission="['add']">新增</el-button>
           </span>
         </span>
         <span>
@@ -27,10 +27,9 @@
           <el-table-column type="index" label="#" width="55" />
           <el-table-column :show-overflow-tooltip="true" prop="username" label="用户名" />
           <el-table-column :show-overflow-tooltip="true" prop="nickname" label="昵称" />
-          <!-- <el-table-column :show-overflow-tooltip="true" prop="phone" width="100" label="电话" /> -->
           <el-table-column label="状态" align="center" prop="status">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.status" :active-value="1" :inactive-value="0" @change="changeEnabled(scope.row.uid, scope.row.status)" />
+              <el-switch v-model="scope.row.status" :disabled="scope.row.uid == 1"  :active-value="1" :inactive-value="0" @change="changeEnabled(scope.row.uid, scope.row.status)" />
             </template>
           </el-table-column>
           <el-table-column :show-overflow-tooltip="true" prop="create_time" label="创建日期">
@@ -40,8 +39,8 @@
           </el-table-column>
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" icon="el-icon-delete">删除</el-button>
+              <el-button size="mini" type="primary" icon="el-icon-edit" :disabled="scope.row.uid == 1" v-permission="['edit']" @click="handleEdit(scope.row)">编辑</el-button>
+              <el-button size="mini" type="danger" icon="el-icon-delete" :disabled="scope.row.uid == 1" v-permission="['delete']">删除</el-button>
             </template>
           </el-table-column>
         </el-table>

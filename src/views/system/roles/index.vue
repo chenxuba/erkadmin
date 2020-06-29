@@ -9,7 +9,7 @@
           <span class='filter-item'>
             <el-button size="mini" type="success" icon="el-icon-search">搜索</el-button>
             <el-button size="mini" type="warning" icon="el-icon-refresh-left">重置</el-button>
-            <el-button size="mini" type="primary" icon="el-icon-plus" @click="hanldAdd">新增</el-button>
+            <el-button size="mini" type="primary" icon="el-icon-plus" @click="hanldAdd" v-permission="['add']">新增</el-button>
           </span>
         </span>
         <span>
@@ -81,8 +81,8 @@
 
           <el-table-column label="操作" align="center" fixed="right" width="300">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" icon="el-icon-edit" @click="hanldEdit(scope.row)">编辑</el-button>
-              <el-button size="mini" type="danger" icon="el-icon-delete">删除</el-button>
+              <el-button size="mini" type="primary" icon="el-icon-edit"  @click="hanldEdit(scope.row)" v-permission="['edit']">编辑</el-button>
+              <el-button size="mini" type="danger" icon="el-icon-delete" v-permission="['delete']">删除</el-button>
               <el-button size="mini" type="warning" icon="el-icon-s-tools" @click="showSetRolesDialog(scope.row)">分配权限</el-button>
             </template>
           </el-table-column>
