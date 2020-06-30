@@ -19,9 +19,9 @@
           <el-table-column :show-overflow-tooltip="true" prop="IdNumber" label="证书编号" />
           <el-table-column :show-overflow-tooltip="true" prop="name" label="真实姓名" />
           <el-table-column :show-overflow-tooltip="true" prop="img" label="照片">
-              <template slot-scope="scope">
-                  <img :src="scope.row.img" alt="">
-              </template>
+            <template slot-scope="scope">
+              <img :src="scope.row.img" alt="">
+            </template>
           </el-table-column>
           <el-table-column :show-overflow-tooltip="true" prop="IDCard" label="身份证号" />
           <el-table-column :show-overflow-tooltip="true" prop="phone" label="联系方式" />
@@ -30,9 +30,9 @@
           <el-table-column :show-overflow-tooltip="true" prop="userID" label="用户身份" />
           <el-table-column :show-overflow-tooltip="true" prop="applyTime" label="申请时间" />
           <el-table-column :show-overflow-tooltip="true" prop="ems" label="快递单号">
-               <template slot-scope="scope">
-                  <el-button type="primary" @click="entryEms(scope.row)">录入单号</el-button>
-              </template>
+            <template slot-scope="scope">
+              <el-button type="primary" @click="entryEms(scope.row)">录入单号</el-button>
+            </template>
           </el-table-column>
           <el-table-column :show-overflow-tooltip="true" prop="type" label="审核状态" />
         </el-table>
@@ -66,7 +66,7 @@ export default {
       console.log('切换页码触发');
     },
     //录入单号
-    entryEms(row){
+    entryEms(row) {
 
     }
   },

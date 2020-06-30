@@ -64,6 +64,9 @@ Vue.directive('permission', {
 Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
+// 点击复制插件
+import Clipboard from 'v-clipboard'
+Vue.use(Clipboard)
 
 Vue.config.productionTip = false
 
