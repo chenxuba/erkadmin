@@ -14,23 +14,24 @@
         </el-table-column>
         <el-table-column prop="id" label="分类ID">
         </el-table-column>
-        <el-table-column prop="name" label="分类名称">
+        <el-table-column prop="type_name" label="分类名称">
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" @click="hanldAdd(scope.$index, scope.row)">添加子类别</el-button>
+            <el-button size="mini" :disabled="scope.row.label == 4" type="primary" @click="hanldAdd(scope.$index, scope.row)">添加子类别</el-button>
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+            <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
     <!-- 添加分类弹窗 -->
-    <DialogMenu :dialogMenu="dialogMenu" :formData='formData'></DialogMenu>
+    <DialogMenu :dialogMenu="dialogMenu" :formData='formData' @addok='getcourseType'></DialogMenu>
   </div>
 </template>
 
 <script>
+import { getcourseType, AddcourseType, DelcourseType } from "@/api/training";
 export default {
   name: "type",
   data() {
@@ -39,204 +40,61 @@ export default {
       formData: {},
       // 默认true
       isShowTable: true,
-      tableData: [
-        {
-          "id": 1,
-          "type_name": "康复训练师",
-          "sort": 0,
-          "disabled": 1,
-          "create_time": 1584190848,
-          "update_time": 1584190848,
-          "p_id": 0,
-          "is_index": 0,
-          "thumb": "http://erkong.ybc365.com/47795202003142100445649.png",
-          "is_platform": 0,
-          "view_number": 2,
-          "is_course": "1",
-          "pid": 0,
-          "label": "1",
-          "name": "康复训练师",
-          "children": [
-            {
-              "id": 2,
-              "type_name": "言语-语言 职业认证课程",
-              "sort": 0,
-              "disabled": 1,
-              "create_time": 1584190891,
-              "update_time": 1584190988,
-              "p_id": 1,
-              "is_index": 0,
-              "thumb": "http://erkong.ybc365.com/311a3202003142101288658.png",
-              "is_platform": 0,
-              "view_number": 16576,
-              "is_course": "1",
-              "pid": 1,
-              "label": "2",
-              "name": "言语-语言 职业认证课程",
-              "children": [
-                {
-                  "id": 3,
-                  "type_name": "初级认证",
-                  "sort": 0,
-                  "disabled": 1,
-                  "create_time": 1584191078,
-                  "update_time": 1584191078,
-                  "p_id": 2,
-                  "is_index": 0,
-                  "thumb": "http://erkong.ybc365.com/ebc05202003142104354864.png",
-                  "is_platform": 0,
-                  "view_number": 0,
-                  "is_course": "1",
-                  "pid": 2,
-                  "name": "初级认证",
-                  "label": "3",
-                  "children": [
-                    {
-                      "id": 4,
-                      "type_name": "基础课程",
-                      "sort": 0,
-                      "disabled": 1,
-                      "create_time": 1584191111,
-                      "update_time": 1584191111,
-                      "p_id": 3,
-                      "is_index": 0,
-                      "thumb": "",
-                      "is_platform": 0,
-                      "view_number": 0,
-                      "is_course": "0",
-                      "pid": 3,
-                      "label": "4",
-                      "name": "基础课程",
-                      "children": [
-
-                      ]
-                    },
-                    {
-                      "id": 5,
-                      "type_name": "拓展课程",
-                      "sort": 0,
-                      "disabled": 1,
-                      "create_time": 1584191124,
-                      "update_time": 1584191124,
-                      "p_id": 3,
-                      "is_index": 0,
-                      "thumb": "",
-                      "is_platform": 0,
-                      "view_number": 0,
-                      "is_course": "1",
-                      "pid": 3,
-                      "label": "4",
-                      "name": "拓展课程",
-                      "children": [
-
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "id": 10,
-                  "type_name": "中级认证",
-                  "sort": 0,
-                  "disabled": 1,
-                  "create_time": 1584694170,
-                  "update_time": 1584694170,
-                  "p_id": 2,
-                  "is_index": 0,
-                  "thumb": "http://erkong.ybc365.com/1ad60202003201649197750.png",
-                  "is_platform": 0,
-                  "view_number": 0,
-                  "is_course": "1",
-                  "pid": 2,
-                  "label": "3",
-                  "name": "中级认证",
-                  "children": [
-                    {
-                      "id": 11,
-                      "type_name": "基础课程",
-                      "sort": 0,
-                      "disabled": 1,
-                      "create_time": 1584694229,
-                      "update_time": 1584694229,
-                      "p_id": 10,
-                      "is_index": 0,
-                      "thumb": "http://erkong.ybc365.com/0c6cc202003201650162729.png",
-                      "is_platform": 0,
-                      "view_number": 0,
-                      "is_course": "0",
-                      "pid": 10,
-                      "label": "4",
-                      "name": "基础课程",
-                      "children": [
-
-                      ]
-                    },
-                    {
-                      "id": 12,
-                      "type_name": "拓展课程",
-                      "sort": 0,
-                      "disabled": 1,
-                      "create_time": 1584694311,
-                      "update_time": 1584694311,
-                      "p_id": 10,
-                      "is_index": 0,
-                      "thumb": "http://erkong.ybc365.com/a03de202003201651406606.png",
-                      "is_platform": 0,
-                      "view_number": 0,
-                      "is_course": "1",
-                      "pid": 10,
-                      "label": "4",
-                      "name": "拓展课程",
-                      "children": [
-
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-      ],
+      tableData: [],
     }
   },
   methods: {
     // 编辑
     handleEdit(index, row) {
+      console.log(row);
       this.dialogMenu = {
         show: true,
         title: "编辑分类",
         option: "edit",
       };
       this.formData = {
-        pid: row.pid,
-        label: row.pid == 0 ? '顶级分类' : row.type_name,
+        id: row.id,
+        p_id: row.p_id,
+        title: row.type_name,
         type_name: row.type_name,
         imgUrl: row.thumb,
         is_platform: row.is_platform + '',//转成字符串
-        sort: row.sort
+        sort: row.sort,
+        is_course: row.is_course,
+        label: row.label,
       }
     },
-    handleDelete() {
-
+    // 删除
+    handleDelete(row) {
+      DelcourseType({ id: row.id }).then(res => {
+        console.log(res);
+        if (res.code == 0) {
+          this.$notify({
+            title: '成功',
+            message: '删除成功',
+            type: 'success'
+          });
+          this.getcourseType()
+        }
+      })
     },
     // 添加类别
     hanldAdd(index, row) {
       console.log(row);
-      
       this.dialogMenu = {
         show: true,
         title: "添加分类",
         option: "add",
       };
       this.formData = {
-        pid: row.pid,
-        label: row.type_name,
+        p_id: row.id,
+        title: row.type_name,
         type_name: "",
         imgUrl: "",
         is_platform: "0",
-        sort: "",
-        is_tuozhan:"",
-        type:row.label
+        sort: "0",
+        is_course: "",
+        label: row.label,
       }
     },
     //添加顶级类别
@@ -247,12 +105,14 @@ export default {
         option: "add",
       };
       this.formData = {
-        pid: 0,
-        label: "顶级分类",
-        type_name: "",
-        imgUrl: "",
-        is_platform: "0",
-        sort: ""
+        p_id: 0, //上级id
+        title: "顶级分类", //上级分类title
+        type_name: "", // 分类名称
+        imgUrl: "", //封面图
+        is_platform: "0", //是否是平台课程
+        sort: "0", //排序
+        is_course: '1', //是否是拓展课程
+        // label: "1"
       }
     },
     //隔行变色
@@ -292,7 +152,36 @@ export default {
       this.$nextTick(function () {
         this.isShowTable = true
       })
-    }
+    },
+    //获取类别
+    getcourseType() {
+      getcourseType().then(res => {
+        res.data.list.map((item) => {
+          item.label = '1'
+          if (item.children) {
+            item.children.map(item => {
+              item.label = '2'
+              if (item.children) {
+                item.children.map(item => {
+                  item.label = '3'
+                  if (item.children) {
+                    item.children.map(item => {
+                      item.label = '4'
+                    })
+                  }
+                })
+              }
+            })
+          }
+        })
+        if (res.code == 0) {
+          this.tableData = res.data.list
+          console.log(this.tableData);
+        }
+      })
+    },
+
+
   },
 
   watch: {
@@ -306,6 +195,9 @@ export default {
     DialogMenu: resolve => {
       require(['@/components/Training/type/DialogMenu.vue'], resolve)
     },
+  },
+  mounted() {
+    this.getcourseType();
   },
 }
 </script>

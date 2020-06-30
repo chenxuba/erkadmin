@@ -97,7 +97,7 @@ export default {
     // 选中图标
     selected(name) {
       console.log(name);
-      
+
       this.formData.icon = name
     },
     // 改变上级菜单的id
