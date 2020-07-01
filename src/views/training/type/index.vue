@@ -6,10 +6,10 @@
           <el-button size="mini" type="primary" icon="el-icon-plus" @click="hanldAddOne">添加顶级类别</el-button>
           <el-button size="mini" type="warning" icon="el-icon-download" @click="unFoldAll">全部展开</el-button>
           <el-button size="mini" type="success" icon="el-icon-upload2" @click="foldAll">全部收起</el-button>
-          <el-button size="mini" type="danger" icon="el-icon-refresh">刷新</el-button>
+          <el-button size="mini" type="danger" icon="el-icon-refresh" @click="refresh">刷新</el-button>
         </el-col>
       </el-row>
-      <el-table :data="tableData" size='small' style="width: 100%;margin-bottom: 20px;" row-key="id" border :tree-props="{children: 'children', hasChildren: 'hasChildren'}" :row-class-name="tableRowClassName" v-if="isShowTable">
+      <el-table :data="tableData" size='small' v-loading="loading" style="width: 100%;margin-bottom: 20px;" row-key="id" border :tree-props="{children: 'children', hasChildren: 'hasChildren'}" :row-class-name="tableRowClassName" v-if="isShowTable">
         <el-table-column type="index" label="#" width="50">
         </el-table-column>
         <el-table-column prop="id" label="分类ID">
@@ -41,6 +41,7 @@ export default {
       // 默认true
       isShowTable: true,
       tableData: [],
+      loading: false
     }
   },
   methods: {
@@ -66,17 +67,28 @@ export default {
     },
     // 删除
     handleDelete(row) {
-      DelcourseType({ id: row.id }).then(res => {
-        console.log(res);
-        if (res.code == 0) {
-          this.$notify({
-            title: '成功',
-            message: '删除成功',
-            type: 'success'
-          });
-          this.getcourseType()
-        }
-      })
+      this.$confirm('此操作将删除该类别, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        DelcourseType(row.id).then(res => {
+          if (res.code == 0) {
+            this.$notify({
+              title: '成功',
+              message: '删除成功',
+              type: 'success'
+            });
+            this.getcourseType()
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+
     },
     // 添加类别
     hanldAdd(index, row) {
@@ -155,6 +167,7 @@ export default {
     },
     //获取类别
     getcourseType() {
+      this.loading = true
       getcourseType().then(res => {
         res.data.list.map((item) => {
           item.label = '1'
@@ -176,11 +189,13 @@ export default {
         })
         if (res.code == 0) {
           this.tableData = res.data.list
-          console.log(this.tableData);
+          this.loading = false
         }
       })
     },
-
+    refresh() {
+      this.getcourseType()
+    }
 
   },
 

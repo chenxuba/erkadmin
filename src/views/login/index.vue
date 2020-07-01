@@ -6,7 +6,7 @@
           <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
 
             <div class="title-container">
-              <h3 class="title">后台管理</h3>
+              <h3 class="title">后台权限管理</h3>
             </div>
 
             <el-form-item prop="username">
@@ -35,18 +35,17 @@
               <img :src="captcha" alt="" class="captcha" @click="changeImgCode">
             </el-form-item> -->
             <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
-
           </el-form>
         </div>
       </div>
-      <video :style="fixStyle" autoplay loop muted class="fillWidth" v-on:canplay="canplay">
+      <!-- <video :style="fixStyle" autoplay loop muted class="fillWidth" v-on:canplay="canplay">
         <source src="../../assets/de53d3cabf8a44391ff4a3f174e20c60764157b0979b2adca08618bc95813b6592fcf750992521c1790e181d662f0846.mp4" type="video/mp4" />
         浏览器不支持 video 标签，建议升级浏览器。
         <source src="../../assets/de53d3cabf8a44391ff4a3f174e20c60764157b0979b2adca08618bc95813b6592fcf750992521c1790e181d662f0846.mp4" type="video/webm" />
         浏览器不支持 video 标签，建议升级浏览器。
-      </video>
+      </video> -->
       <div class="poster hidden" v-if="!vedioCanPlay">
-        <!-- <img :style="fixStyle" src="../../assets/404_images/404.png" alt=""> -->
+        <img :style="fixStyle" src="https://el-admin.xin/static/img/background.9fbb9927.jpg" alt="">
       </div>
     </div>
   </div>
@@ -81,7 +80,7 @@ $light_gray: #eee;
 .video-container .filter {
   z-index: 1;
   position: absolute;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.3);
 }
 .login-container {
   min-height: 100%;
