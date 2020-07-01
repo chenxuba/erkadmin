@@ -122,15 +122,23 @@ export default {
           }
           if (this.dialogMenu.option == 'add') {
             addmenu(data).then(res => {
-              this.$message.success('添加成功')
+               this.$notify({
+                title: '成功',
+                message: '添加成功',
+                type: 'success'
+              });
               this.dialogMenu.show = false
-              this.$emit('addOk')
+              this.$emit("refreshChilden",this.formData.pid)
             })
           } else {
             editmenu(this.formData.id, data).then(res => {
-              this.$message.success('编辑成功')
+               this.$notify({
+                title: '成功',
+                message: '修改成功',
+                type: 'success'
+              });
               this.dialogMenu.show = false
-              this.$emit('addOk')
+              this.$emit("refreshChilden",this.formData.pid)
             })
           }
 

@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-
+// 类别管理
 export function getcourseType() {
   return request({
     url: '/courseType',
@@ -25,5 +25,12 @@ export function DelcourseType(id) {
   return request({
     url: '/courseType/' + id,
     method: 'delete',
+  })
+}
+// 课程列表
+export function gettrainingCourse() {
+  return request({
+    url: 'trainingCourse',
+    method: 'get',
   })
 }

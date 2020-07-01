@@ -72,7 +72,7 @@
       </el-card>
     </el-col>
     <!-- 新增弹窗 -->
-    <DialogMenu :dialogMenu="dialogMenu" :formData="formData" @addOk='getAntRouter'></DialogMenu>
+    <DialogMenu :dialogMenu="dialogMenu" :formData="formData"  @refreshChilden='refreshChilden'></DialogMenu>
   </div>
 </template>
 
@@ -172,6 +172,12 @@ export default {
           this.data = res.data.list
           this.loading = false
         }
+      })
+    },
+    //刷新子节点
+    refreshChilden(value) {
+      getAntRouter({ pid: value,type:2 }).then(res => {
+        this.$set(this.$refs.table.store.states.lazyTreeNodeMap, value, res.data.list)
       })
     }
   },

@@ -83,7 +83,7 @@ export default {
             type_name: '言语-语言职业认证课程',
             children: [{
               id: 3,
-              type_name: '初级认证'
+              type_name: '初级认证',
             }, {
               id: 4,
               type_name: '中级认证'

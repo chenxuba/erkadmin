@@ -61,38 +61,25 @@
 </template>
 
 <script>
+import { gettrainingCourse } from "@/api/training";
 export default {
   data() {
     return {
       data: [
-        {
-          "id": 1,
-          "type_id": 3,
-          "course_price": "900",
-          "sort": "0",
-          "course_thumb": "http://erkong.ybc365.com/a8421202003142111179409.png",
-          "create_time": 1584191486,
-          "view_number": 45,
-          "certificate_price": "20.00",
-          "click_number": 0,
-          "expand_number": 8,
-          "type_name": "康复训练师/言语-语言职业认证课程/初级认证",
-          "thumb": "<img src='http://erkong.ybc365.com/a8421202003142111179409.png' width='68'>"
-        },
-        {
-          "id": 3,
-          "type_id": 10,
-          "course_price": "1100",
-          "sort": "0",
-          "course_thumb": "http://erkong.ybc365.com/940a4202003201655408246.png",
-          "create_time": 1584694610,
-          "view_number": 50,
-          "certificate_price": "20.00",
-          "click_number": 0,
-          "expand_number": 11,
-          "type_name": "康复训练师/言语-语言职业认证课程/中级认证",
-          "thumb": "<img src='http://erkong.ybc365.com/940a4202003201655408246.png' width='68'>"
-        }
+        // {
+        //   "id": 1,
+        //   "type_id": 3,
+        //   "course_price": "900",
+        //   "sort": "0",
+        //   "course_thumb": "http://erkong.ybc365.com/a8421202003142111179409.png",
+        //   "create_time": 1584191486,
+        //   "view_number": 45,
+        //   "certificate_price": "20.00",
+        //   "click_number": 0,
+        //   "expand_number": 8,
+        //   "type_name": "康复训练师/言语-语言职业认证课程/初级认证",
+        //   "thumb": "<img src='http://erkong.ybc365.com/a8421202003142111179409.png' width='68'>"
+        // }
       ],
       dialogMenu: {
         show: false,
@@ -137,7 +124,7 @@ export default {
         option: "edit",
       };
       this.formData = {
-        type: [],
+        type: [1,2,4],
         course_price: row.course_price,
         sort: row.sort,
         zhengshu_price: row.certificate_price,
@@ -152,10 +139,22 @@ export default {
         path: "/training/courseitem",
         query: {
           id: row.id,
-          type:row.type_name
+          type: row.type_name
+        }
+      })
+    },
+    //获取课程
+    gettrainingCourse() {
+      gettrainingCourse().then(res => {
+        console.log(res);
+        if (res.code == 0) {
+          this.data = res.data.list
         }
       })
     }
+  },
+  mounted() {
+    this.gettrainingCourse();
   },
   components: {
     DialogCourse: resolve => {
