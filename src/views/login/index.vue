@@ -162,7 +162,7 @@ export default {
       captcha: "",//验证码图片
       loginForm: {
         username: 'admin',
-        password: '123456',
+        password: '1234561',
         // captcha: ""
       },
       loginRules: {
