@@ -6,7 +6,7 @@
       </div>
     </el-card>
     <el-card style="margin-top: 10px;">
-      <el-form ref="form" :model="formData" :rules="rules" size="small" label-width="80px">
+      <el-form ref="form" :model="formData" :rules="rules"  label-width="80px">
         <!-- 课件分类 -->
         <el-form-item label="课件分类" prop="menu">
           <el-select v-model="formData.menu" placeholder="请选择">
@@ -29,7 +29,7 @@
         <el-form-item label="封面图" prop="imgUrl">
           <el-upload class="avatar-uploader" action="http://aoaoe.ybc365.com/api/upImg" :show-file-list="false" :name="key" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" :on-progress='onProgress'>
             <img v-if="formData.imgUrl" :src="formData.imgUrl" class="imgUrl">
-            <el-button v-else size="mini">点击上传<i class="el-icon-upload el-icon--right"></i></el-button>
+            <el-button v-else >点击上传<i class="el-icon-upload el-icon--right"></i></el-button>
             <span class="tishi block">建议尺寸《750*460》</span>
             <el-progress v-show="imgFlag == true" :percentage="percent"></el-progress>
           </el-upload>
@@ -60,14 +60,14 @@
         <el-form-item label="视频上传" prop="video">
           <el-upload class="avatar-uploader" accept=".mp4" action="http://aoaoe.ybc365.com/api/upImg" :show-file-list="false" :name="key" :on-success="handleVideoSuccess" :before-upload="beforeUploadVideo" :on-progress='uploadVideoProcess'>
             <span v-if="formData.video">{{videoName}}</span>
-            <el-button v-else size="mini">点击上传<i class="el-icon-upload el-icon--right"></i></el-button>
+            <el-button v-else >点击上传<i class="el-icon-upload el-icon--right"></i></el-button>
             <span class="tishi">请上传mp4格式的视频,且大小不能超过200M</span>
             <el-progress v-show="videoFlag == true" :percentage="videoUploadPercent"></el-progress>
             <span class="tishi" v-show="videoFlag == true">视频处理中,请稍后<i class="el-icon-loading"></i></span>
           </el-upload>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" size='small' style="width:200px" @click="submitForm('form')">确认提交</el-button>
+          <el-button type="primary"  style="width:200px" @click="submitForm('form')">确认提交</el-button>
         </el-form-item>
       </el-form>
     </el-card>

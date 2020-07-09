@@ -32,18 +32,18 @@
       <div class="head-container">
         <div>
           <!-- 搜索 -->
-          <el-input clearable size="small" placeholder="输入直播名称" style="width: 200px;" class="filter-item" />
-          <el-date-picker :default-time="['00:00:00','23:59:59']" type="daterange" range-separator=":" size="small" class="date-item" value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
-          <el-button type="success" size="mini" icon="el-icon-search">搜索</el-button>
-          <el-button type="primary" size="mini" icon="el-icon-refresh-left">重置</el-button>
-          <el-button type="warning" size="mini" icon="el-icon-edit" @click="handleAdd">新建</el-button>
+          <el-input clearable  placeholder="输入直播名称" style="width: 200px;" class="filter-item" />
+          <el-date-picker :default-time="['00:00:00','23:59:59']" type="daterange" range-separator=":"  class="date-item" value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
+          <el-button type="success"  icon="el-icon-search">搜索</el-button>
+          <el-button type="primary"  icon="el-icon-refresh-left">重置</el-button>
+          <el-button type="warning"  icon="el-icon-edit" @click="handleAdd">新建</el-button>
         </div>
       </div>
       <!-- 表格渲染 -->
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style='margin-top: 10px;'>
         <!--表格渲染-->
         <el-card style="margin:10px 0;">
-          <el-table ref="table" :data="data" style="width: 100%;" size='mini'>
+          <el-table ref="table" :data="data" style="width: 100%;" >
             <el-table-column :show-overflow-tooltip="true" prop="id" label="ID" width="55" />
             <el-table-column :show-overflow-tooltip="true" prop="title" label="直播名称" />
             <el-table-column prop="img" label="直播封面" align="center">
@@ -58,7 +58,7 @@
             <el-table-column :show-overflow-tooltip="true" prop="startTime" label="开播时间" align="center" />
             <el-table-column :show-overflow-tooltip="true" prop="is_huikan" label="是否回看" align="center" width="110">
               <template slot-scope="scope">
-                <el-button type="warning" v-if="scope.row.is_huikan == 1" size="mini">上传回放</el-button>
+                <el-button type="warning" v-if="scope.row.is_huikan == 1" >上传回放</el-button>
               </template>
             </el-table-column>
             <el-table-column :show-overflow-tooltip="true" prop="xunirenshu" label="观看人数" align="center" />
@@ -70,16 +70,16 @@
             </el-table-column>
             <el-table-column label="操作" width="220" align="center">
               <template slot-scope="scope">
-                <el-button @click="handleClick(scope.row)" size="mini" type="primary">修改</el-button>
-                <el-button size="mini" type="danger" @click="showLiveConfig(scope.row)">配置</el-button>
+                <el-button @click="handleClick(scope.row)"  type="primary">修改</el-button>
+                <el-button  type="danger" @click="showLiveConfig(scope.row)">配置</el-button>
                 <el-popover placement="top" v-model="visible">
-                  <el-button type="primary" size="mini" @click="showShoplist(scope.row)">直播带货</el-button>
-                  <el-button type="success" size="mini" @click="showViplist(scope.row)">会员列表</el-button>
+                  <el-button type="primary"  @click="showShoplist(scope.row)">直播带货</el-button>
+                  <el-button type="success"  @click="showViplist(scope.row)">会员列表</el-button>
                   <br>
                   <br>
-                  <el-button type="warning" size="mini" @click="showTealist(scope.row)">导师助教</el-button>
-                  <el-button type="danger" size="mini" @click="visible = false">删除房间</el-button>
-                  <el-button slot="reference" type="warning" size="mini" style="margin-left:10px">更多</el-button>
+                  <el-button type="warning"  @click="showTealist(scope.row)">导师助教</el-button>
+                  <el-button type="danger"  @click="visible = false">删除房间</el-button>
+                  <el-button slot="reference" type="warning"  style="margin-left:10px">更多</el-button>
                 </el-popover>
               </template>
             </el-table-column>
@@ -108,21 +108,21 @@
         <div>
           <!-- 搜索 -->
           <span>
-            <el-input size="small" clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" />
+            <el-input  clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" />
             <span class='filter-item'>
-              <el-button size="mini" type="success" icon="el-icon-search">搜索</el-button>
-              <el-button size="mini" type="warning" icon="el-icon-refresh-left">重置</el-button>
+              <el-button  type="success" icon="el-icon-search">搜索</el-button>
+              <el-button  type="warning" icon="el-icon-refresh-left">重置</el-button>
             </span>
           </span>
           <span>
             <el-button-group>
-              <el-button icon="el-icon-search" size="mini"></el-button>
-              <el-button icon="el-icon-refresh" size="mini"></el-button>
+              <el-button icon="el-icon-search" ></el-button>
+              <el-button icon="el-icon-refresh" ></el-button>
             </el-button-group>
           </span>
         </div>
       </div>
-      <el-table :data="tableviplist" style="width: 100%;margin-top:10px;" size='small'>
+      <el-table :data="tableviplist" style="width: 100%;margin-top:10px;" >
         <el-table-column prop="name" label="会员昵称" align="center">
         </el-table-column>
         <el-table-column prop="time" label="加入直播间时间" align="center">
@@ -142,8 +142,8 @@
         </el-pagination>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogViplist = false" size="mini">取 消</el-button>
-        <el-button type="primary" @click="dialogViplist = false" size="mini">确 定</el-button>
+        <el-button @click="dialogViplist = false" >取 消</el-button>
+        <el-button type="primary" @click="dialogViplist = false" >确 定</el-button>
       </span>
     </el-dialog>
     <!-- 直播带货 -->
@@ -153,23 +153,23 @@
         <div>
           <!-- 搜索 -->
           <span>
-            <el-input size="small" clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" />
+            <el-input  clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" />
             <span class='filter-item'>
-              <el-button size="mini" type="success" icon="el-icon-search">搜索</el-button>
-              <el-button size="mini" type="warning" icon="el-icon-refresh-left">重置</el-button>
+              <el-button  type="success" icon="el-icon-search">搜索</el-button>
+              <el-button  type="warning" icon="el-icon-refresh-left">重置</el-button>
             </span>
           </span>
           <span>
             <el-button-group>
-              <el-button icon="el-icon-search" size="mini"></el-button>
-              <el-button icon="el-icon-refresh" size="mini"></el-button>
+              <el-button icon="el-icon-search" ></el-button>
+              <el-button icon="el-icon-refresh" ></el-button>
             </el-button-group>
           </span>
         </div>
       </div>
       <el-tabs v-model="activeName" @tab-click="handleClickTabs">
         <el-tab-pane label="视频" name="first">
-          <el-table :data="tableshoplist" style="width: 100%;margin-top:10px;" size='small'>
+          <el-table :data="tableshoplist" style="width: 100%;margin-top:10px;" >
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column prop="id" label="ID" align="center">
@@ -188,7 +188,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="音频" name="second">
-          <el-table :data="tableshoplist" style="width: 100%;margin-top:10px;" size='small'>
+          <el-table :data="tableshoplist" style="width: 100%;margin-top:10px;" >
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column prop="id" label="ID" align="center">
@@ -207,7 +207,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="图文" name="third">
-          <el-table :data="tableshoplist" style="width: 100%;margin-top:10px;" size='small'>
+          <el-table :data="tableshoplist" style="width: 100%;margin-top:10px;" >
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column prop="id" label="ID" align="center">
@@ -226,7 +226,7 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="专栏" name="fourth">
-          <el-table :data="tableshoplist" style="width: 100%;margin-top:10px;" size='small'>
+          <el-table :data="tableshoplist" style="width: 100%;margin-top:10px;" >
             <el-table-column type="selection" width="55">
             </el-table-column>
             <el-table-column prop="id" label="ID" align="center">
@@ -247,8 +247,8 @@
       </el-tabs>
 
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogShoplist = false" size="mini">取 消</el-button>
-        <el-button type="primary" @click="dialogShoplist = false" size="mini">确 定</el-button>
+        <el-button @click="dialogShoplist = false" >取 消</el-button>
+        <el-button type="primary" @click="dialogShoplist = false" >确 定</el-button>
       </span>
     </el-dialog>
     <!-- 直播配置 -->
@@ -277,11 +277,11 @@
               <p class="p1 p">请将下列信息配置到OBS中</p>
               <p class="p2 p">URL:</p>
               <p class="p3 p">rtmp://79255.livepush.myqcloud.com/live
-                <el-button type="success" size="mini" v-clipboard:copy="text1" v-clipboard:success="onCopy" v-clipboard:error="onError">点击复制</el-button>
+                <el-button type="success"  v-clipboard:copy="text1" v-clipboard:success="onCopy" v-clipboard:error="onError">点击复制</el-button>
               </p>
               <p class="p4 p">流密钥:</p>
               <p class="p5 p">live_room61?txSecret=43ed1ae82c13c4a42f3af06a75ff9e19&txTime=5EF88D48
-                <el-button type="success" size="mini" v-clipboard:copy="text2" v-clipboard:success="onCopy" v-clipboard:error="onError">点击复制</el-button>
+                <el-button type="success"  v-clipboard:copy="text2" v-clipboard:success="onCopy" v-clipboard:error="onError">点击复制</el-button>
               </p>
             </el-card>
             <!-- 小程序推流配置 -->
@@ -311,12 +311,12 @@
             </div>
             <div class="a1">
               <h1>OBS软件下载地址</h1>
-              <el-button size="mini" round>Windows</el-button>
-              <el-button size="mini" round>Mac</el-button>
+              <el-button  round>Windows</el-button>
+              <el-button  round>Mac</el-button>
             </div>
             <div class="a1" style="margin-top:20px;">
               <h1>OBS操作文档</h1>
-              <el-button size="mini" round>操作文档</el-button>
+              <el-button  round>操作文档</el-button>
             </div>
           </el-card>
           <!-- 小程序推流客户端 -->
@@ -332,13 +332,13 @@
         </el-col>
       </el-row>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogLiveConfig = false" size="mini">取 消</el-button>
-        <el-button type="primary" @click="dialogLiveConfig = false" size="mini">确 定</el-button>
+        <el-button @click="dialogLiveConfig = false" >取 消</el-button>
+        <el-button type="primary" @click="dialogLiveConfig = false" >确 定</el-button>
       </span>
     </el-dialog>
     <!-- 导师助教 -->
     <el-dialog title="导师助教" :visible.sync="dialogTealist" width="60%">
-      <el-table :data="tableTealist" style="width: 100%;margin-top:10px;" size='small'>
+      <el-table :data="tableTealist" style="width: 100%;margin-top:10px;" >
         <el-table-column prop="img" label="头像" align="center">
           <template slot-scope="scope">
             <img :src="scope.row.img" alt="">
@@ -356,19 +356,19 @@
         </el-table-column>
         <el-table-column fixed="right" label="操作">
           <template slot-scope="scope">
-            <el-button @click.native.prevent="deleteRow(scope.$index, tableData)" type="text" size="small">
+            <el-button @click.native.prevent="deleteRow(scope.$index, tableData)" type="text" >
               移除
             </el-button>
           </template>
         </el-table-column>
       </el-table>
       <div class="center">
-        <el-button type="warning" plain size="mini" style="width:100px">添加嘉宾</el-button>
-        <el-button type="danger" plain size="mini" style="width:100px">确 定</el-button>
+        <el-button type="warning" plain  style="width:100px">添加嘉宾</el-button>
+        <el-button type="danger" plain  style="width:100px">确 定</el-button>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogTealist = false" size="mini">取 消</el-button>
-        <el-button type="primary" @click="dialogTealist = false" size="mini">确 定</el-button>
+        <el-button @click="dialogTealist = false" >取 消</el-button>
+        <el-button type="primary" @click="dialogTealist = false" >确 定</el-button>
       </span>
     </el-dialog>
   </div>

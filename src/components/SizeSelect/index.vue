@@ -44,7 +44,7 @@ export default {
       this.$store.dispatch('tagsView/delAllCachedViews', this.$route)
 
       const { fullPath } = this.$route
-
+      console.log('/redirect' + fullPath);
       this.$nextTick(() => {
         this.$router.replace({
           path: '/redirect' + fullPath

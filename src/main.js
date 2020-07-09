@@ -1,5 +1,5 @@
 import Vue from 'vue'
-
+import Cookies from 'js-cookie'
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 import ElementUI from 'element-ui'
@@ -61,7 +61,11 @@ Vue.directive('permission', {
 
 
 // set ElementUI lang to EN
-Vue.use(ElementUI, { locale })
+// Vue.use(ElementUI, { locale })
+console.log(Cookies.get('size'));
+
+Vue.use(ElementUI, {size: Cookies.get('size') || 'small' // set element-ui default size
+})
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
 // 点击复制插件

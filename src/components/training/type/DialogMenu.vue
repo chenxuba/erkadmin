@@ -1,6 +1,6 @@
 <template>
   <el-dialog :title="dialogMenu.title" :visible.sync="dialogMenu.show" width="60%" @open='openDialog'>
-    <el-form ref="form" :model="formData" :rules="rules" size="small" label-width="130px">
+    <el-form ref="form" :model="formData" :rules="rules"  label-width="130px">
       <!-- 父级分类 title -->
       <el-form-item label="父级分类" prop="label">
         <el-input v-model="formData.title" placeholder="父级分类" disabled style="width: 200px;" />
@@ -60,8 +60,8 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button size="mini" @click="resetForm('form')">取 消</el-button>
-      <el-button size="mini" type="primary" @click="submit('form')">确 定</el-button>
+      <el-button  @click="resetForm('form')">取 消</el-button>
+      <el-button  type="primary" @click="submit('form')">确 定</el-button>
     </span>
   </el-dialog>
 </template>

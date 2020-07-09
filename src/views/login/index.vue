@@ -34,7 +34,7 @@
               </el-input>
               <img :src="captcha" alt="" class="captcha" @click="changeImgCode">
             </el-form-item> -->
-            <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
+            <el-button :loading="loading" size="medium" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
           </el-form>
         </div>
       </div>
@@ -46,6 +46,9 @@
       </video> -->
       <div class="poster hidden" v-if="!vedioCanPlay">
         <img :style="fixStyle" src="https://el-admin.xin/static/img/background.9fbb9927.jpg" alt="">
+      </div>
+       <div  class="poster hidden" v-else>
+        <img  src="https://el-admin.xin/static/img/background.9fbb9927.jpg" alt="">
       </div>
     </div>
   </div>

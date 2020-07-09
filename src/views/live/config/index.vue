@@ -27,7 +27,7 @@
               <el-input v-model="form.name" style="width:400px" placeholder="请输入推流API Key"></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" style="width:200px" size="small">确认提交</el-button>
+              <el-button type="primary" style="width:200px" >确认提交</el-button>
             </el-form-item>
           </el-form>
         </el-tab-pane>
@@ -51,7 +51,7 @@
               </el-form-item>
             </div>
             <el-form-item>
-              <el-button type="primary" style="width:200px" size="small">确认提交</el-button>
+              <el-button type="primary" style="width:200px" >确认提交</el-button>
             </el-form-item>
           </el-form>
         </el-tab-pane>

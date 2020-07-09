@@ -4,10 +4,11 @@
     <breadcrumb class="breadcrumb-container" />
     <div class="right-menu">
       <template v-if="device!=='mobile'">
+        <search id="header-search" class="right-menu-item" />
         <screenfull id="screenfull" class="right-menu-item hover-effect" />
-        <!-- <el-tooltip content="布局大小" effect="dark" placement="bottom">
+        <el-tooltip content="布局大小" effect="dark" placement="bottom">
           <size-select id="size-select" class="right-menu-item hover-effect" />
-        </el-tooltip> -->
+        </el-tooltip>
       </template>
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
@@ -37,13 +38,14 @@ import Hamburger from '@/components/Hamburger'
 import { removeToken } from '@/utils/auth'
 import Screenfull from "@/components/Screenfull";　　　　// 添加部分
 import SizeSelect from '@/components/SizeSelect'
-
+import Search from '@/components/HeaderSearch' // 添加部分
 export default {
   components: {
     Breadcrumb,
     Hamburger,
     Screenfull,
     SizeSelect,
+     Search // 添加部分
   },
   computed: {
     ...mapGetters([

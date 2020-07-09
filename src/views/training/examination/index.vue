@@ -3,15 +3,15 @@
     <el-card>
       <el-row>
         <el-col>
-          <el-cascader style="width: 60%;" filterable size="small" v-model="value" placeholder="请选择课件进行筛选" clearable :props='props' :options="options" @change="handleChange"></el-cascader>
-          <el-button type="primary" size="mini" style="width:100px;">搜 索</el-button>
-          <el-button type="warning" size="mini" style="width:100px;">重 置</el-button>
-          <el-button type="success" size="mini" style="width:100px;" @click="addexamination">创建试卷</el-button>
+          <el-cascader style="width: 60%;" filterable  v-model="value" placeholder="请选择课件进行筛选" clearable :props='props' :options="options" @change="handleChange"></el-cascader>
+          <el-button type="primary"  style="width:100px;">搜 索</el-button>
+          <el-button type="warning"  style="width:100px;">重 置</el-button>
+          <el-button type="success"  style="width:100px;" @click="addexamination">创建试卷</el-button>
         </el-col>
       </el-row>
       <el-row style="margin-top:20px;">
         <el-col>
-          <el-table :data="tableData" size='small' style="width: 100%" >
+          <el-table :data="tableData"  style="width: 100%" >
             <el-table-column type="index" label="#" />
             <el-table-column prop="name" label="试卷名称" show-overflow-tooltip />
             <el-table-column prop="from" label="试卷归属" show-overflow-tooltip />
@@ -26,9 +26,9 @@
             </el-table-column>
             <el-table-column  label="操作" width="280" align="center">
               <template slot-scope="scope">
-                <el-button size="small" type="primary" @click="hanlEdit(scope.row)">编辑</el-button>
-                <el-button size="small" type="danger" @click="hanlDelete(scope.row)">删除</el-button>
-                <el-button size="small" type="success" @click="hanlAdd(scope.row)">添加试题</el-button>
+                <el-button  type="primary" @click="hanlEdit(scope.row)">编辑</el-button>
+                <el-button  type="danger" @click="hanlDelete(scope.row)">删除</el-button>
+                <el-button  type="success" @click="hanlAdd(scope.row)">添加试题</el-button>
               </template>
             </el-table-column>
           </el-table>

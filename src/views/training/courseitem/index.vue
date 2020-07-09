@@ -5,17 +5,17 @@
       <div>
         <!-- 搜索 -->
         <span>
-          <el-input size="small" clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" />
+          <el-input  clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" />
           <span class='filter-item'>
-            <el-button size="mini" type="success" icon="el-icon-search">搜索</el-button>
-            <el-button size="mini" type="warning" icon="el-icon-refresh-left">重置</el-button>
-            <el-button size="mini" type="primary" icon="el-icon-plus" @click="handleAdd()">创建课件</el-button>
+            <el-button  type="success" icon="el-icon-search">搜索</el-button>
+            <el-button  type="warning" icon="el-icon-refresh-left">重置</el-button>
+            <el-button  type="primary" icon="el-icon-plus" @click="handleAdd()">创建课件</el-button>
           </span>
         </span>
         <span>
           <el-button-group>
-            <el-button icon="el-icon-search" size="mini"></el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="refresh"></el-button>
+            <el-button icon="el-icon-search" ></el-button>
+            <el-button icon="el-icon-refresh"  @click="refresh"></el-button>
           </el-button-group>
         </span>
       </div>
@@ -25,7 +25,7 @@
     </div>
     <!--菜单管理-->
     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="margin-top: 20px">
-      <el-table ref="table" :data="data" size='small'>
+      <el-table ref="table" :data="data" >
         <el-table-column label="ID" prop="id" width="50" />
         <el-table-column prop="type_name" label="分类" align="center" />
         <el-table-column prop="course_title" label="课程名称" width="300" align="center">
@@ -53,13 +53,13 @@
         <el-table-column prop="video" label="预览" align="center">
           <template slot-scope="scope">
             <!-- <video :src="scope.row.video" controls width="150px"></video> -->
-            <el-button size="mini" type="danger" @click="seeVideo(scope.row)">查看</el-button>
+            <el-button  type="danger" @click="seeVideo(scope.row)">查看</el-button>
           </template>
         </el-table-column>
         <el-table-column label="操作" width="300" align="center">
           <template slot-scope="scope">
-            <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" icon="el-icon-delete">删除</el-button>
+            <el-button  type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button  type="danger" icon="el-icon-delete">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

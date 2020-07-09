@@ -14,7 +14,7 @@
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style='margin-top: 10px;'>
         <!--表格渲染-->
         <el-card style="margin-top:10px;">
-          <el-table ref="table" v-loading="loading" :data="data" style="width: 100%;" size='mini'>
+          <el-table ref="table" v-loading="loading" :data="data" style="width: 100%;" >
             <el-table-column :show-overflow-tooltip="true" prop="ID" label="ID" />
             <el-table-column :show-overflow-tooltip="true" prop="phone" label="电话" />
             <el-table-column :show-overflow-tooltip="true" prop="type" label="发送类型" />

@@ -3,13 +3,13 @@
     <el-card>
       <el-row>
         <el-col class="col">
-          <el-button size="mini" type="primary" icon="el-icon-plus" @click="hanldAddOne">添加顶级类别</el-button>
-          <el-button size="mini" type="warning" icon="el-icon-download" @click="unFoldAll">全部展开</el-button>
-          <el-button size="mini" type="success" icon="el-icon-upload2" @click="foldAll">全部收起</el-button>
-          <el-button size="mini" type="danger" icon="el-icon-refresh" @click="refresh">刷新</el-button>
+          <el-button  type="primary" icon="el-icon-plus" @click="hanldAddOne">添加顶级类别</el-button>
+          <el-button  type="warning" icon="el-icon-download" @click="unFoldAll">全部展开</el-button>
+          <el-button  type="success" icon="el-icon-upload2" @click="foldAll">全部收起</el-button>
+          <el-button  type="danger" icon="el-icon-refresh" @click="refresh">刷新</el-button>
         </el-col>
       </el-row>
-      <el-table :data="tableData" size='small' v-loading="loading" style="width: 100%;margin-bottom: 20px;" row-key="id" border :tree-props="{children: 'children', hasChildren: 'hasChildren'}" :row-class-name="tableRowClassName" v-if="isShowTable">
+      <el-table :data="tableData"  v-loading="loading" style="width: 100%;margin-bottom: 20px;" row-key="id" border :tree-props="{children: 'children', hasChildren: 'hasChildren'}" :row-class-name="tableRowClassName" v-if="isShowTable">
         <el-table-column type="index" label="#" width="50">
         </el-table-column>
         <el-table-column prop="id" label="分类ID">
@@ -18,9 +18,9 @@
         </el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
-            <el-button size="mini" :disabled="scope.row.label == 4" type="primary" @click="hanldAdd(scope.$index, scope.row)">添加子类别</el-button>
-            <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
+            <el-button  :disabled="scope.row.label == 4" type="primary" @click="hanldAdd(scope.$index, scope.row)">添加子类别</el-button>
+            <el-button  @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+            <el-button  type="danger" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

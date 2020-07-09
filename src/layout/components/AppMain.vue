@@ -5,6 +5,11 @@
         <router-view :key="key" />
       </keep-alive>
     </transition>
+    <div v-if="$store.state.settings.showFooter" id="el-main-footer">
+      <span v-html="$store.state.settings.footerTxt" />
+      <span> ⋅ </span>
+      <a href="http://www.beian.miit.gov.cn" target="_blank">{{ $store.state.settings.caseNumber }}</a>
+    </div>
   </section>
 </template>
 
@@ -30,7 +35,7 @@ export default {
   position: relative;
   overflow: hidden;
 }
-.fixed-header+.app-main {
+.fixed-header + .app-main {
   padding-top: 50px;
 }
 .hasTagsView {
@@ -38,7 +43,7 @@ export default {
     /* 84 = navbar + tags-view = 50 + 34 */
     min-height: calc(100vh - 84px);
   }
-  .fixed-header+.app-main {
+  .fixed-header + .app-main {
     padding-top: 84px;
   }
 }

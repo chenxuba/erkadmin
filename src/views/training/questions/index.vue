@@ -4,9 +4,9 @@
       <h2>所属试卷：{{type}}</h2>
     </div>
     <el-card>
-      <el-button type="warning" size="mini" @click="hanldAdd">新增试题</el-button>
+      <el-button type="warning"  @click="hanldAdd">新增试题</el-button>
       <el-divider></el-divider>
-      <el-table :data="tableData" style="width: 100%" size='mini'>
+      <el-table :data="tableData" style="width: 100%" >
         <el-table-column prop="id" label="ID" width="55" />
         <el-table-column prop="problem_title" label="题目" width="400" align="center" :show-overflow-tooltip="true" />
         <el-table-column prop="problem_type" label="题目类型" />
@@ -14,8 +14,8 @@
         <el-table-column prop="create_user" label="创建人" />
         <el-table-column fixed="right" label="操作" width="200">
           <template slot-scope="scope">
-            <el-button size="mini" type="success" @click="hanldEdit(scope.row)">编辑</el-button>
-            <el-button size="mini" type="danger">删除</el-button>
+            <el-button  type="success" @click="hanldEdit(scope.row)">编辑</el-button>
+            <el-button  type="danger">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -23,7 +23,7 @@
     <!-- dialog -->
     <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="70%">
       <div style="margin-top: -25px">
-        <el-radio-group v-model="dialogRadio" size="mini" @change='hanldChang'>
+        <el-radio-group v-model="dialogRadio"  @change='hanldChang'>
           <el-radio-button label="1">单选题</el-radio-button>
           <el-radio-button label="2">多选题</el-radio-button>
           <el-radio-button label="3">判断题</el-radio-button>
@@ -61,7 +61,7 @@
         <!-- 正确答案 -->
         <h1>正确答案</h1>
         <div v-show="dialogRadio == 1">
-          <el-radio-group v-model="danxuanDaAn" size="mini">
+          <el-radio-group v-model="danxuanDaAn" >
             <el-radio-button label="A"></el-radio-button>
             <el-radio-button label="B"></el-radio-button>
             <el-radio-button label="C"></el-radio-button>
@@ -69,7 +69,7 @@
           </el-radio-group>
         </div>
         <div v-show="dialogRadio == 2">
-          <el-checkbox-group v-model="duoxuanDaAn" size="mini">
+          <el-checkbox-group v-model="duoxuanDaAn" >
             <el-checkbox-button label="A"></el-checkbox-button>
             <el-checkbox-button label="B"></el-checkbox-button>
             <el-checkbox-button label="C"></el-checkbox-button>
@@ -77,15 +77,15 @@
           </el-checkbox-group>
         </div>
         <div v-show="dialogRadio == 3">
-          <el-radio-group v-model="panuanDaAn" size="mini">
+          <el-radio-group v-model="panuanDaAn" >
             <el-radio-button label="1">真</el-radio-button>
             <el-radio-button label="2">假</el-radio-button>
           </el-radio-group>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false" size="mini">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false" size="mini">确 定</el-button>
+        <el-button @click="dialogVisible = false" >取 消</el-button>
+        <el-button type="primary" @click="dialogVisible = false" >确 定</el-button>
       </span>
     </el-dialog>
   </div>

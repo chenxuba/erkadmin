@@ -16,7 +16,7 @@
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
         <!--表格渲染-->
         <el-card style="margin:10px 0;">
-          <el-table ref="table" :data="data" style="width: 100%;" size='mini'>
+          <el-table ref="table" :data="data" style="width: 100%;" >
             <el-table-column :show-overflow-tooltip="true" prop="id" label="ID" width="55" />
             <el-table-column :show-overflow-tooltip="true" prop="title" label="直播名称" width="205" align="center" />
             <el-table-column prop="img" label="直播封面" align="center">
@@ -26,7 +26,7 @@
             </el-table-column>
             <el-table-column :show-overflow-tooltip="true" prop="type" label="审核状态" align="center">
               <template slot-scope="scope">
-                <el-tag type="danger">{{scope.row.type}}</el-tag>
+                <el-tag type="danger" >{{scope.row.type}}</el-tag>
               </template>
             </el-table-column>
             <el-table-column :show-overflow-tooltip="true" prop="from" label="直播归属" align="center" />
@@ -34,8 +34,8 @@
             <el-table-column :show-overflow-tooltip="true" prop="startTime" label="开播时间" align="center" width="180" />
             <el-table-column label="操作" width="220" align="center">
               <template slot-scope="scope">
-                <el-button @click="handleClick(scope.row)" size="mini" type="primary">通过</el-button>
-                <el-button size="mini" type="danger">驳回</el-button>
+                <el-button @click="handleClick(scope.row)"  type="primary">通过</el-button>
+                <el-button  type="danger" @click="bohui">驳回</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -79,7 +79,11 @@ export default {
       this.$router.push('/live/addlive')
     },
     handleSizeChange(){},
-    handleCurrentChange(){}
+    handleCurrentChange(){},
+    // 驳回
+    bohui(){
+
+    }
   },
 }
 </script>

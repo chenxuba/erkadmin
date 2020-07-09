@@ -5,16 +5,16 @@
       <div class="head-container">
         <div>
           <!-- 搜索 -->
-          <el-input clearable size="small" placeholder="输入会员名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
-          <el-date-picker :default-time="['00:00:00','23:59:59']" type="daterange" range-separator=":" size="small" class="date-item" value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
-          <el-button type="success" size="mini" icon="el-icon-search">搜索</el-button>
-          <el-button type="primary" size="mini" icon="el-icon-refresh-left">重置</el-button>
-          <el-button type="warning" size="mini" icon="el-icon-download">导出</el-button>
+          <el-input clearable  placeholder="输入会员名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+          <el-date-picker :default-time="['00:00:00','23:59:59']" type="daterange" range-separator=":"  class="date-item" value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
+          <el-button type="success"  icon="el-icon-search">搜索</el-button>
+          <el-button type="primary"  icon="el-icon-refresh-left">重置</el-button>
+          <el-button type="warning"  icon="el-icon-download">导出</el-button>
         </div>
       </div>
       <!--表格渲染-->
       <el-card style="margin-top:10px;">
-        <el-table ref="table" v-loading="loading" :data="data" style="width: 100%;" size='mini'>
+        <el-table ref="table" v-loading="loading" :data="data" style="width: 100%;" >
           <el-table-column type="index" width="55" label="#" />
           <el-table-column :show-overflow-tooltip="true" prop="IdNumber" label="证书编号" />
           <el-table-column :show-overflow-tooltip="true" prop="name" label="真实姓名" />

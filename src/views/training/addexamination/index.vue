@@ -1,10 +1,10 @@
 <template>
   <div class="main">
     <el-card style="margin-top: 10px;">
-      <el-form ref="form" :model="formData" :rules="rules" size="small" label-width="100px">
+      <el-form ref="form" :model="formData" :rules="rules"  label-width="100px">
         <!-- 选择课件 -->
         <el-form-item label="选择课件" prop="menu">
-          <el-cascader style="width: 60%;" filterable size="small" v-model="value" placeholder="请选择课件进行筛选" clearable :props='props' :options="options" @change="handleChange"></el-cascader>
+          <el-cascader style="width: 60%;" filterable  v-model="value" placeholder="请选择课件进行筛选" clearable :props='props' :options="options" @change="handleChange"></el-cascader>
         </el-form-item>
         <!-- 试卷名称 -->
         <el-form-item label="课程名称" prop="title">
@@ -15,7 +15,7 @@
         <el-form-item label="封面图" prop="imgUrl">
           <el-upload class="avatar-uploader" action="http://aoaoe.ybc365.com/api/upImg" :show-file-list="false" :name="key" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" :on-progress='onProgress'>
             <img v-if="formData.imgUrl" :src="formData.imgUrl" class="imgUrl">
-            <el-button v-else size="mini">点击上传<i class="el-icon-upload el-icon--right"></i></el-button>
+            <el-button v-else >点击上传<i class="el-icon-upload el-icon--right"></i></el-button>
             <span class="tishi block">建议尺寸《750*460》</span>
             <el-progress v-show="imgFlag == true" :percentage="percent"></el-progress>
           </el-upload>
@@ -67,7 +67,7 @@
           <el-radio v-model="formData.is_up" label="2">否</el-radio>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" size='small' style="width:200px" @click="submitForm('form')">确认提交</el-button>
+          <el-button type="primary"  style="width:200px" @click="submitForm('form')">确认提交</el-button>
         </el-form-item>
       </el-form>
     </el-card>

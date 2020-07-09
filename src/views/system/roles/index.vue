@@ -5,17 +5,17 @@
       <div>
         <!-- 搜索 -->
         <span>
-          <el-input v-model="rolesName" size="small" clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+          <el-input v-model="rolesName"  clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
           <span class='filter-item'>
-            <el-button size="mini" type="success" icon="el-icon-search">搜索</el-button>
-            <el-button size="mini" type="warning" icon="el-icon-refresh-left">重置</el-button>
-            <el-button size="mini" type="primary" icon="el-icon-plus" @click="hanldAdd" v-permission="['add']">新增</el-button>
+            <el-button  type="success" icon="el-icon-search">搜索</el-button>
+            <el-button  type="warning" icon="el-icon-refresh-left">重置</el-button>
+            <el-button  type="primary" icon="el-icon-plus" @click="hanldAdd" v-permission="['add']">新增</el-button>
           </span>
         </span>
         <span>
           <el-button-group>
-            <el-button icon="el-icon-search" size="mini"></el-button>
-            <el-button icon="el-icon-refresh" size="mini" @click="refresh"></el-button>
+            <el-button icon="el-icon-search" ></el-button>
+            <el-button icon="el-icon-refresh"  @click="refresh"></el-button>
           </el-button-group>
         </span>
       </div>
@@ -26,7 +26,7 @@
         <div slot="header" class="clearfix">
           <span class="role-span">角色列表</span>
         </div>
-        <el-table ref="table" v-loading="loading" size='small' highlight-current-row style="width: 100%;" :data="data" @selection-change="selectionChangeHandler" @current-change="handleCurrentChange">
+        <el-table ref="table" v-loading="loading"  highlight-current-row style="width: 100%;" :data="data" @selection-change="selectionChangeHandler" @current-change="handleCurrentChange">
           <el-table-column type="expand" width="55">
             <template slot-scope="scope">
               <el-row :class="['bdbottom','vcenter',index === 0 ? 'bdtop' : '']" v-for="(item1,index) in scope.row.children" :key="index">
@@ -81,9 +81,9 @@
 
           <el-table-column label="操作" align="center" fixed="right" width="300">
             <template slot-scope="scope">
-              <el-button size="mini" type="primary" icon="el-icon-edit"  @click="hanldEdit(scope.row)" v-permission="['edit']">编辑</el-button>
-              <el-button size="mini" type="danger" icon="el-icon-delete" v-permission="['delete']">删除</el-button>
-              <el-button size="mini" type="warning" icon="el-icon-s-tools" @click="showSetRolesDialog(scope.row)">分配权限</el-button>
+              <el-button  type="primary" icon="el-icon-edit"  @click="hanldEdit(scope.row)" v-permission="['edit']">编辑</el-button>
+              <el-button  type="danger" icon="el-icon-delete" v-permission="['delete']">删除</el-button>
+              <el-button  type="warning" icon="el-icon-s-tools" v-permission="['give']" @click="showSetRolesDialog(scope.row)">分配权限</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -96,8 +96,8 @@
       <!-- 树形控件 -->
       <el-tree :data="rolesList"  show-checkbox :props="treeProps" node-key="id" default-expand-all :default-checked-keys='defKeys' ref='treeRef'></el-tree>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="rolesDialogVisible = false" size="small">取 消</el-button>
-        <el-button type="primary" @click="PostAuthorize" size="small">确 定</el-button>
+        <el-button @click="rolesDialogVisible = false" >取 消</el-button>
+        <el-button type="primary" @click="PostAuthorize" >确 定</el-button>
       </span>
     </el-dialog>
     <DialogRoles :dialogRoles="dialogRoles" :formData="formData" @addOk="getRoles"></DialogRoles>

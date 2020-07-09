@@ -9,14 +9,14 @@
             <div class="head-container" style="margin-bottom:10px;">
               <div>
                 <!-- 搜索 -->
-                <el-input clearable size="small" v-model="search" placeholder="输入会员名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
-                <el-date-picker :default-time="['00:00:00','23:59:59']" type="daterange" range-separator=":" size="small" class="date-item" value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
-                <el-button type="success" size="mini" icon="el-icon-search">搜索</el-button>
-                <el-button type="primary" size="mini" icon="el-icon-refresh-left">重置</el-button>
-                <el-button type="warning" size="mini" icon="el-icon-download">导出</el-button>
+                <el-input clearable  v-model="search" placeholder="输入会员名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+                <el-date-picker :default-time="['00:00:00','23:59:59']" type="daterange" range-separator=":"  class="date-item" value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
+                <el-button type="success"  icon="el-icon-search">搜索</el-button>
+                <el-button type="primary"  icon="el-icon-refresh-left">重置</el-button>
+                <el-button type="warning"  icon="el-icon-download">导出</el-button>
               </div>
             </div>
-            <el-table :data="tableData1" style="width: 100%" size='small' height="400">
+            <el-table :data="tableData1" style="width: 100%"  height="400">
               <el-table-column prop="id" label="ID" width="100">
               </el-table-column>
               <el-table-column prop="username" :show-overflow-tooltip="true" label="用户名">
@@ -45,16 +45,15 @@
             <div class="head-container" style="margin-bottom:10px;">
               <div>
                 <!-- 搜索 -->
-                <el-input clearable size="small" v-model="search" placeholder="输入会员名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
-                <el-date-picker :default-time="['00:00:00','23:59:59']" type="daterange" range-separator=":" size="small" class="date-item" value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
-                <el-button type="success" size="mini" icon="el-icon-search">搜索</el-button>
-                <el-button type="primary" size="mini" icon="el-icon-refresh-left">重置</el-button>
-                <el-button type="warning" size="mini" icon="el-icon-download">导出</el-button>
+                <el-input clearable  v-model="search" placeholder="输入会员名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+                <el-date-picker :default-time="['00:00:00','23:59:59']" type="daterange" range-separator=":"  class="date-item" value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
+                <el-button type="success"  icon="el-icon-search">搜索</el-button>
+                <el-button type="primary"  icon="el-icon-refresh-left">重置</el-button>
+                <el-button type="warning"  icon="el-icon-download">导出</el-button>
               </div>
             </div>
           </el-tab-pane>
         </el-tabs>
-
       </el-tab-pane>
       <el-tab-pane label="课程分析">课程分析</el-tab-pane>
       <el-tab-pane label="试卷分析">试卷分析</el-tab-pane>
@@ -63,14 +62,14 @@
         <div class="head-container" style="margin-bottom:10px;">
           <div>
             <!-- 搜索 -->
-            <el-input clearable size="small" v-model="search" placeholder="输入会员名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
-            <el-date-picker :default-time="['00:00:00','23:59:59']" type="daterange" range-separator=":" size="small" class="date-item" value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
-            <el-button type="success" size="mini" icon="el-icon-search">搜索</el-button>
-            <el-button type="primary" size="mini" icon="el-icon-refresh-left">重置</el-button>
-            <el-button type="warning" size="mini" icon="el-icon-download">导出</el-button>
+            <el-input clearable  v-model="search" placeholder="输入会员名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+            <el-date-picker :default-time="['00:00:00','23:59:59']" type="daterange" range-separator=":"  class="date-item" value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
+            <el-button type="success"  icon="el-icon-search">搜索</el-button>
+            <el-button type="primary"  icon="el-icon-refresh-left">重置</el-button>
+            <el-button type="warning"  icon="el-icon-download">导出</el-button>
           </div>
         </div>
-        <el-table :data="tableData2.filter(data => !search || data.teacher.toLowerCase().includes(search.toLowerCase()))" show-summary :summary-method="getSummaries" style="width: 100%" size='small' height="450">
+        <el-table :data="tableData2.filter(data => !search || data.teacher.toLowerCase().includes(search.toLowerCase()))" show-summary :summary-method="getSummaries" style="width: 100%"  height="450">
           <el-table-column prop="id" label="ID" width="100">
           </el-table-column>
           <el-table-column prop="username" :show-overflow-tooltip="true" label="用户名">

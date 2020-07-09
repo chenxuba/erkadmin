@@ -1,6 +1,6 @@
 <template>
   <el-dialog :title="dialogMenu.title" :visible.sync="dialogMenu.show" width="60%" @close='hanldclose'>
-    <el-form ref="form" :model="formData" :rules="rules" size="small" label-width="80px">
+    <el-form ref="form" :model="formData" :rules="rules"  label-width="80px">
       <!-- 课程分类 -->
       <el-form-item label="课程分类" prop="type">
         <el-cascader v-model="formData.type" :options="options" @change="handleChange" :props="props" ref="cascader" style="width:'300px'"></el-cascader>
@@ -39,7 +39,7 @@
           <span class="tishi">为0代表没有限制,拓展必修课数量只能增加不能减少</span>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" size='small' style="width:200px">确认提交</el-button>
+        <el-button type="primary"  style="width:200px">确认提交</el-button>
       </el-form-item>
     </el-form>
   </el-dialog>

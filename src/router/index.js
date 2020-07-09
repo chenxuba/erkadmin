@@ -48,7 +48,17 @@ export const constantRoutes = [
       meta: { title: '系统首页', icons: 'dashboard', affix: true } // affix: true 固定 不能被关闭的tabs
     }]
   },
-  
+  {
+    path: '/redirect',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: '/redirect/:path*',
+        component: (resolve) => require(['@/views/redirect'], resolve)
+      }
+    ]
+  },
   // 404 page must be placed at the end !!!
   // { path: '*', redirect: '/404', hidden: true }
 ]
