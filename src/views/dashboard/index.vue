@@ -21,52 +21,52 @@
     <el-card style="margin-top:20px;">
       <h1>常用模块</h1>
       <div class="ul">
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
       </div>
       <div class="ul two">
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
       </div>
     </el-card>
     <!-- 知识产品 -->
     <el-card style="margin-top:20px;">
       <h1>知识产品</h1>
       <div class="ul">
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
       </div>
     </el-card>
     <!-- 营销管理 -->
     <el-card style="margin-top:20px;">
       <h1>营销管理</h1>
       <div class="ul">
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
       </div>
       <div class="ul two">
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
-        <el-button icon="el-icon-menu">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
+        <el-button icon="el-icon-menu" size="small">类别管理</el-button>
       </div>
     </el-card>
   </div>

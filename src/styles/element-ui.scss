@@ -81,3 +81,15 @@
   z-index: 99;
   width: 100%;
 }
+.el-checkbox__input.is-checked+.el-checkbox__label{
+  color: #666;
+}
+.el-message .el-icon-error{
+  color: #fff;
+}
+.el-message--error{
+  background-color: #f06d6b;
+}
+.el-message--error .el-message__content{
+  color: #fff;
+}

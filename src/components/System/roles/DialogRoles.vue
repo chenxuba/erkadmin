@@ -47,7 +47,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          if (this.formData.option == 'add') {
+          if (this.dialogRoles.option == 'add') {
             addRole({ title: this.formData.name, desc: this.formData.desc, status: this.formData.status }).then(res => {
               console.log(res);
               if (res.code == 0) {

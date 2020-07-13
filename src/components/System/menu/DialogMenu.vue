@@ -1,10 +1,10 @@
 <template>
   <div class="dialogmenu">
     <el-dialog :title="dialogMenu.title" :visible.sync="dialogMenu.show" @open='openDialog' :close-on-click-modal="false" :close-on-press-escape="false" :modal-append-to-body="false">
-      <el-form ref="form" :inline="true" :model="formData" :rules="rules"  label-width="80px">
+      <el-form ref="form" :inline="true" :model="formData" :rules="rules" label-width="80px">
         <!-- 菜单类型 type -->
         <el-form-item label="菜单类型" prop="type">
-          <el-radio-group v-model="formData.type"  style="width: 178px">
+          <el-radio-group v-model="formData.type" style="width: 178px">
             <el-radio-button label="1">目录</el-radio-button>
             <el-radio-button label="2">菜单</el-radio-button>
             <el-radio-button label="3">按钮</el-radio-button>
@@ -22,7 +22,7 @@
         </el-form-item>
         <!-- 菜单是否可见 hidden -->
         <el-form-item v-if="formData.type != '3'" label="菜单可见" prop="hidden">
-          <el-radio-group v-model="formData.hidden" >
+          <el-radio-group v-model="formData.hidden">
             <el-radio-button label="1">是</el-radio-button>
             <el-radio-button label="0">否</el-radio-button>
           </el-radio-group>
@@ -61,8 +61,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="cancel('form')" >取 消</el-button>
-        <el-button type="primary" @click="submitForm('form')" >确 定</el-button>
+        <el-button @click="cancel('form')">取 消</el-button>
+        <el-button type="primary" @click="submitForm('form')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -130,6 +130,7 @@ export default {
               this.dialogMenu.show = false
               this.$emit("addok")
               this.$emit("refreshChilden", this.formData.pid)
+              this.$refs[formName].resetFields();
             })
           } else {
             editmenu(this.formData.id, data).then(res => {
@@ -141,6 +142,7 @@ export default {
               this.dialogMenu.show = false
               this.$emit("addok")
               this.$emit("refreshChilden", this.formData.pid)
+              this.$refs[formName].resetFields();
             })
           }
 
