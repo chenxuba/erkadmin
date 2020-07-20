@@ -56,7 +56,7 @@
       </el-table>
       <!--分页-->
       <div class="fenye" style="margin-top:20px;">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="total, prev, pager, next,sizes" :total="40">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[5,10, 20, 30, 40]" :page-size="pageSize" layout="total, prev, pager, next,sizes" :total="total">
         </el-pagination>
       </div>
     </el-card>
@@ -73,20 +73,23 @@ import axios from "axios";
 export default {
   data() {
     return {
-      loading:false,
+      loading: false,
       dialogVideo: false,
       videoUrl: "",
       tableData: [],
-      search: ""
+      search: "",
+      page: 1,
+      pageSize: 5,
+      total: 0
     }
   },
   methods: {
     //获取审核列表
     gettbeauty() {
       this.loading = true
-      gettbeauty(1).then(res => {
-        console.log(res);
+      gettbeauty({ status: 1, page: this.page, page_size:this.pageSize }).then(res => {
         this.tableData = res.data.list
+        this.total = res.data.count
         this.loading = false
       })
     },
@@ -103,11 +106,25 @@ export default {
       }
 
     },
-    handleSizeChange() {
+    handleSizeChange(v) {
       console.log('每页显示xxx条 触发');
+      this.pageSize = v
+      gettbeauty({ status: 1, page: this.page, page_size:this.pageSize}).then(res => {
+        this.tableData = res.data.list
+        this.total = res.data.count
+        this.loading = false
+      })
     },
-    handleCurrentChange() {
-      console.log('切换页码触发');
+    handleCurrentChange(v) {
+      // console.log(v);
+      this.loading = true
+      this.page = v
+      gettbeauty({ status: 1, page: this.page,page_size:this.pageSize }).then(res => {
+        this.tableData = res.data.list
+        this.total = res.data.count
+        this.loading = false
+      })
+      // console.log('切换页码触发');
     },
     //关闭弹窗触发
     closeDialogVideo() {

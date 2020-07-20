@@ -83,7 +83,7 @@ $light_gray: #eee;
 .video-container .filter {
   z-index: 1;
   position: absolute;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.3); 
 }
 .login-container {
   min-height: 100%;

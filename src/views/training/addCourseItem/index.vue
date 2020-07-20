@@ -6,7 +6,7 @@
       </div>
     </el-card>
     <el-card style="margin-top: 10px;">
-      <el-form ref="form" :model="formData" :rules="rules"  label-width="80px">
+      <el-form ref="form" :model="formData" :rules="rules" label-width="80px">
         <!-- 课件分类 -->
         <el-form-item label="课件分类" prop="menu">
           <el-select v-model="formData.menu" placeholder="请选择">
@@ -26,14 +26,7 @@
           <el-button type="text">查看示例<i class="el-icon-question"></i></el-button>
         </el-form-item>
         <!-- 封面图 -->
-        <el-form-item label="封面图" prop="imgUrl">
-          <el-upload class="avatar-uploader" action="http://aoaoe.ybc365.com/api/upImg" :show-file-list="false" :name="key" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" :on-progress='onProgress'>
-            <img v-if="formData.imgUrl" :src="formData.imgUrl" class="imgUrl">
-            <el-button v-else >点击上传<i class="el-icon-upload el-icon--right"></i></el-button>
-            <span class="tishi block">建议尺寸《750*460》</span>
-            <el-progress v-show="imgFlag == true" :percentage="percent"></el-progress>
-          </el-upload>
-        </el-form-item>
+       <uploadImage @uploadSuccessImg='uploadSuccessImg' accept='image/*' checking='imgUrl'></uploadImage>
         <!-- 排序 -->
         <el-form-item label="排序" prop="sort">
           <el-input-number v-model.number="formData.sort" placeholder='数字越大越靠前' :min="0" :max="999" controls-position="right" style="width: 200px;" />
@@ -41,13 +34,17 @@
         </el-form-item>
         <!-- 是否上架 -->
         <el-form-item label="是否上架" prop="is_up">
-          <el-radio v-model="formData.is_up" label="1">是</el-radio>
-          <el-radio v-model="formData.is_up" label="2">否</el-radio>
+          <el-radio-group v-model="formData.is_up">
+            <el-radio label="1">是</el-radio>
+            <el-radio label="2">否</el-radio>
+          </el-radio-group>
         </el-form-item>
         <!-- 类型 -->
         <el-form-item label="类型" prop="type">
-          <el-radio v-model="formData.type" label="1">视频</el-radio>
-          <el-radio v-model="formData.type" label="2">音频</el-radio>
+          <el-radio-group v-model="formData.type">
+            <el-radio label="1">视频</el-radio>
+            <el-radio label="2">音频</el-radio>
+          </el-radio-group>
         </el-form-item>
         <!-- 选择导师 -->
         <el-form-item label="选择导师" prop="teacher">
@@ -57,17 +54,9 @@
           </el-select>
         </el-form-item>
         <!-- 视频上传 -->
-        <el-form-item label="视频上传" prop="video">
-          <el-upload class="avatar-uploader" accept=".mp4" action="http://aoaoe.ybc365.com/api/upImg" :show-file-list="false" :name="key" :on-success="handleVideoSuccess" :before-upload="beforeUploadVideo" :on-progress='uploadVideoProcess'>
-            <span v-if="formData.video">{{videoName}}</span>
-            <el-button v-else >点击上传<i class="el-icon-upload el-icon--right"></i></el-button>
-            <span class="tishi">请上传mp4格式的视频,且大小不能超过200M</span>
-            <el-progress v-show="videoFlag == true" :percentage="videoUploadPercent"></el-progress>
-            <span class="tishi" v-show="videoFlag == true">视频处理中,请稍后<i class="el-icon-loading"></i></span>
-          </el-upload>
-        </el-form-item>
+        <uploadVideo @uploadSuccess='uploadSuccess' accept='video/*' checking='video'></uploadVideo>
         <el-form-item>
-          <el-button type="primary"  style="width:200px" @click="submitForm('form')">确认提交</el-button>
+          <el-button type="primary" style="width:200px" @click="submitForm('form')">确认提交</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -75,6 +64,8 @@
 </template>
 
 <script>
+import uploadVideo from "@/components/Common/uploadVideo";
+import uploadImage from "@/components/Common/uploadImage";
 export default {
   data() {
     return {
@@ -82,98 +73,48 @@ export default {
       imgFlag: false,
       percent: 0,
       type: this.$route.query.type,
-      videoFlag: false, //是否显示进度条
-      videoUploadPercent: 0, //进度条的进度，
-      isShowUploadVideo: false, //显示上传按钮
-      videoName: "",//视频的名字
       formData: {
         imgUrl: "",
         video: ""
       },
       rules: {
-        menu: [{ required: true, message: '请选择课件分类', trigger: 'blur' }],
+        menu: [{ required: true, message: '请选择课件分类', trigger: 'change' }],
         title: [{ required: true, message: '请输入课程名称', trigger: 'blur' }],
         desc: [{ required: true, message: '请输入课程简介', trigger: 'blur' }],
         imgUrl: [{ required: true, message: '请上传封面图', trigger: 'blur' }],
         sort: [{ required: true, message: '请排序', trigger: 'blur' }],
-        is_up: [{ required: true, message: '请选择是否上下架', trigger: 'blur' }],
-        type: [{ required: true, message: '请选择资源类型', trigger: 'blur' }],
-        teacher: [{ required: true, message: '请选择所属导师', trigger: 'blur' }],
-        video: [{ required: true, message: '请选择所属导师', trigger: 'blur' }],
+        is_up: [{ required: true, message: '请选择是否上下架', trigger: 'change' }],
+        type: [{ required: true, message: '请选择资源类型', trigger: 'change' }],
+        teacher: [{ required: true, message: '请选择所属导师', trigger: 'change' }],
+        video: [{ required: true, message: '请上传视频', trigger: 'blur' }],
       },
       options: [{ value: '1', label: '基础课程' }, { value: '2', label: '拓展课程' }],
     }
   },
   methods: {
-    //上传封面图成功回调
-    handleAvatarSuccess(res, file, fileList) {
-      this.imgFlag = false;
-      this.percent = 0;
-      this.formData.imgUrl = res.data.url;
+    //视频上传成功回调
+    uploadSuccess(url) {
+      this.formData.video = url
     },
-    // 上传封面图前校验
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
-      const isPNG = file.type === 'image/png';
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG && !isPNG) {
-        this.$message.error('上传图片只能是JPG或者PNG格式!');
-      }
-      if (!isLt2M) {
-        this.$message.error('上传图片大小不能超过 2MB!');
-      }
-      return (isJPG || isPNG) && isLt2M;
-    },
-    // 上传中的钩子
-    onProgress(event, file, fileList) {
-      console.log(file);
-      this.imgFlag = true;
-      console.log(event.percent);
-      this.percent = Math.floor(event.percent);
-    },
-    // 视频上传前的钩子
-    beforeUploadVideo(file) {
-      const isLt200M = file.size / 1024 / 1024 < 200;
-      if (['video/mp4'].indexOf(file.type) == -1) { //'video/ogg', 'video/flv', 'video/avi', 'video/wmv', 'video/rmvb'
-        this.$message.error('请上传正确的视频格式');
-        return false;
-      }
-      if (!isLt200M) {
-        this.$message.error('上传视频大小不能超过200MB哦!');
-        return false;
-      }
-      this.isShowUploadVideo = false;
-    },
-    // 视频上传中的钩子
-    uploadVideoProcess(event, file, fileList) {
-      this.videoFlag = true;
-      this.videoUploadPercent = Math.floor(event.percent);
-    },
-    // 视频上传后的钩子
-    handleVideoSuccess(res, file) {
-      this.videoFlag = false;
-      this.videoUploadPercent = 0;
-      if (res.status == 0) {
-        this.formData.video = res.data.url;
-        this.videoName = file.name
-        this.$message.success("视频上传成功")
-      } else {
-        this.$message.error('视频上传失败，请重新上传！');
-      }
+    uploadSuccessImg(url){
+      this.formData.imgUrl = url
     },
     //提交表单
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-       console.log( this.formData);
-        
+          console.log(this.formData);
+
         } else {
           console.log('error submit!!');
           return false;
         }
       });
     }
+  },
+  components: {
+    uploadVideo,
+    uploadImage
   },
 }
 </script>

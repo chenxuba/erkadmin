@@ -20,33 +20,28 @@
             基本信息
           </div>
         </div>
-        <!-- 课件分类  category -->
-        <el-form-item label="课件分类" prop="category">
+        <!-- 所属分类  category -->
+        <el-form-item label="所属分类" prop="category">
           <el-cascader v-model="formData.category" :options="options" style="width:200px;" placeholder="请选择课件分类" @change="handleChange"></el-cascader>
         </el-form-item>
         <!-- 课程名称 title -->
-        <el-form-item label="课程名称" prop="title">
+        <el-form-item label="视频名称" prop="title">
           <el-input v-model="formData.title" placeholder='课程名称' style="width: 500px;" />
-          <span class="tishi">请输入课程名称</span>
+          <span class="tishi">请输入视频名称</span>
         </el-form-item>
         <!-- 简介 desc -->
-        <el-form-item label="课程简介" prop="desc">
+        <el-form-item label="视频简介" prop="desc">
           <el-input v-model="formData.desc" placeholder='课程简介' type="textarea" :rows="3" style="width: 500px;" />
-          <span class="tishi">请输入课程简介</span>
+          <span class="tishi">请输入视频简介</span>
           <el-button type="text">查看示例<i class="el-icon-question"></i></el-button>
         </el-form-item>
         <!-- 封面图 imgUrl -->
-        <el-form-item label="封面图" prop="imgUrl">
-          <el-upload class="avatar-uploader" action="http://aoaoe.ybc365.com/api/upImg" :show-file-list="false" :name="key" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" :on-progress='onProgress'>
-            <img v-if="formData.imgUrl" :src="formData.imgUrl" class="imgUrl">
-            <el-button v-else>点击上传<i class="el-icon-upload el-icon--right"></i></el-button>
-            <span class="tishi block">建议尺寸《750*460》</span>
-            <el-progress v-show="imgFlag == true" :percentage="percent"></el-progress>
-          </el-upload>
-        </el-form-item>
-        <!-- 课程详情  message-->
+        <uploadImage @uploadSuccessImg='uploadSuccessImg' accept='image/*' checking='imgUrl' name='上传封面' ></uploadImage>
+        <!-- 视频文件 -->
+        <uploadVideo @uploadSuccess='uploadSuccess' accept='video/*' checking='video'></uploadVideo>
+        <!-- 视频详情  message-->
         <div class="wrap">
-          <el-form-item label="课程详情" prop="message">
+          <el-form-item label="视频详情" prop="message">
             <div class="ueditor">
               <vue-ueditor-wrap v-model="formData.message" :config="myConfig"></vue-ueditor-wrap>
             </div>
@@ -58,7 +53,7 @@
         <!-- 片段试看 TryTime -->
         <el-form-item label="片段试看" prop="TryTime">
           <el-checkbox v-model="formData.checkedTryTime">开启片段试看</el-checkbox>
-          <span class="tishi">为用户提供一段时间的试看内容，刺激用户购买 (截取时间定位存在正负10秒的误差)</span>
+          <span class="tishi">为用户提供一段时间的试看内容，刺激用户购买。</span>
           <div class="setting-wrapper" v-if="formData.checkedTryTime">
             试看设置
             <div class="ipt-box">视频前
@@ -186,21 +181,23 @@
             引导加群
           </div>
         </div>
-        <!-- 导师二维码 QRcode-->
-        <el-form-item label="二维码上传" prop="imgUrl">
-          <el-upload class="avatar-uploader" action="http://aoaoe.ybc365.com/api/upImg" :show-file-list="false" :name="key" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" :on-progress='onProgress'>
-            <img v-if="formData.imgUrl" :src="formData.imgUrl" class="imgUrl">
-            <el-button v-else>点击上传<i class="el-icon-upload el-icon--right"></i></el-button>
-            <span class="tishi block">正常1:1 的图片上传，引导用户加微信群、微信个人号或公众号等</span>
-            <el-progress v-show="QRcodeFlag == true" :percentage="percent"></el-progress>
-          </el-upload>
+        <el-form-item label="引导加群">
+          <el-switch v-model="value">
+          </el-switch>
+          <span class="tishi">引导用户加微信群、微信个人号或公众号等</span>
+          <el-button type="text">查看示例<i class="el-icon-question"></i></el-button>
         </el-form-item>
-        <!-- 二维码提示语 qrmsg-->
-        <el-form-item label="提示语" prop="qrmsg">
-          <el-input v-model="formData.qrmsg" placeholder='可输入群名称' style="width: 300px;" maxlength="30" />
-          <span class="tishi">显示二维码底部的提示语</span>
-        </el-form-item>
+        <div class="addqun" v-if="value">
+          <!-- 导师二维码 QRcode-->
+           <uploadImage @uploadSuccessImg='uploadSuccessQrImg' accept='image/*' checking='imgUrl' name='二维码上传' ></uploadImage>
+          <!-- 二维码提示语 qrmsg-->
+          <el-form-item label="提示语" prop="qrmsg">
+            <el-input v-model="formData.qrmsg" placeholder='可输入群名称' style="width: 300px;" maxlength="30" />
+            <span class="tishi">显示二维码底部的提示语</span>
+          </el-form-item>
+        </div>
         <el-form-item>
+          <el-button type="warning" style="width:150px" @click="resetForm('form')">重置</el-button>
           <el-button type="primary" style="width:150px" @click="submitForm('form')">确认提交</el-button>
         </el-form-item>
       </el-form>
@@ -210,10 +207,12 @@
 
 <script>
 import VueUeditorWrap from 'vue-ueditor-wrap'
+import uploadImage from "@/components/Common/uploadImage";
+import uploadVideo from "@/components/Common/uploadVideo";
 export default {
   data() {
     return {
-
+      value: false,
       msg: "",
       myConfig: {
         toolbars: [[
@@ -247,12 +246,6 @@ export default {
         // UEditor 资源文件的存放路径，如果你使用的是 vue-cli 生成的项目，通常不需要设置该选项，vue-ueditor-wrap 会自动处理常见的情况，如果需要特殊配置，参考下方的常见问题2
         UEDITOR_HOME_URL: '/UEditor/'
       },
-      key: 'file',
-      imgFlag: false,
-      QRcodeFlag: false,
-      percent: 0,
-      isShowUploadVideo: false, //显示上传按钮
-      videoName: "",//视频的名字
       formData: {
         checkedTryTime: false, //是否开启试看
         category: "",//类别
@@ -272,11 +265,12 @@ export default {
         proportion: "", //抽成比例
         sort: "", //排序
         share: "",//分享收益
-        sharePrice:"",
+        sharePrice: "",
         is_up: "",//是否上架
         recommend: "",//是否推荐到首页
         QRcode: "",//二维码
-        qrmsg: ""//二维码提示语
+        qrmsg: "",//二维码提示语
+        video:"",
       },
       rules: {
         category: [{ required: true, message: '请选择课件分类', trigger: 'blur' }],//类别
@@ -285,19 +279,20 @@ export default {
         message: [{ required: true, message: '请完善课程详情', trigger: 'blur' }],//详情
         payType: [{ required: true, message: '请选择支付方式', trigger: 'change' }],//支付方式
         password: [{ required: true, message: '请选择课件分类', trigger: 'blur' }],//密码
-        vipdiscount: [{ required: true, message: '请选择课件分类', trigger: 'change' }],//VIP折扣
-        svipdiscount: [{ required: true, message: '请选择课件分类', trigger: 'change' }],//sVIP折扣
-        type: [{ required: true, message: '请选择课件分类', trigger: 'change' }], //类型
-        teacher: [{ required: true, message: '请选择课件分类', trigger: 'blur' }],//选择导师
-        falsepeople: [{ required: true, message: '请选择课件分类', trigger: 'blur' }],//虚拟人数
-        proportion: [{ required: true, message: '请选择课件分类', trigger: 'blur' }], //抽成比例
-        sort: [{ required: true, message: '请选择课件分类', trigger: 'blur' }], //排序
-        share: [{ required: true, message: '请选择课件分类', trigger: 'change' }],//分享收益
-        is_up: [{ required: true, message: '请选择课件分类', trigger: 'change' }],//是否上架
-        recommend: [{ required: true, message: '请选择课件分类', trigger: 'change' }],//是否推荐到首页
-        QRcode: [{ required: true, message: '请选择课件分类', trigger: 'blur' }],//二维码
-        qrmsg: [{ required: true, message: '请选择课件分类', trigger: 'blur' }],//二维码提示语
-        imgUrl: [{ required: true, message: '请选择课件分类', trigger: 'blur' }]//二封面图
+        vipdiscount: [{ required: true, message: '请选择是否折扣', trigger: 'change' }],//VIP折扣
+        svipdiscount: [{ required: true, message: '请选择是否折扣', trigger: 'change' }],//sVIP折扣
+        type: [{ required: true, message: '请选择资源类型', trigger: 'change' }], //类型
+        teacher: [{ required: true, message: '请选择所属导师', trigger: 'blur' }],//选择导师
+        falsepeople: [{ required: true, message: '请填写虚拟人数', trigger: 'blur' }],//虚拟人数
+        proportion: [{ required: true, message: '请填写抽成比例', trigger: 'blur' }], //抽成比例
+        sort: [{ required: true, message: '请排序', trigger: 'blur' }], //排序
+        share: [{ required: true, message: '请选择是否推荐分享', trigger: 'change' }],//分享收益
+        is_up: [{ required: true, message: '请选择是否上架', trigger: 'change' }],//是否上架
+        recommend: [{ required: true, message: '请选择是否推荐到首页', trigger: 'change' }],//是否推荐到首页
+        QRcode: [{ required: true, message: '请上传二维码', trigger: 'blur' }],//二维码
+        qrmsg: [{ required: true, message: '请填写提示语', trigger: 'blur' }],//二维码提示语
+        imgUrl: [{ required: true, message: '请上传封面图', trigger: 'blur' }],//二封面图
+        video: [{ required: true, message: '请上传视频', trigger: 'blur' }],//二封面图
       },
       options: [
         {
@@ -318,59 +313,41 @@ export default {
     }
   },
   methods: {
-    //上传封面图成功回调
-    handleAvatarSuccess(res, file, fileList) {
-      this.imgFlag = false;
-      this.percent = 0;
-      this.formData.imgUrl = res.data.url;
+    uploadSuccess(url){
+      this.formData.video = url
     },
-    // 上传封面图前校验
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
-      const isPNG = file.type === 'image/png';
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG && !isPNG) {
-        this.$message.error('上传图片只能是JPG或者PNG格式!');
-      }
-      if (!isLt2M) {
-        this.$message.error('上传图片大小不能超过 2MB!');
-      }
-      return (isJPG || isPNG) && isLt2M;
+    uploadSuccessImg(url) {
+      this.formData.imgUrl = url
     },
-    // 上传中的钩子
-    onProgress(event, file, fileList) {
-      console.log(file);
-      this.imgFlag = true;
-      console.log(event.percent);
-      this.percent = Math.floor(event.percent);
+    uploadSuccessQrImg(url){
+      this.formData.QRcode = url
     },
-
     //提交表单
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.formData);
           if (this.formData.checkedTryTime == true && this.formData.TryTime == '') {
             this.$message({
               message: '片段试听/试看设置时长需大于0',
               type: 'error',
             });
-          }else if(this.formData.payType == 1 && this.formData.price == undefined ){
+          } else if (this.formData.payType == 1 && this.formData.price == undefined) {
             this.$message({
               message: '付费价格不能为0或空！',
               type: 'error',
             });
-          }else if(this.formData.payType == 3 &&  this.formData.password == ''){
+          } else if (this.formData.payType == 3 && this.formData.password == '') {
             this.$message({
               message: '支付方式为密码时，密码不能为空',
               type: 'error',
             });
-          }else if(this.formData.share == 1 &&  this.formData.sharePrice == ''){
+          } else if (this.formData.share == 1 && this.formData.sharePrice == '') {
             this.$message({
               message: '分享直推收益金额不能为0或空！',
               type: 'error',
             });
+          } else {
+            console.log(this.formData);
           }
         } else {
           console.log('error submit!!');
@@ -378,10 +355,16 @@ export default {
         }
       });
     },
+    //重置
+    resetForm(formName) {
+      this.$refs[formName].resetFields();
+    },
     handleChange() { },
   },
   components: {
-    VueUeditorWrap
+    VueUeditorWrap,
+    uploadImage,
+    uploadVideo
   },
 }
 </script>

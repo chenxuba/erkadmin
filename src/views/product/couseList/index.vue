@@ -14,7 +14,7 @@
           <el-date-picker :default-time="['00:00:00','23:59:59']" type="daterange" range-separator=":" class="date-item" value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
           <el-button type="success" icon="el-icon-search">搜索</el-button>
           <el-button type="primary" icon="el-icon-refresh-left">重置</el-button>
-          <el-button type="warning" icon="el-icon-edit" @click="handleAdd">新建课程</el-button>
+          <el-button type="warning" icon="el-icon-edit" @click="handleAdd">新增视频</el-button>
         </div>
       </div>
       <!-- 表格渲染 -->
@@ -56,21 +56,24 @@
               </template>
             </el-table-column>
             <!-- 分享收益 share -->
-            <el-table-column :show-overflow-tooltip="true" prop="share" label="分享收益" align="center">
+            <el-table-column :show-overflow-tooltip="true" prop="share" label="分享收益" align="center" width="100">
               <template slot-scope="scope">
                 <el-tag>{{scope.row.share}}</el-tag>
               </template>
             </el-table-column>
             <!-- 创建时间 createTime  -->
-            <el-table-column :show-overflow-tooltip="true" prop="createTime" label="创建时间" align="center" />
-            <el-table-column label="操作" width="200" align="center">
+            <el-table-column :show-overflow-tooltip="true" prop="createTime" label="创建时间" align="center" width="130" />
+            <el-table-column label="操作" width="150" align="center" fixed="right">
               <template slot-scope="scope">
-                <div class="flex">
-                  <el-button @click="handleClick(scope.row)" type="primary">编辑课程</el-button>
-                  <el-button type="success">上传课时</el-button>
-                  <el-button type="danger" class="btn">删除课程</el-button>
-                  <el-button type="warning">查看评论</el-button>
-                </div>
+                  <el-tooltip class="item" effect="dark" content="编辑视频" placement="top" >
+                    <el-button @click="handleClick(scope.row)" circle icon="el-icon-edit" type="primary" />
+                  </el-tooltip>
+                  <el-tooltip class="item" effect="dark" content="删除视频" placement="top">
+                    <el-button type="danger" circle class="btn" icon="el-icon-delete"></el-button>
+                  </el-tooltip>
+                  <el-tooltip class="item" effect="dark" content="查看评论" placement="top">
+                    <el-button type="warning" circle icon="el-icon-s-comment"></el-button>
+                  </el-tooltip>
               </template>
             </el-table-column>
           </el-table>
@@ -117,7 +120,7 @@ export default {
           pwdOrPrice: "20.00",
           vip: "会员免费",
           svip: "会员免费",
-          share: "推荐/1.00",
+          share: "推荐/99.00",
           createTime: "2020-02-02 12:00"
         }
       ]
@@ -161,13 +164,6 @@ export default {
   }
   .flex {
     display: flex;
-    flex-wrap: wrap;
-    .el-button {
-      margin-bottom: 5px;
-    }
-    .btn {
-      margin-left: 0;
-    }
   }
 }
 </style>

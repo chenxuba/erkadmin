@@ -79,6 +79,7 @@ export default {
       options: [],
       rules: {
         type_name: [{ required: true, message: '请输入分类名称', trigger: 'blur' }],
+        is_course: [{ required: true, message: '请选择是否是拓展课程', trigger: 'change' }],
         is_platform: [{ required: true, message: '请选择课程分类', trigger: 'blur' }],
         is_tuozhan: [{ required: true, message: '请选择是否是拓展课程', trigger: 'change' }],
         sort: [{ required: true, message: '请排序,数字越大越靠前', trigger: 'blur' }],

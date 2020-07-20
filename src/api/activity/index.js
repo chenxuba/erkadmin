@@ -3,8 +3,9 @@ import request from '@/utils/request'
 // 获取列表
 export function gettbeauty(data) {
   return request({
-    url: "/beauty?status=" + data,
+    url: "/beauty",
     method: 'get',
+    params:data
   })
 }
 //驳回

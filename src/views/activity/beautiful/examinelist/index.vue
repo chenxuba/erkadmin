@@ -94,7 +94,7 @@ export default {
   methods: {
     //获取审核列表
     gettbeauty() {
-      gettbeauty(0).then(res => {
+      gettbeauty({status:0}).then(res => {
         console.log(res);
         this.tableData = res.data.list
       })
