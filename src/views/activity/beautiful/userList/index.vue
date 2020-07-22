@@ -41,18 +41,20 @@
         <el-table-column label="擅长" prop="skills" />
         <!-- <el-table-column label="所属区域" /> -->
         <el-table-column label="所属机构" prop="org_name" :show-overflow-tooltip="true" />
-        <el-table-column label="从业年限" prop="entire_period" align="center" />
+        <el-table-column label="从业年限" prop="entire_period" align="center" width="80" />
+        <el-table-column label="票数" prop="score" align="center" width="70" />
         <el-table-column label="视频展示" align="center">
           <template slot-scope="scope">
             <el-button type="warning" icon="el-icon-search" round @click="preview(scope.row)">预览</el-button>
           </template>
         </el-table-column>
-        <el-table-column label="是否上下架" width="150" align="center" prop="status">
+        <!-- <el-table-column label="是否上下架" width="150" align="center" prop="status">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.status" active-color="#13ce66" inactive-color="#ff4949" :active-value="1" :inactive-value="0">
             </el-switch>
           </template>
-        </el-table-column>
+        </el-table-column> -->
+         <el-table-column label="参与时间" prop="create_time" />
       </el-table>
       <!--分页-->
       <div class="fenye" style="margin-top:20px;">
@@ -69,7 +71,6 @@
 
 <script>
 import { gettbeauty, search, outexport } from "@/api/activity";
-import axios from "axios";
 export default {
   data() {
     return {
