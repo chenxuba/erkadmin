@@ -16,6 +16,7 @@ import '../public/UEditor/ueditor.all.min.js'
 import '../public/UEditor/lang/zh-cn/zh-cn.js'
 import '../public/UEditor/dialogs/xiumi-ue-dialog-v5'
 import '../public/UEditor/dialogs/xiumi-ue-v5.css'
+// 引入相关文件
 
 import '@/icons' // icon
 import '@/permission' // permission control
