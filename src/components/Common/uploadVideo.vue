@@ -112,10 +112,10 @@ export default {
   display: inline-block;
   width: 400px;
 }
-/deep/ .icon {
+::v-deep .icon {
   margin-right: 5px;
 }
-/deep/ .span{
+::v-deep .span{
   background-color: red;
   color: #fff;
   padding: 0px 8px;

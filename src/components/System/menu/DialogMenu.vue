@@ -216,7 +216,7 @@ export default {
 
 <style lang="scss" scoped>
 .dialogmenu {
-  /deep/ .el-dialog {
+  ::v-deep .el-dialog {
     overflow: hidden;
   }
 }

@@ -71,7 +71,7 @@ export default {
   padding-top: 12px;
   text-align: center;
 }
-/deep/ .el-card__header {
+::v-deep .el-card__header {
   padding: 12px 20px !important;
   font-size: 14px;
   background: #f5f5f5;

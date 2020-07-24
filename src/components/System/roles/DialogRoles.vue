@@ -79,7 +79,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/deep/ .el-dialog {
+::v-deep .el-dialog {
   overflow: auto;
 }
 </style>

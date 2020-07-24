@@ -10,13 +10,12 @@ import '@/styles/index.scss' // global css
 import App from './App'
 import store from './store'
 import router from './router'
-// 引入相关文件
-import '../public/UEditor/ueditor.config'
-import '../public/UEditor/ueditor.all.min.js'
-import '../public/UEditor/lang/zh-cn/zh-cn.js'
-import '../public/UEditor/dialogs/xiumi-ue-dialog-v5'
-import '../public/UEditor/dialogs/xiumi-ue-v5.css'
-// 引入相关文件
+
+//引入必要的文件 集成秀米所需
+import '../public/NEditor/neditor.config'
+import '../public/NEditor/neditor.all.min.js'
+import '../public/NEditor/dialogs/xiumi-ue-dialog-v5'
+import '../public/NEditor/dialogs/xiumi-ue-v5.css'
 
 import '@/icons' // icon
 import '@/permission' // permission control

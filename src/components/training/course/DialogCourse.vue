@@ -128,7 +128,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/deep/ .el-cascader {
+::v-deep .el-cascader {
   width: 380px;
 }
 .tishi{

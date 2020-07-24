@@ -266,10 +266,10 @@ export default {
     height: 45px;
     border-radius: 4px;
   }
-  /deep/ .el-switch {
+  ::v-deep .el-switch {
     margin-left: -10px;
   }
-  /deep/ .el-switch__label--left {
+  ::v-deep .el-switch__label--left {
     position: relative;
     left: 44px;
     color: #fff;
@@ -278,7 +278,7 @@ export default {
       font-size: 12px !important;
     }
   }
-  /deep/ .el-switch__label--right {
+  ::v-deep .el-switch__label--right {
     position: relative;
     right: 44px;
     color: #fff;
@@ -287,12 +287,12 @@ export default {
     }
     z-index: -1111;
   }
-  /deep/ .el-switch__label--right.is-active {
+  ::v-deep .el-switch__label--right.is-active {
     z-index: 1111;
     font-size: 12px !important;
     color: #fff !important;
   }
-  /deep/ .el-switch__label--left.is-active {
+  ::v-deep .el-switch__label--left.is-active {
     z-index: 1111;
     font-size: 12px !important;
     color: #9c9c9c !important;

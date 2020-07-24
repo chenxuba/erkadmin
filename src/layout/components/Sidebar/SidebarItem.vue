@@ -13,7 +13,7 @@
       <template slot="title">
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
       </template>
-      <sidebar-item v-for="child in item.children" :key="child.path" :is-nest="true" :item="child" :base-path="resolvePath(child.path)" class="nest-menu" :class="child.children ? 'children' : ''" /> 
+      <sidebar-item v-for="child in item.children" :key="child.path" :is-nest="true" :item="child" :base-path="resolvePath(child.path)" class="nest-menu" :class="child.children ? 'children' : ''" />
       <!-- 上面 多层child的时候双排显示会出问题， :class="child.children ? 'children' : ''" 这样就ok了 -->
     </el-submenu>
   </div>
@@ -91,22 +91,22 @@ export default {
       return path.resolve(this.basePath, routePath)
     }
   },
-  
+
 }
 </script>
 <style lang="scss" scoped>
-/deep/.el-menu {
+::v-deep .el-menu {
   display: flex;
   flex-wrap: wrap;
   background-color: #1f2d3d !important;
-  /deep/ .el-menu-item {
-    padding-left: 20px !important;
-  }
   .nest-menu {
     width: 50%;
   }
-  .children{
-    width:100%;
+  .children {
+    width: 100%;
   }
+}
+::v-deep .el-menu-item {
+  padding-left: 20px !important;
 }
 </style>

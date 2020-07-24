@@ -192,7 +192,7 @@ export default {
   .demo-table-expand {
     font-size: 0;
   }
-  /deep/.demo-table-expand label {
+  ::v-deep.demo-table-expand label {
     width: 100px;
     color: red;
     font-weight: bold;

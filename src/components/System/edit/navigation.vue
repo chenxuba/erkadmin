@@ -159,7 +159,7 @@ export default {
     width: 45px;
     height: 45px;
   }
-  /deep/ .el-drawer__header {
+ ::v-deep .el-drawer__header {
     span {
       outline: none;
     }

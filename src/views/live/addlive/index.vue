@@ -83,7 +83,8 @@
         <div class="wrap">
           <el-form-item label="直播详情" prop="guize">
             <div class="ueditor">
-              <vue-ueditor-wrap v-model="msg" :config="myConfig"></vue-ueditor-wrap>
+              <!-- <vue-ueditor-wrap v-model="msg" :config="myConfig"></vue-ueditor-wrap> -->
+              <Ueditor @change='changeContent'></Ueditor>
             </div>
             <div class="box">
               <div v-html="msg"></div>
@@ -100,45 +101,14 @@
 </template>
 
 <script>
-import VueUeditorWrap from 'vue-ueditor-wrap'
+// import VueUeditorWrap from 'vue-ueditor-wrap'
 export default {
   data() {
     return {
       value: "",
       value1: "",
       msg: "",
-      myConfig: {
-        toolbars: [[
-          'source', //源代码
-          'undo', //撤销
-          'redo', //重做
-          'bold', //加粗
-          'underline', //下划线
-          'strikethrough', //删除线
-          'forecolor', //字体颜色
-          'preview', //预览
-          'horizontal', //分隔线
-          'simpleupload', //单图上传
-          'link', //超链接
-          'spechars', //特殊字符
-          'justifyleft', //居左对齐
-          'justifyright', //居右对齐
-          'justifycenter', //居中对齐
-          'justifyjustify', //两端对齐
-          'fullscreen', //全屏
-          'imagecenter', //居中
-        ]],
-        // 编辑器不自动被内容撑高
-        autoHeightEnabled: false,
-        // 初始容器高度
-        initialFrameHeight: 400,
-        // 初始容器宽度
-        initialFrameWidth: '80%',
-        // 上传文件接口（这个地址是我为了方便各位体验文件上传功能搭建的临时接口，请勿在生产环境使用！！！）
-        serverUrl: 'http://35.201.165.115:8000/controller.php',
-        // UEditor 资源文件的存放路径，如果你使用的是 vue-cli 生成的项目，通常不需要设置该选项，vue-ueditor-wrap 会自动处理常见的情况，如果需要特殊配置，参考下方的常见问题2
-        UEDITOR_HOME_URL: '/UEditor/'
-      },
+      
       props: {
         value: "id",
       },
@@ -201,10 +171,16 @@ export default {
         }
       });
     },
-    handleChange() { }
+    handleChange() { },
+    changeContent(v){
+      this.msg = v
+    }
   },
   components: {
-    VueUeditorWrap
+    // VueUeditorWrap
+    Ueditor: resolve => {
+      require(['@/components/Ueditor/index'], resolve)
+    },
   },
 }
 </script>
