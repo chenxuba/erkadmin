@@ -3,12 +3,12 @@
     <!-- 视频上传 -->
     <el-form-item :label="name" :prop='checking'>
       <el-button @click="vExampleAdd">点击上传<i class="el-icon-upload el-icon--right"></i></el-button>
-      <span v-html="uploadLoading"></span>
+      <span v-html="uploadLoading" class="spans"></span>
       <form ref="vExample">
         <input type="file" :accept='accept' style="display:none;" ref="vExampleFile" @change="vExampleUpload" />
       </form>
     </el-form-item>
-    <!-- 视频名称 -->
+    <!-- 图片预览 -->
     <el-form-item :label="label " v-if="uploaderInfos.progress == 1" :prop='checking'>
       <img :src="uploaderInfos.imageUrl" class="img" alt="">
     </el-form-item>
@@ -131,5 +131,8 @@ export default {
   color: #fff;
   padding: 0px 8px;
   border-radius: 4px;
+}
+.spans{
+  margin-left: 10px;
 }
 </style>

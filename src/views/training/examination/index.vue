@@ -3,7 +3,7 @@
     <el-card>
       <el-row>
         <el-col>
-          <el-cascader style="width: 60%;" filterable  v-model="value" placeholder="请选择课件进行筛选" clearable :props='props' :options="options" @change="handleChange"></el-cascader>
+          <el-cascader style="width: 60%;margin-right:10px;" filterable  v-model="value" placeholder="请选择课件进行筛选"  clearable :props='props' :options="options" @change="handleChange"></el-cascader>
           <el-button type="primary"  style="width:100px;">搜 索</el-button>
           <el-button type="warning"  style="width:100px;">重 置</el-button>
           <el-button type="success"  style="width:100px;" @click="addexamination">创建试卷</el-button>

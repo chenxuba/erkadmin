@@ -21,8 +21,8 @@
       </el-table>
     </el-card>
     <!-- dialog -->
-    <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="70%">
-      <div style="margin-top: -25px">
+    <el-dialog :title="dialogTitle" :visible.sync="dialogVisible" width="50%">
+      <div style="margin-top: -15px;text-align: center">
         <el-radio-group v-model="dialogRadio"  @change='hanldChang'>
           <el-radio-button label="1">单选题</el-radio-button>
           <el-radio-button label="2">多选题</el-radio-button>
@@ -109,7 +109,7 @@ export default {
       dialogTitle: "新增试题",
       dialogRadio: '1',
       tiganText: "",
-      form: "",
+      form: {},
       A: "",
       B: "",
       C: "",

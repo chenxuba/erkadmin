@@ -5,18 +5,18 @@
       <div>
         <!-- 搜索 -->
         <span>
-          <el-input  clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" />
+          <el-input clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" />
           <span class='filter-item'>
-            <el-button  type="success" icon="el-icon-search">搜索</el-button>
-            <el-button  type="warning" icon="el-icon-refresh-left">重置</el-button>
-            <el-button  type="primary" icon="el-icon-plus" @click="handleAdd()">创建课程</el-button>
-            <el-button  type="primary" icon="el-icon-plus" @click="handleAdd()">创建须知</el-button>
+            <el-button type="success" icon="el-icon-search">搜索</el-button>
+            <el-button type="warning" icon="el-icon-refresh-left">重置</el-button>
+            <el-button type="primary" icon="el-icon-plus" @click="handleAdd()">创建课程</el-button>
+            <el-button type="primary" icon="el-icon-plus" @click="handleAdd()">创建须知</el-button>
           </span>
         </span>
         <span>
           <el-button-group>
-            <el-button icon="el-icon-search" ></el-button>
-            <el-button icon="el-icon-refresh"  @click="refresh"></el-button>
+            <el-button icon="el-icon-search"></el-button>
+            <el-button icon="el-icon-refresh" @click="refresh"></el-button>
           </el-button-group>
         </span>
       </div>
@@ -24,30 +24,31 @@
     <!--菜单管理-->
     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="margin-top: 20px">
       <el-card class="box-card" shadow="never">
-        <el-table ref="table" :data="data" >
-          <el-table-column label="ID" prop="id" width="100" />
-          <el-table-column prop="type_name" label="类别">
+        <el-table ref="table" :data="data" v-loading='loading'>
+          <el-table-column label="ID" prop="id" width="55" />
+          <el-table-column prop="type_name" label="类别" align="center" width="300">
             <template slot-scope="scope">
               <el-tooltip class="item" effect="dark" :content="scope.row.type_name" placement="top">
                 <span style="overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{scope.row.type_name}}</span>
               </el-tooltip>
             </template>
           </el-table-column>
-          <el-table-column prop="course_price" label="价格">
+          <el-table-column prop="course_price" label="价格" align="center">
             <template slot-scope="scope">
-              <span class="course_price">¥ {{scope.row.course_price}}</span>
+              <span class="course_price" v-if="scope.row.course_price != 0">¥ {{scope.row.course_price}}</span>
+              <span class="course_price" v-else>免费</span>
             </template>
           </el-table-column>
-          <el-table-column prop="course_thumb" label="Banner图">
+          <el-table-column prop="course_thumb" label="Banner图" align="center">
             <template slot-scope="scope">
               <img :src="scope.row.course_thumb" alt="" class="course_thumb">
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="300">
+          <el-table-column label="操作" width="300" align="center">
             <template slot-scope="scope">
-              <el-button  type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
-              <el-button  type="danger" icon="el-icon-delete">删除</el-button>
-              <el-button  type="warning" icon="el-icon-view" @click="seeCourseItem(scope.row)">查看课件</el-button>
+              <el-button size="mini" type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
+              <el-button size="mini" type="danger" icon="el-icon-delete" @click="DelTrainingCourse(scope.row.id)">删除</el-button>
+              <el-button size="mini" type="warning" icon="el-icon-view" @click="seeCourseItem(scope.row)">查看课件</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -56,31 +57,17 @@
       </el-card>
     </el-col>
     <!-- 新增弹窗 -->
-    <DialogCourse :dialogMenu="dialogMenu" :formData="formData"></DialogCourse>
+    <DialogCourse :dialogMenu="dialogMenu" :formData="formData" @update='gettrainingCourse'></DialogCourse>
   </div>
 </template>
 
 <script>
-import { gettrainingCourse } from "@/api/training";
+import { gettrainingCourse, DelTrainingCourse } from "@/api/training";
 export default {
   data() {
     return {
-      data: [
-        // {
-        //   "id": 1,
-        //   "type_id": 3,
-        //   "course_price": "900",
-        //   "sort": "0",
-        //   "course_thumb": "http://erkong.ybc365.com/a8421202003142111179409.png",
-        //   "create_time": 1584191486,
-        //   "view_number": 45,
-        //   "certificate_price": "20.00",
-        //   "click_number": 0,
-        //   "expand_number": 8,
-        //   "type_name": "康复训练师/言语-语言职业认证课程/初级认证",
-        //   "thumb": "<img src='http://erkong.ybc365.com/a8421202003142111179409.png' width='68'>"
-        // }
-      ],
+      loading: false,
+      data: [],
       dialogMenu: {
         show: false,
         title: "",
@@ -98,6 +85,7 @@ export default {
     }
   },
   methods: {
+    // 创建课程
     handleAdd() {
       this.dialogMenu = {
         show: true,
@@ -105,6 +93,7 @@ export default {
         option: "add",
       };
       this.formData = {
+        type_id: '',
         type: [],
         course_price: '',
         sort: "",
@@ -114,17 +103,20 @@ export default {
         imgUrl: "",
       }
     },
-    refresh() {
-
-    },
+    // 刷新
+    refresh() { },
+    // 编辑课程
     handleEdit(row) {
+      console.log(row);
       this.dialogMenu = {
         show: true,
         title: "编辑课程",
         option: "edit",
       };
       this.formData = {
-        type: [1,2,4],
+        id: row.id,
+        type_id: row.type_arr[2],
+        type: row.type_arr,
         course_price: row.course_price,
         sort: row.sort,
         zhengshu_price: row.certificate_price,
@@ -145,12 +137,32 @@ export default {
     },
     //获取课程
     gettrainingCourse() {
+      this.loading = true
       gettrainingCourse().then(res => {
-        console.log(res);
-        if (res.code == 0) {
-          this.data = res.data.list
-        }
+        this.data = res.data.list
+        this.loading = false
       })
+    },
+    //删除课程
+    DelTrainingCourse(id) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        DelTrainingCourse(id).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+          this.gettrainingCourse()
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     }
   },
   mounted() {
@@ -193,6 +205,7 @@ export default {
   border-radius: 15px;
 }
 .course_thumb {
-  width: 120px;
+  width: 100px;
+  border-radius: 3px;
 }
 </style>

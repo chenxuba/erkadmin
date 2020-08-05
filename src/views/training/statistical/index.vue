@@ -7,7 +7,7 @@
           <el-tab-pane label="言语培训课">
             <!--工具栏-->
             <div class="head-container" style="margin-bottom:10px;">
-              <div>
+              <div style="display: flex;">
                 <!-- 搜索 -->
                 <el-input clearable  v-model="search" placeholder="输入会员名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
                 <el-date-picker :default-time="['00:00:00','23:59:59']" type="daterange" range-separator=":"  class="date-item" value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
@@ -192,5 +192,8 @@ export default {
 <style lang="scss" scoped>
 .main {
   margin: 10px;
+  .filter-item,.date-item{
+    margin-right: 10px;
+  }
 }
 </style>
