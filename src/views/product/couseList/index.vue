@@ -5,13 +5,13 @@
       <div class="head-container">
         <div>
           <!-- 搜索 -->
-          <el-input clearable placeholder="输入课程名称搜索" style="width: 150px;" class="filter-item" />
+          <el-input clearable placeholder="输入课程名称搜索" style="width: 150px;margin-right:10px;" class="filter-item" />
           <!-- 选择导师 -->
           <el-select v-model="teacher" placeholder="请选择导师">
             <el-option v-for="item in teacherArr" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
-          <el-date-picker :default-time="['00:00:00','23:59:59']" type="daterange" range-separator=":" class="date-item" value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
+          <el-date-picker :default-time="['00:00:00','23:59:59']" style="margin:0 10px;" type="daterange" range-separator=":" class="date-item" value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
           <el-button type="success" icon="el-icon-search">搜索</el-button>
           <el-button type="primary" icon="el-icon-refresh-left">重置</el-button>
           <el-button type="warning" icon="el-icon-edit" @click="handleAdd">新增视频</el-button>

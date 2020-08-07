@@ -22,7 +22,7 @@
       <el-button @click="resetUp" v-if="uploaderInfos.progress != 1 && uploaderInfos.progress != 0" v-show="showReBtn">取消上传<i class="el-icon-upload el-icon--right"></i></el-button>
     </el-form-item>
     <!-- 预览 -->
-    <el-dialog title="预览" :visible.sync="dialogVisible" width="40%" destroy-on-close>
+    <el-dialog title="预览" :visible.sync="dialogVisible" width="40%" destroy-on-close append-to-body>
       <video :src="uploaderInfos.videoUrl" style="width:100%;" controls></video>
     </el-dialog>
   </div>
