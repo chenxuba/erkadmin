@@ -59,8 +59,8 @@
         </el-table-column>
         <el-table-column label="操作" width="200" align="center">
           <template slot-scope="scope">
-            <el-button type="primary" icon="el-icon-edit" @click="handleEdit(scope.row)">编辑</el-button>
-            <el-button type="danger" icon="el-icon-delete">删除</el-button>
+            <el-button type="primary" icon="el-icon-edit" size="mini" @click="handleEdit(scope.row)">编辑</el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="DeltrainingCourseware(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { gettrainingCourseItem } from "@/api/training";
+import { gettrainingCourseItem, DeltrainingCourseware } from "@/api/training";
 export default {
   data() {
     return {
@@ -90,7 +90,8 @@ export default {
       loading: false,
       dialogVisible: false,
       id: this.$route.query.id,
-      type: this.$route.query.type,
+      type: this.$route.query.type || localStorage.getItem("type"),
+      thirdId: this.$route.query.thirdId || localStorage.getItem("thirdId"),
       value: "0",
       videoUrl: "",
       data: [],
@@ -117,7 +118,9 @@ export default {
       this.$router.push({
         path: '/training/addCourseItem',
         query: {
-          type: this.type
+          id: this.id,
+          type: this.type,
+          thirdId: this.thirdId
         }
       })
     },
@@ -140,6 +143,7 @@ export default {
         path: '/training/editCourseItem/' + row.id,
         query: {
           type: this.type,
+          thirdId: this.thirdId
         }
       })
     },
@@ -164,6 +168,30 @@ export default {
         this.loading = false
       })
     },
+    // 删除课件
+    DeltrainingCourseware(row) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        DeltrainingCourseware(row.id).then(res => {
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          });
+          gettrainingCourseItem({ page_size: this.pageSize, page: this.page }, this.id).then(res => {
+            this.data = res.data.list
+            this.total = res.data.count
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    }
   },
   components: {
 

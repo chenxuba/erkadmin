@@ -3,20 +3,28 @@
     <!-- 视频上传 -->
     <el-form-item label="视频上传" :prop='checking'>
       <el-button @click="vExampleAdd">点击上传<i class="el-icon-upload el-icon--right"></i></el-button>
-      <span v-html="uploadLoading"></span>
+      <span v-html="uploadLoading" v-if="showupType"></span>
       <form ref="vExample">
         <input type="file" :accept='accept' style="display:none;" ref="vExampleFile" @change="vExampleUpload" />
       </form>
     </el-form-item>
     <!-- 视频名称 -->
     <el-form-item label="视频名称" v-if="uploaderInfos.progress == 1" :prop='checking'>
-      <span>{{uploaderInfos.videoInfo.name + '.' + uploaderInfos.videoInfo.type}}</span>
+      <span v-if="uploaderInfos.videoInfo.name != undefined">{{uploaderInfos.videoInfo.name + '.' + uploaderInfos.videoInfo.type}}</span>
+      <span v-else>未命名.mp4</span>
+      <span>
+        <el-button type="text" style="margin-left: 15px;" @click="proview">预览</el-button>
+      </span>
     </el-form-item>
     <!-- 上传进度 -->
     <el-form-item label="上传进度" v-if="uploaderInfos.progress != 0" :prop='checking'>
       <el-progress :percentage="uploaderInfos.progress * 100" class="progress" :text-inside="true" :stroke-width="15" />
       <el-button @click="resetUp" v-if="uploaderInfos.progress != 1 && uploaderInfos.progress != 0" v-show="showReBtn">取消上传<i class="el-icon-upload el-icon--right"></i></el-button>
     </el-form-item>
+    <!-- 预览 -->
+    <el-dialog title="预览" :visible.sync="dialogVisible" width="40%" destroy-on-close>
+      <video :src="uploaderInfos.videoUrl" style="width:100%;" controls></video>
+    </el-dialog>
   </div>
 </template>
 
@@ -34,6 +42,8 @@ export default {
   },
   data() {
     return {
+      showupType: false,
+      dialogVisible: false,
       showReBtn: true,//取消上传后 改成false不显示显示按钮
       uploadLoading: "", //上传状态html
       ruleForm: {},
@@ -54,6 +64,7 @@ export default {
     },
     //input change 事件
     vExampleUpload() {
+      this.showupType = true
       this.uploadLoading = '<span class="span"><i class="el-icon-loading icon"></i>解析中...</span> '
       var self = this;
       var mediaFile = this.$refs.vExampleFile.files[0]
@@ -62,14 +73,14 @@ export default {
       })
       // 视频上传进度
       this.uploader.on('media_progress', function (info) {
-         self.uploadLoading = '<span class="span"><i class="el-icon-loading icon"></i>上传中...</span> '
+        self.uploadLoading = '<span class="span"><i class="el-icon-loading icon"></i>上传中...</span> '
         self.uploaderInfos.progress = info.percent;
       })
       // 视频上传完成时
       this.uploader.on('media_upload', function (info) {
         self.uploaderInfos.isVideoUploadSuccess = true;
         self.$message.success('上传成功')
-         self.uploadLoading = '<span class="span">上传成功 <i class="el-icon-check"></i></span> '
+        self.uploadLoading = '<span class="span">上传成功 <i class="el-icon-check"></i></span> '
       })
 
       self.uploaderInfos.videoInfo = this.uploader.videoInfo //用来展示视频的名字和type 例如：xxx.mp4
@@ -89,6 +100,10 @@ export default {
       this.$refs.vExample.reset() //避免选择相同文件不触发change事件
       this.showReBtn = false
       this.uploaderInfos.progress = 0
+    },
+    //预览
+    proview() {
+      this.dialogVisible = true
     }
   },
   created() {
@@ -115,10 +130,11 @@ export default {
 ::v-deep .icon {
   margin-right: 5px;
 }
-::v-deep .span{
+::v-deep .span {
   background-color: red;
   color: #fff;
   padding: 0px 8px;
   border-radius: 4px;
+  margin-left: 10px;
 }
 </style>

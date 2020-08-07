@@ -66,3 +66,58 @@ export function gettrainingCourseItem(params,id) {
     params
   })
 }
+// 新增课件获取课件分类 /courseType/getFirstClass
+export function getChild(id) {
+  return request({
+    url: `/courseType/${id}/getChild`,
+    method: 'get',
+  })
+}
+//新增课件 /trainingCourseware
+export function addtrainingCourse(data) {
+  return request({
+    url: '/trainingCourseware',
+    method: 'post',
+    data
+  })
+}
+//获取老师列表 /teachers
+export function getteachers(id) {
+  return request({
+    url: `/teachers`,
+    method: 'get',
+  })
+}
+//删除课件
+// /trainingCourseware/{:id}
+export function DeltrainingCourseware(id) {
+  return request({
+    url: '/trainingCourseware/' + id,
+    method: 'delete',
+  })
+}
+//获取课件详情 /trainingCourseware/1
+export function trainingCoursewareDetail(id) {
+  return request({
+    url: `/trainingCourseware/${id}`,
+    method: 'get',
+  })
+}
+//编辑课件
+// /trainingCourseware/{:id}
+export function edittrainingCourse(data,id) {
+  return request({
+    url: `/trainingCourseware/${id}`,
+    method: 'put',
+    data
+  })
+}
+// 试卷管理 /examination
+// 获取列表
+export function getExamination(params) {
+  return request({
+    url: `/examination`,
+    method: 'get',
+    params
+  })
+}

@@ -23,7 +23,7 @@
     <!--菜单管理-->
     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="margin-top: 20px">
       <el-card class="box-card" shadow="never">
-        <el-table ref="table" v-loading="loading"  lazy :load="getMenus" :data="data" :tree-props="{children: 'children', hasChildren: 'hasChildren'}" row-key="id" @select="selectChange" @select-all="selectAllChange" @selection-change="selectionChangeHandler">
+        <el-table ref="table" v-loading="loading"  lazy :load="getMenus" :data="data" :tree-props="{children: 'children', hasChildren: 'has_children'}" row-key="id" @select="selectChange" @select-all="selectAllChange" @selection-change="selectionChangeHandler">
           <!-- <el-table-column type="selection" width="55" /> -->
           <el-table-column type="index" width="55" label="#" />
           <el-table-column :show-overflow-tooltip="true" label="菜单标题" width="125px" prop="meta.title" />

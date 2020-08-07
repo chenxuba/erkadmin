@@ -3,7 +3,7 @@
     <!-- 视频上传 -->
     <el-form-item :label="name" :prop='checking'>
       <el-button @click="vExampleAdd">点击上传<i class="el-icon-upload el-icon--right"></i></el-button>
-      <span v-html="uploadLoading" class="spans"></span>
+      <span v-html="uploadLoading" class="spans" v-if="showupType"></span>
       <form ref="vExample">
         <input type="file" :accept='accept' style="display:none;" ref="vExampleFile" @change="vExampleUpload" />
       </form>
@@ -34,12 +34,13 @@ export default {
     name: {
       type: String,
     },
-    label:{
+    label: {
       type: String,
     }
   },
   data() {
     return {
+      showupType: false,
       showReBtn: true,//取消上传后 改成false不显示显示按钮
       uploadLoading: "", //上传状态html
       ruleForm: {},
@@ -60,6 +61,7 @@ export default {
     },
     //input change 事件
     vExampleUpload() {
+      this.showupType = true
       this.uploadLoading = '<span class="span"><i class="el-icon-loading icon"></i>解析中...</span> '
       var self = this;
       var mediaFile = this.$refs.vExampleFile.files[0]
@@ -121,18 +123,18 @@ export default {
 ::v-deep .icon {
   margin-right: 5px;
 }
-.img{
+.img {
   width: 160px;
   height: 90px;
   object-fit: cover;
 }
-::v-deep .span{
+::v-deep .span {
   background-color: red;
   color: #fff;
   padding: 0px 8px;
   border-radius: 4px;
 }
-.spans{
+.spans {
   margin-left: 10px;
 }
 </style>

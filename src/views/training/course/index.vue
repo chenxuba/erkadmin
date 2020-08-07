@@ -131,9 +131,12 @@ export default {
         path: "/training/courseitem",
         query: {
           id: row.id,
-          type: row.type_name
+          type: row.type_name,
+          thirdId:row.type_arr[2]
         }
       })
+      localStorage.setItem("type", row.type_name);
+      localStorage.setItem("thirdId", row.type_arr[2]);
     },
     //获取课程
     gettrainingCourse() {

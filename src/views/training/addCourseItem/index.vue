@@ -7,54 +7,54 @@
     </el-card>
     <el-card style="margin-top: 10px;">
       <el-form ref="form" :model="formData" :rules="rules" label-width="80px">
-        <!-- 课件分类 -->
-        <el-form-item label="课件分类" prop="menu">
-          <el-select v-model="formData.menu" placeholder="请选择">
-            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+        <!-- 课件分类 type_id -->
+        <el-form-item label="课件分类" prop="type_id">
+          <el-select v-model="formData.type_id" placeholder="请选择">
+            <el-option v-for="item in options" :key="item.id" :label="item.type_name" :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
-        <!-- 课程名称 -->
-        <el-form-item label="课程名称" prop="title">
-          <el-input v-model="formData.title" placeholder='课程名称' style="width: 500px;" />
+        <!-- 课程名称 course_name -->
+        <el-form-item label="课程名称" prop="course_name">
+          <el-input v-model="formData.course_name" placeholder='课程名称' style="width: 500px;" />
           <span class="tishi">请输入课程名称</span>
         </el-form-item>
-        <!-- 简介 -->
-        <el-form-item label="课程简介" prop="desc">
-          <el-input v-model="formData.desc" placeholder='课程简介' type="textarea" :rows="3" style="width: 500px;" />
+        <!-- 简介 course_desc -->
+        <el-form-item label="课程简介" prop="course_desc">
+          <el-input v-model="formData.course_desc" placeholder='课程简介' type="textarea" :rows="3" style="width: 500px;" />
           <span class="tishi">请输入课程简介</span>
           <el-button type="text">查看示例<i class="el-icon-question"></i></el-button>
         </el-form-item>
-        <!-- 封面图 -->
-       <uploadImage @uploadSuccessImg='uploadSuccessImg' accept='image/*' checking='imgUrl'></uploadImage>
-        <!-- 排序 -->
+        <!-- 封面图 imgUrl -->
+        <uploadImage @uploadSuccessImg='uploadSuccessImg' ref="childImage" name='封面图' accept='image/*' checking='imgUrl'></uploadImage>
+        <!-- 排序 sort -->
         <el-form-item label="排序" prop="sort">
           <el-input-number v-model.number="formData.sort" placeholder='数字越大越靠前' :min="0" :max="999" controls-position="right" style="width: 200px;" />
           <span class="tishi">数字越大越靠前</span>
         </el-form-item>
-        <!-- 是否上架 -->
-        <el-form-item label="是否上架" prop="is_up">
-          <el-radio-group v-model="formData.is_up">
+        <!-- 是否上架  disabled -->
+        <el-form-item label="是否上架" prop="disabled">
+          <el-radio-group v-model="formData.disabled">
             <el-radio label="1">是</el-radio>
-            <el-radio label="2">否</el-radio>
+            <el-radio label="0">否</el-radio>
           </el-radio-group>
         </el-form-item>
-        <!-- 类型 -->
-        <el-form-item label="类型" prop="type">
-          <el-radio-group v-model="formData.type">
-            <el-radio label="1">视频</el-radio>
-            <el-radio label="2">音频</el-radio>
+        <!-- 类型 course_type -->
+        <el-form-item label="类型" prop="course_type">
+          <el-radio-group v-model="formData.course_type">
+            <el-radio label="0">视频</el-radio>
+            <el-radio label="1">音频</el-radio>
           </el-radio-group>
         </el-form-item>
-        <!-- 选择导师 -->
-        <el-form-item label="选择导师" prop="teacher">
-          <el-select v-model="formData.teacher" placeholder="请选择">
-            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+        <!-- 选择导师 teacher_name -->
+        <el-form-item label="选择导师" prop="teacher_name">
+          <el-select v-model="formData.teacher_name" placeholder="请选择" filterable>
+            <el-option v-for="item in teachers" :key="item.id" :label="item.teacher_name" :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
-        <!-- 视频上传 -->
-        <uploadVideo @uploadSuccess='uploadSuccess' accept='video/*' checking='video'></uploadVideo>
+        <!-- 视频上传 video -->
+        <uploadVideo @uploadSuccess='uploadSuccess' ref="childVideo" accept='video/*' checking='video'></uploadVideo>
         <el-form-item>
           <el-button type="primary" style="width:200px" @click="submitForm('form')">确认提交</el-button>
         </el-form-item>
@@ -66,29 +66,40 @@
 <script>
 import uploadVideo from "@/components/Common/uploadVideo";
 import uploadImage from "@/components/Common/uploadImage";
+import { getChild, addtrainingCourse,getteachers } from "@/api/training";
 export default {
   data() {
     return {
       key: 'file',
       imgFlag: false,
       percent: 0,
-      type: this.$route.query.type,
+      type: this.$route.query.type || localStorage.getItem("type"),
+      thirdId: this.$route.query.thirdId || localStorage.getItem("thirdId"),
       formData: {
-        imgUrl: "",
-        video: ""
+        course_id: this.$route.query.id,//课程ID
+        type_id: '',//课件分类
+        course_name: "",//课程名称
+        course_desc: "",//简介
+        disabled: "",//是否上架
+        course_type: "",//类型
+        imgUrl: "",//封面
+        video: "",//视频链接
+        teacher_name: "",//导师ID
+
       },
       rules: {
-        menu: [{ required: true, message: '请选择课件分类', trigger: 'change' }],
-        title: [{ required: true, message: '请输入课程名称', trigger: 'blur' }],
-        desc: [{ required: true, message: '请输入课程简介', trigger: 'blur' }],
+        type_id: [{ required: true, message: '请选择课件分类', trigger: 'change' }],
+        course_name: [{ required: true, message: '请输入课程名称', trigger: 'blur' }],
+        course_desc: [{ required: true, message: '请输入课程简介', trigger: 'blur' }],
         imgUrl: [{ required: true, message: '请上传封面图', trigger: 'blur' }],
         sort: [{ required: true, message: '请排序', trigger: 'blur' }],
-        is_up: [{ required: true, message: '请选择是否上下架', trigger: 'change' }],
-        type: [{ required: true, message: '请选择资源类型', trigger: 'change' }],
-        teacher: [{ required: true, message: '请选择所属导师', trigger: 'change' }],
+        disabled: [{ required: true, message: '请选择是否上下架', trigger: 'change' }],
+        course_type: [{ required: true, message: '请选择资源类型', trigger: 'change' }],
+        teacher_name: [{ required: true, message: '请选择所属导师', trigger: 'change' }],
         video: [{ required: true, message: '请上传视频', trigger: 'blur' }],
       },
-      options: [{ value: '1', label: '基础课程' }, { value: '2', label: '拓展课程' }],
+      options: [],
+      teachers:[]
     }
   },
   methods: {
@@ -96,15 +107,34 @@ export default {
     uploadSuccess(url) {
       this.formData.video = url
     },
-    uploadSuccessImg(url){
+    uploadSuccessImg(url) {
       this.formData.imgUrl = url
     },
     //提交表单
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.formData);
-
+          addtrainingCourse({
+            course_id: this.formData.course_id,
+            type_id: this.formData.type_id,
+            course_name: this.formData.course_name,
+            course_thumb: this.formData.imgUrl,
+            course_desc: this.formData.course_desc,
+            disabled: this.formData.disabled,
+            course_type: this.formData.course_type,
+            teacher_name: this.formData.teacher_name,
+            link_url:this.formData.video
+          }).then(res => {
+            console.log(res);
+            this.$message.success('创建成功！')
+            this.$refs[formName].resetFields();
+            this.$refs.childImage.uploaderInfos.imageUrl = ''
+            this.$refs.childVideo.uploaderInfos.videoUrl = ''
+            this.$refs.childImage.uploaderInfos.progress = 0
+            this.$refs.childVideo.uploaderInfos.progress = 0
+            this.$refs.childImage.showupType = false
+            this.$refs.childVideo.showupType = false
+          })
         } else {
           console.log('error submit!!');
           return false;
@@ -115,6 +145,15 @@ export default {
   components: {
     uploadVideo,
     uploadImage
+  },
+  mounted() {
+    getChild(this.thirdId).then(res => {
+      console.log(res);
+      this.options = res.data
+    });
+    getteachers().then(res=>{
+      this.teachers = res.data.list
+    })
   },
 }
 </script>
