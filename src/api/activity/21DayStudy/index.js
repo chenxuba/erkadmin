@@ -13,8 +13,8 @@ export function getStudyCourses(data) {
   return request({
     url: "/study/courses",
     method: 'get',
-    // params:data
-    data
+    params:data
+    // data
   })
 }
 // 新增视频

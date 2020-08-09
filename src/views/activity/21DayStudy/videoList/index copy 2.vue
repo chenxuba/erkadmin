@@ -316,16 +316,21 @@ export default {
     },
     // 视频上传成功回调
     uploadSuccess(url) {
-      var audioElement = new Audio(url);
-      var self = this;
-      var result;
-      audioElement.addEventListener("loadedmetadata", function () {
-        // 视频时长值的获取要等到这个匿名函数执行完毕才产生
-        result = audioElement.duration; //得到时长为秒，小数，182.36
-        self.ruleForm.duration = result
+      const loading = this.$loading({
+        lock: true,
+        text: '获取视频时长中,请稍后',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
       });
       this.ruleForm.video_url = url
       this.option = ''
+      let vid = this.$refs.video
+      setTimeout(() => {
+        this.ruleForm.duration = vid.duration
+        loading.close();
+      }, 2000);
+
+
     },
     // 图片上传成功回调
     uploadSuccessImg(url) {
@@ -335,17 +340,18 @@ export default {
     //选择视频
     selectVideo(row) {
       console.log(row);
-      var audioElement = new Audio(row.link_url);
-      var self = this;
-      var result;
-      audioElement.addEventListener("loadedmetadata", function () {
-        // 视频时长值的获取要等到这个匿名函数执行完毕才产生
-        result = audioElement.duration; //得到时长为秒，小数，182.36
-        self.ruleForm.duration = result
+      const loading = this.$loading({
+        lock: true,
+        text: '获取视频时长中,请稍后',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
       });
       this.ruleForm.video_url = row.link_url
       let vid = this.$refs.video
-
+      setTimeout(() => {
+        this.ruleForm.duration = vid.duration
+        loading.close();
+      }, 2000);
     },
     // 搜索弹窗内的视频
     SearchVideoName() {
