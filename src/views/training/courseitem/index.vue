@@ -37,7 +37,11 @@
         <el-table-column prop="course_desc" show-overflow-tooltip label="课程简介" align="center" />
         <el-table-column prop="course_thumb" label="封面图" align="center" width="130">
           <template slot-scope="scope">
-            <img :src="scope.row.course_thumb" alt="" class="course_thumb">
+            <el-image :src="scope.row.course_thumb" alt="" class="course_thumb">
+              <div slot="placeholder" class="image-slot">
+                加载中<span class="dot">...</span>
+              </div>
+            </el-image>
           </template>
         </el-table-column>
         <el-table-column prop="teacher_name" label="导师名称" align="center" />

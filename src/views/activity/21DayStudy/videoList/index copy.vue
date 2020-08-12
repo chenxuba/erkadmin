@@ -6,7 +6,7 @@
         <span style="display: flex;align-items: center;">
           <el-input v-model="serachValue" size="small" clearable placeholder="输入视频名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
           <span class='filter-item' style="margin-left: 15px;">
-            <el-button size="mini" type="success" icon="el-icon-search">搜索</el-button>
+            <el-button size="mini" type="success" icon="el-icon-search" @click="toQuery">搜索</el-button>
             <el-button size="mini" type="warning" icon="el-icon-refresh-left">重置</el-button>
             <el-button size="mini" type="primary" icon="el-icon-plus" @click="hanldAdd">新增</el-button>
           </span>
@@ -23,7 +23,14 @@
       <el-table :data="tableData" style="width: 100%" v-loading='loading'>
         <el-table-column prop="id" label="ID" width="55">
         </el-table-column>
-        <el-table-column prop="course_name" label="标题" width="300" show-overflow-tooltip align="center">
+        <el-table-column prop="type" label="所属分类" width="120" show-overflow-tooltip align="center">
+          <template slot-scope="scope">
+            <el-tag v-if="scope.row.type == 1">智慧康复专区</el-tag>
+            <el-tag v-if="scope.row.type == 2" type="warning">打卡学习</el-tag>
+            <el-tag v-if="scope.row.type == 3" type="danger">VIP专区</el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column prop="course_name" label="标题" width="250" show-overflow-tooltip align="center">
         </el-table-column>
         <el-table-column prop="course_thumb" label="封面图" align="center">
           <template slot-scope="scope">
@@ -39,15 +46,20 @@
         </el-table-column>
         <el-table-column prop="sort" label="排序" align="center" width="50">
         </el-table-column>
-        <el-table-column prop="create_time" label="创建时间" align="center">
+        <el-table-column prop="publish_date" label="发布时间" align="center">
         </el-table-column>
-        <el-table-column label="操作" align="center">
+        <el-table-column label="操作" align="center" width='160'>
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
             <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
+      <div class="fenye" style="margin-top:15px;">
+        <el-pagination @size-change="handleSizeChangeOne" @current-change="handleCurrentChangeOne" :page-sizes="[5,10, 20, 30, 40]" :page-size="page_sizeOne" layout="total, prev, pager, next,sizes" :total="totalOne">
+        </el-pagination>
+      </div>
     </el-card>
     <!-- 预览dialog -->
     <el-dialog title="预览" :visible.sync="dialogProview" width="30%" destroy-on-close>
@@ -56,6 +68,14 @@
     <!-- 新增编辑dialog -->
     <el-dialog :title="title" :visible.sync="dialogAddEdit" width="50%" destroy-on-close @close='closeDialog'>
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
+        <!-- 所属分区 -->
+        <el-form-item label="所属分区" prop="type">
+          <el-radio-group v-model="ruleForm.type">
+            <el-radio :label="1">智慧康复专区</el-radio>
+            <el-radio :label="2">打卡学习</el-radio>
+            <el-radio :label="3">VIP专区</el-radio>
+          </el-radio-group>
+        </el-form-item>
         <!-- 视频标题 -->
         <el-form-item label="视频标题" prop="course_name">
           <el-input v-model="ruleForm.course_name" style="width:60%;" placeholder="请输入视频标题"></el-input>
@@ -114,6 +134,10 @@
         <el-form-item label="排序" prop="sort">
           <el-input v-model="ruleForm.sort" style="width:60%;" placeholder="排序默认为0" />
         </el-form-item>
+        <!-- 视频总时长 -->
+        <el-form-item label="视频总时长" prop="duration">
+          <el-input v-model="ruleForm.duration" disabled style="width:60%;" placeholder="视频总时长" />
+        </el-form-item>
         <!-- 发布时间 -->
         <el-form-item label="发布时间" prop="publish_date">
           <el-date-picker v-model="ruleForm.publish_date" :picker-options="pickerOptions0" type="date" value-format='yyyy-MM-dd' placeholder="选择日期">
@@ -124,9 +148,11 @@
           <el-button type="primary" @click="EditStudyCourses('ruleForm')" v-if="option == 'edit'" :loading="btnloading">立即修改</el-button>
           <el-button @click="resetForm('ruleForm')">重置</el-button>
         </el-form-item>
-
+        <video :src="ruleForm.video_url" style="display:none;" ref="video" width="100%"></video>
       </el-form>
     </el-dialog>
+    <!-- none -->
+
   </div>
 </template>
 
@@ -154,6 +180,7 @@ export default {
       btnloading: false,
       video_url: "",
       ruleForm: {
+        type: 1,
         is_new: 1,
         course_name: "",
         course_thumb: "",
@@ -161,6 +188,7 @@ export default {
         video_url: "",
         publish_date: "",
         sort: 0,
+        duration: 0
       },
       rules: {
         course_name: [{ required: true, message: '不能为空', trigger: 'blur' }],
@@ -170,10 +198,14 @@ export default {
         video_url: [{ required: true, message: '不能为空', trigger: 'blur' }],
         publish_date: [{ required: true, message: '不能为空', trigger: 'change' }],
         sort: [{ required: true, message: '不能为空', trigger: 'blur' }],
+        type: [{ required: true, message: '不能为空', trigger: 'change' }],
       },
       page_size: 2,//翻页相关
+      page_sizeOne: 5,//翻页相关
       page: 1,//翻页相关
+      pageOne: 1,//翻页相关
       total: 0, //翻页相关
+      totalOne: 0, //翻页相关
       id: ""
     }
   },
@@ -181,10 +213,10 @@ export default {
     // 获取列表
     getStudyCourses() {
       this.loading = true
-      getStudyCourses().then(res => {
-        console.log(res);
+      getStudyCourses({ page_size: this.page_sizeOne, page: this.pageOne }).then(res => {
         this.loading = false
         this.tableData = res.data.list
+        this.totalOne = res.data.count
       })
       getVideos({ page_size: this.page_size, page: this.page }).then(res => {
         this.videos = res.data.list
@@ -269,8 +301,12 @@ export default {
               video_url: "",
               publish_date: "",
               sort: 0,
+              duration: 0
             }
             this.btnloading = false
+          }).catch((err) => {
+            this.btnloading = false
+            console.log(err);
           })
         } else {
           console.log('error submit!!');
@@ -280,8 +316,21 @@ export default {
     },
     // 视频上传成功回调
     uploadSuccess(url) {
+      const loading = this.$loading({
+        lock: true,
+        text: '获取视频时长中,请稍后',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
       this.ruleForm.video_url = url
       this.option = ''
+      let vid = this.$refs.video
+      setTimeout(() => {
+        this.ruleForm.duration = vid.duration
+        loading.close();
+      }, 2000);
+
+
     },
     // 图片上传成功回调
     uploadSuccessImg(url) {
@@ -291,7 +340,18 @@ export default {
     //选择视频
     selectVideo(row) {
       console.log(row);
+      const loading = this.$loading({
+        lock: true,
+        text: '获取视频时长中,请稍后',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      });
       this.ruleForm.video_url = row.link_url
+      let vid = this.$refs.video
+      setTimeout(() => {
+        this.ruleForm.duration = vid.duration
+        loading.close();
+      }, 2000);
     },
     // 搜索弹窗内的视频
     SearchVideoName() {
@@ -341,6 +401,7 @@ export default {
     closeDialog() {
       this.option = ''
       this.ruleForm = {
+        type: 1,
         is_new: 1,
         course_name: "",
         course_thumb: "",
@@ -349,6 +410,51 @@ export default {
         publish_date: "",
         sort: 0,
       }
+    },
+    // 外部翻页
+    handleSizeChangeOne(v) {
+      this.loading = true
+      this.page_sizeOne = v
+      if (this.serachValue) {
+        getStudyCourses({ page_size: this.page_sizeOne, page: this.pageOne, title: this.serachValue }).then(res => {
+          this.tableData = res.data.list
+          this.totalOne = res.data.count
+          this.loading = false
+        })
+      } else {
+        getStudyCourses({ page_size: this.page_sizeOne, page: this.pageOne }).then(res => {
+          this.tableData = res.data.list
+          this.totalOne = res.data.count
+          this.loading = false
+        })
+      }
+    },
+    // 外部翻页
+    handleCurrentChangeOne(v) {
+      this.loading = true
+      this.pageOne = v
+      if (this.serachValue) {
+        getStudyCourses({ page_size: this.page_sizeOne, page: this.pageOne, title: this.serachValue }).then(res => {
+          this.tableData = res.data.list
+          this.total = res.data.count
+          this.loading = false
+        })
+      } else {
+        getStudyCourses({ page_size: this.page_sizeOne, page: this.pageOne }).then(res => {
+          this.tableData = res.data.list
+          this.total = res.data.count
+          this.loading = false
+        })
+      }
+    },
+    // 外部搜索
+    toQuery() {
+      this.loading = true
+      getStudyCourses({ page_size: this.page_sizeOne, page: this.pageOne, course_name: this.serachValue }).then(res => {
+        this.loading = false
+        this.tableData = res.data.list
+        this.totalOne = res.data.count
+      })
     }
   },
   mounted() {

@@ -134,6 +134,17 @@
         <el-form-item label="排序" prop="sort">
           <el-input v-model="ruleForm.sort" style="width:60%;" placeholder="排序默认为0" />
         </el-form-item>
+        <!-- 密码 code -->
+        <el-form-item label="设置密码" prop="code" v-if="ruleForm.type == 1">
+          <el-checkbox v-model="showCode">设置密码观看</el-checkbox>
+          <div class="setting-wrapper" v-if="showCode">
+            密码设置
+            <div class="ipt-box">
+              <input type="password" maxlength="6" placeholder="请输入6位密码" v-model="ruleForm.code" class="minute-ipt inputDefault">
+            </div>
+            <!---->
+          </div>
+        </el-form-item>
         <!-- 视频总时长 -->
         <el-form-item label="视频总时长" prop="duration">
           <el-input v-model="ruleForm.duration" disabled style="width:60%;" placeholder="视频总时长" />
@@ -163,6 +174,7 @@ import uploadVideo from "@/components/Common/uploadVideo";
 export default {
   data() {
     return {
+      showCode: false,
       pickerOptions0: { //限制不能选今天之前的日期
         disabledDate(time) {
           return time.getTime() < Date.now() - 8.64e7;//如果没有后面的-8.64e7就是不可以选择今天的
@@ -180,6 +192,7 @@ export default {
       btnloading: false,
       video_url: "",
       ruleForm: {
+        code: "",
         type: 1,
         is_new: 1,
         course_name: "",
@@ -235,6 +248,11 @@ export default {
       this.ruleForm = row
       this.id = row.id
       this.title = '修改视频'
+      if (row.is_code == 1) {
+        this.showCode = true
+      }else{
+        this.showCode = false
+      }
     },
     // 立即修改
     EditStudyCourses() {
@@ -251,6 +269,7 @@ export default {
           video_url: "",
           publish_date: "",
           sort: 0,
+          code: ""
         }
         this.btnloading = false
       })
@@ -301,7 +320,8 @@ export default {
               video_url: "",
               publish_date: "",
               sort: 0,
-              duration: 0
+              duration: 0,
+              code: ""
             }
             this.btnloading = false
           }).catch((err) => {
@@ -403,6 +423,7 @@ export default {
         video_url: "",
         publish_date: "",
         sort: 0,
+        code: ""
       }
     },
     // 外部翻页
@@ -462,4 +483,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.setting-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 80%;
+  padding: 27px 20px;
+  background: #f5f7fa;
+  margin-top: 15px;
+  .ipt-box {
+    margin-left: 20px;
+    margin-right: 20px;
+    .minute-ipt {
+      width: 200px;
+      color: #353535;
+      margin: 0 10px;
+    }
+    .inputDefault {
+      height: 36px;
+      line-height: 36px;
+      padding: 0 0 0 8px;
+      border: solid 1px #dcdcdc;
+      border-radius: 2px;
+      border-image: initial;
+      outline: none;
+    }
+  }
+}
 </style>

@@ -5,11 +5,11 @@
       <div class="head-container">
         <div>
           <!-- 搜索 -->
-          <el-input clearable  placeholder="输入会员名称搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+          <el-input clearable  placeholder="输入会员名称搜索" style="width: 200px;margin-right:10px;" class="filter-item" @keyup.enter.native="toQuery" />
           <el-date-picker :default-time="['00:00:00','23:59:59']" type="daterange" range-separator=":"  class="date-item" value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
-          <el-button type="success"  icon="el-icon-search">搜索</el-button>
-          <el-button type="primary"  icon="el-icon-refresh-left">重置</el-button>
-          <el-button type="warning"  icon="el-icon-download">导出</el-button>
+          <el-button type="success"  icon="el-icon-search" style="margin: 0 10px;" size="mini">搜索</el-button>
+          <el-button type="primary"  icon="el-icon-refresh-left" size="mini">重置</el-button>
+          <el-button type="warning"  icon="el-icon-download" size="mini">导出</el-button>
         </div>
       </div>
       <!--表格渲染-->
