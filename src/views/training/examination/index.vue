@@ -3,22 +3,26 @@
     <el-card>
       <el-row>
         <el-col>
-          <el-cascader style="width: 60%;margin-right:10px;" filterable v-model="value" placeholder="请选择课件进行筛选" clearable :props='props' :options="options" @change="handleChange"></el-cascader>
-          <el-button type="primary" style="width:100px;">搜 索</el-button>
-          <el-button type="warning" style="width:100px;">重 置</el-button>
-          <el-button type="success" style="width:100px;" @click="addexamination">创建试卷</el-button>
+          <el-cascader :show-all-levels="false" filterable v-model="courseTypeArr" placeholder="请选择分类" clearable :props='props' :options="courseType" @change="handleChangeCourseType"></el-cascader>
+          <el-select v-model="courseItem_id" placeholder="请选择课件" style="margin:0 10px;">
+            <el-option v-for="item in courseItemArr" :key="item.id" :label="item.course_name" :value="item.id">
+            </el-option>
+          </el-select>
+          <el-button type="primary" style="width:100px;" size="mini" @click="hanldSearch">筛 选</el-button>
+          <el-button type="warning" style="width:100px;" size="mini" @click="reset">重 置</el-button>
+          <el-button type="success" style="width:100px;" size="mini" @click="addexamination">创建试卷</el-button>
         </el-col>
       </el-row>
       <el-row style="margin-top:20px;">
         <el-col>
-          <el-table :data="tableData" style="width: 100%" v-loading='loading'  :height="clientHeight">
-            <el-table-column prop="id" label="ID" width="55"/>
+          <el-table :data="tableData" style="width: 100%" v-loading='loading' :height="clientHeight">
+            <el-table-column prop="id" label="ID" width="55" />
             <el-table-column prop="title" label="试卷名称" show-overflow-tooltip align="center">
               <template slot-scope="scope">
                 <el-tag>{{scope.row.title}}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="courseware_name" label="所属课件" show-overflow-tooltip   align="center"/>
+            <el-table-column prop="courseware_name" label="所属课件" show-overflow-tooltip align="center" />
             <el-table-column prop="total_num" label="总题目数" width="70" align="center" />
             <el-table-column prop="total_score" label="总分数" width="70" align="center" />
             <el-table-column prop="pass_number" label="合格分数" width="70" align="center">
@@ -26,12 +30,12 @@
                 <el-tag size="small" type="danger">{{scope.row.pass_number}}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="status" label="是否上架" width="100" align="center">
+            <!-- <el-table-column prop="status" label="是否上架" width="100" align="center">
               <template slot-scope="scope">
                 <el-switch v-model="scope.row.disabled" active-value="1" inactive-value="0">
                 </el-switch>
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column label="操作" width="280" align="center">
               <template slot-scope="scope">
                 <el-button type="primary" @click="hanlEdit(scope.row)">编辑</el-button>
@@ -52,7 +56,7 @@
 </template>
 
 <script>
-import { getExamination } from "@/api/training";
+import { getExamination, DelExamination, getcourseType, getCourseWare } from "@/api/training";
 export default {
   data() {
     return {
@@ -61,94 +65,55 @@ export default {
       tableData: [],
       props: {
         value: "id",
+        label: 'type_name'
       },
-      options: [
-        {
-          "id": "1",
-          "label": "康复训练师",
-          "children": [{
-            "id": "2",
-            "label": "言语-语言职业认证课程",
-            "children": [{
-              "id": "3",
-              "label": "初级认证",
-              "children": [{
-                "id": "4",
-                "label": "基础课程",
-                "children": [{
-                  "id": "9",
-                  "label": "第一讲 言语-语言 康复训练概述"
-                },
-                {
-                  "id": "10",
-                  "label": "第二讲 呼吸系统概述及训练方法"
-                }
-                ]
-              },
-              {
-                "id": "5",
-                "label": "拓展课程",
-                "children": [{
-                  "id": "11",
-                  "label": "婴幼儿认知功能发育"
-                },
-                {
-                  "id": "12",
-                  "label": "脑性瘫痪儿童的言语训练"
-                }
-                ]
-              }
-              ]
-            },
-            {
-              "id": "6",
-              "label": "中级认证",
-              "children": [{
-                "id": "7",
-                "label": "基础课程",
-                "children": [{
-                  "id": "13",
-                  "label": "儿童语言发育迟缓概述和评估"
-                },
-                {
-                  "id": "14",
-                  "label": "儿童康复概论"
-                }
-                ]
-              },
-              {
-                "id": "8",
-                "label": "拓展课程",
-                "children": [{
-                  "id": "15",
-                  "label": "面对儿童语言康复及言语康复的 脑瘫儿童"
-                },
-                {
-                  "id": "16",
-                  "label": "认知能力与语言技巧(一)"
-                }
-                ]
-              }
-              ]
-            }
-            ]
-          }]
-        }
-      ],
       page_size: 10,
       page: 1,
-      total:0,
-      clientHeight: document.body.clientHeight - 260
+      total: 0,
+      clientHeight: document.body.clientHeight - 270,
+      courseType: [],//课件分类数组
+      courseItemArr: [],//课件数组
+      courseTypeArr: [],//选中的课件分类id数组
+      courseType_id: '',//最后一级的课件分类id
+      courseItem_id: '',//课件id
     }
   },
   methods: {
-    handleChange(value) {
+    // 选择分类后触发，请求课件列表
+    handleChangeCourseType(value) {
       console.log(value);
+      this.courseType_id = value[3]
+      this.courseItem_id = ''
+      getCourseWare(this.courseType_id).then(res => {
+        this.courseItemArr = res.data
+      })
+
     },
     // 编辑
-    hanlEdit(row) { },
+    hanlEdit(row) {
+      this.$router.push('/training/editexamination/' + row.id)
+    },
     // 删除
-    hanlDelete(row) { },
+    hanlDelete(row) {
+      this.$confirm('此操作将删除该试卷, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        DelExamination(row.id).then(res => {
+          if (res.code == 0) {
+            this.$message.error('删除成功')
+            this.getExamination()
+          }
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+
+    },
     // 添加试题
     hanlAdd(row) {
       this.$router.push({
@@ -194,9 +159,41 @@ export default {
         console.log(err);
       })
     },
+    // 获取课件类别
+    getcourseType() {
+      getcourseType().then(res => {
+        this.courseType = res.data.list
+      })
+    },
+    // 搜索
+    hanldSearch() {
+      if (this.courseItem_id == '') {
+        this.$message.error('请完善筛选条件')
+      } else {
+        this.loading = true
+        getExamination({ courseware_id: this.courseItem_id }).then(res => {
+          console.log(res);
+          if (res.code == 0) {
+            this.loading = false
+            this.tableData = res.data.list
+            this.total = res.data.count
+          }
+        })
+      }
+    },
+    //重置
+    reset() {
+      this.courseItem_id = ''
+      this.courseTypeArr = []
+      this.getExamination()
+    }
   },
   mounted() {
     this.getExamination();
+    this.getcourseType()
+  },
+  watch: {
+
   },
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="dialoguser">
-    <el-dialog :title="dialogUser.title" :visible.sync="dialogUser.show" :close-on-click-modal="false" :close-on-press-escape="false" :modal-append-to-body="false">
+    <el-dialog :title="dialogUser.title" :visible.sync="dialogUser.show" destroy-on-close :close-on-click-modal="false" :close-on-press-escape="false" :modal-append-to-body="false">
       <el-form ref="form" :inline="true" :model="formData" :rules="rules"  label-width="66px">
         <el-form-item label="用户名" prop="username">
           <el-input v-model="formData.username" placeholder="请输入用户名" />

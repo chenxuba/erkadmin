@@ -121,3 +121,40 @@ export function getExamination(params) {
     params
   })
 }
+// 创建试卷 /examination
+export function AddExamination(data) {
+  return request({
+    url: `/examination`,
+    method: 'post',
+    data
+  })
+}
+// /courseType/:id/getCourseWare
+export function getCourseWare(id) {
+  return request({
+    url: `/courseType/${id}/getCourseWare`,
+    method: 'get',
+  })
+}
+// 删除 /examination/:id
+export function DelExamination(id) {
+  return request({
+    url: `/examination/${id}`,
+    method: 'delete',
+  })
+}
+// /examination/{:id} 详情
+export function getexaminationDetail(id) {
+  return request({
+    url: `/examination/${id}`,
+    method: 'get',
+  })
+}
+// EditExamination
+export function EditExamination(data,id) {
+  return request({
+    url: `/examination/`+id,
+    method: 'put',
+    data
+  })
+}

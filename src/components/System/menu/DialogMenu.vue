@@ -1,6 +1,6 @@
 <template>
   <div class="dialogmenu">
-    <el-dialog :title="dialogMenu.title" :visible.sync="dialogMenu.show" @open='openDialog' :close-on-click-modal="false" :close-on-press-escape="false" :modal-append-to-body="false">
+    <el-dialog :title="dialogMenu.title" :visible.sync="dialogMenu.show" width="55%" destroy-on-close @open='openDialog' :close-on-click-modal="false" :close-on-press-escape="false" :modal-append-to-body="false">
       <el-form ref="form" :inline="true" :model="formData" :rules="rules" label-width="80px">
         <!-- 菜单类型 type -->
         <el-form-item label="菜单类型" prop="type">
@@ -11,7 +11,7 @@
           </el-radio-group>
         </el-form-item>
         <!-- 点击选择图标 icon -->
-        <el-form-item v-if="formData.type != '3'" label="菜单图标" prop="icon">
+        <el-form-item v-if="formData.type != '3'" label="菜单图标" >
           <el-popover placement="bottom-start" width="450" trigger="click" @show="$refs['iconSelect'].reset()">
             <IconSelect ref="iconSelect" @selected="selected" />
             <el-input slot="reference" v-model="formData.icon" style="width: 450px;" placeholder="点击选择图标" readonly>
@@ -20,6 +20,7 @@
             </el-input>
           </el-popover>
         </el-form-item>
+        <br>
         <!-- 菜单是否可见 hidden -->
         <el-form-item v-if="formData.type != '3'" label="菜单可见" prop="hidden">
           <el-radio-group v-model="formData.hidden">
@@ -39,6 +40,7 @@
         <el-form-item v-if="formData.type == '3'" label="权限标识" prop="permission">
           <el-input v-model="formData.permission" placeholder="权限标识" style="width: 178px;" />
         </el-form-item>
+        <br>
         <!-- 路由地址 path -->
         <el-form-item v-if="formData.type != '3'" label="路由地址" prop="path">
           <el-input v-model="formData.path" placeholder="路由地址（/:path）" style="width: 178px;" />

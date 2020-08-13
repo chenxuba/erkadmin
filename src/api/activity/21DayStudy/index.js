@@ -40,3 +40,28 @@ export function DelStudyCourses(id) {
     method: 'delete',
   })
 }
+export function getStudyCoursesrank(data) {
+  return request({
+    url: "/study/courses/rank",
+    method: 'get',
+    params:data
+    // data
+  })
+}
+export function getStudystatics(data) {
+  return request({
+    url: "/study/statics",
+    method: 'get',
+    params:data
+    // data
+  })
+}
+// /study/questionnaire
+export function getquestionnaire(data) {
+  return request({
+    url: "/study/questionnaire",
+    method: 'get',
+    params:data
+    // data
+  })
+}

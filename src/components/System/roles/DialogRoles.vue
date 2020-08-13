@@ -1,6 +1,6 @@
 <template>
   <div class="dialogmenu">
-    <el-dialog :title="dialogRoles.title" :visible.sync="dialogRoles.show" @open='openDialog' :close-on-click-modal="false" :close-on-press-escape="false" :modal-append-to-body="false">
+    <el-dialog :title="dialogRoles.title" :visible.sync="dialogRoles.show" destroy-on-close @open='openDialog' :close-on-click-modal="false" :close-on-press-escape="false" :modal-append-to-body="false">
       <el-form ref="form" :model="formData" :rules="rules"  label-width="80px">
         <el-form-item label="角色名称" prop="name">
           <el-input v-model="formData.name" style="width: 380px;" placeholder="请输入角色名称" />

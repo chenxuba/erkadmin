@@ -2,8 +2,8 @@
   <div class="main">
     <el-card style="margin-top: 10px;">
       <el-form ref="form" :model="formData" :rules="rules" label-width="100px">
-        <!-- 课件分类 courseType -->
-        <el-form-item label="课件分类" prop="courseType">
+        <!-- 课程分类 courseType -->
+        <el-form-item label="课程分类" prop="courseType">
           <el-cascader style="width: 60%;" filterable v-model="courseTypeArr" placeholder="请选择课件进行筛选" clearable :props='props' :options="courseType" @change="handleChangeCourseType"></el-cascader>
         </el-form-item>
         <!-- 选择课件 courseItem -->
@@ -24,11 +24,15 @@
         <el-form-item label="封面图" ref="childImage" prop="imgUrl">
           <uploadImage @uploadSuccessImg='uploadSuccessImg' accept='image/*'></uploadImage>
         </el-form-item>
+        <!-- 封面图预览 -->
+        <el-form-item v-if="showPreview">
+          <img :src="formData.imgUrl" width="120px" alt="">
+        </el-form-item>
         <!-- 考场规则 content -->
         <div class="wrap">
           <el-form-item label="考场规则" prop="content" ref="content">
             <div class="ueditor">
-              <Ueditor @change='changeContent'></Ueditor>
+              <Ueditor @change='changeContent' ref="childUeditor"></Ueditor>
             </div>
             <div class="box">
               <div v-html="formData.content"></div>
@@ -66,17 +70,16 @@
           <span class="tishi">判断题每道题的分数</span>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="width:200px" @click="submitForm('form')">确认提交</el-button>
+          <el-button type="primary" style="width:200px" @click="submitForm('form')">确认修改{{id}}</el-button>
         </el-form-item>
       </el-form>
     </el-card>
-
   </div>
 </template>
 
 <script>
 import uploadImage from "@/components/Common/uploadImage";
-import { AddExamination, getcourseType, getCourseWare } from "@/api/training";
+import { EditExamination, getcourseType, getCourseWare, getexaminationDetail } from "@/api/training";
 export default {
   data() {
     return {
@@ -86,6 +89,7 @@ export default {
         label: 'type_name'
       },
       formData: {
+        id: '',
         courseType: "",//课程分类id
         courseItem: "",//课件id
         title: "",//试卷名称
@@ -112,7 +116,9 @@ export default {
         judge_number: [{ required: true, message: '不能为空', trigger: 'blur' }],
       },
       courseTypeArr: [],//选中的课程分类id数组
-      courseType: []//课程分类数组
+      courseType: [],//课程分类数组
+      id: this.$route.params.id,
+      showPreview: true
     }
   },
   methods: {
@@ -120,7 +126,7 @@ export default {
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          AddExamination({
+          EditExamination({
             type_id: this.formData.courseType,
             courseware_id: this.formData.courseItem,
             title: this.formData.title,
@@ -132,9 +138,9 @@ export default {
             radio_number: this.formData.radio_number,
             checkbox_number: this.formData.checkbox_number,
             judge_number: this.formData.judge_number
-          }).then(res => {
+          },this.formData.id).then(res => {
             if (res.code == 0) {
-              this.$message.success('创建试卷成功！')
+              this.$message.success('修改试卷成功！')
               this.$store.dispatch('tagsView/delView', this.$route); //关闭当前tabview
               this.$router.go(-1)
             }
@@ -147,12 +153,13 @@ export default {
     },
     // 富文本触发
     changeContent(html) {
-      this.formData.content = html
       this.$refs['content'].clearValidate()
+      this.formData.content = html
     },
     //图片成功回调
     uploadSuccessImg(url) {
       this.formData.imgUrl = url
+      this.showPreview = false
       this.$refs['childImage'].clearValidate()
     },
     // 获取课件类别
@@ -178,6 +185,26 @@ export default {
   },
   mounted() {
     this.getcourseType();
+    getexaminationDetail(this.id).then(res => {
+      console.log(res);
+      this.formData.id = res.data.id //id
+      this.courseTypeArr = res.data.type_arr
+      this.formData.courseType = this.courseTypeArr[3] //课程分类id
+      getCourseWare(this.formData.courseType).then(res => {
+        this.courseItemArr = res.data
+      })
+      this.formData.courseItem = res.data.courseware_id //课件id
+      this.formData.title = res.data.title //试卷名字
+      this.formData.imgUrl = res.data.thumb //封面
+      this.formData.content = res.data.content //考场规则
+      this.$refs.childUeditor.content = res.data.content
+      this.formData.examination_time = res.data.examination_time
+      this.formData.examination_number = res.data.examination_number
+      this.formData.pass_number = res.data.pass_number
+      this.formData.radio_number = res.data.radio_number
+      this.formData.checkbox_number = res.data.checkbox_number
+      this.formData.judge_number = res.data.judge_number
+    })
   },
 }
 </script>
@@ -213,7 +240,7 @@ export default {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    transform: scale(0.45);
+    transform: scale(0.8);
     margin-top: -200px;
     > div {
       height: 660px;

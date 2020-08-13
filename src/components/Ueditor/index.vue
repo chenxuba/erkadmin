@@ -49,13 +49,13 @@ export default {
           'dialog'//秀米
         ]],
         // 如果需要上传功能,找后端小伙伴要服务器接口地址
-        serverUrl: '',
+        serverUrl: 'api/therapists/upload',
         // 你的UEditor资源存放的路径,相对于打包后的index.html
         UEDITOR_HOME_URL: '/NEditor/',
         // 编辑器不自动被内容撑高
         autoHeightEnabled: false,
         // 初始容器高度
-        initialFrameHeight: 340,
+        initialFrameHeight: 240,
         // 初始容器宽度
         initialFrameWidth: '80%',
         // 关闭自动保存

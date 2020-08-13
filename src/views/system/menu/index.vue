@@ -49,7 +49,7 @@
               <span v-else>{{ scope.row.component == '' ? '-' : scope.row.component }}</span>
             </template>
           </el-table-column>
-          <el-table-column v-if="($route.meta.roles).indexOf('menutype') >=0 ? true : false" :show-overflow-tooltip="true" prop="component" label="菜单类型" align="center">
+          <el-table-column v-if="checkPermission(['menutype'])" :show-overflow-tooltip="true" prop="component" label="菜单类型" align="center">
             <template slot-scope="scope">
               <el-tag type="success" v-if="scope.row.type == 1">目录</el-tag>
               <el-tag type="warning" v-if="scope.row.type == 2">菜单</el-tag>
@@ -86,6 +86,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getAntRouter } from "@/api/user";
+import checkPermission from '@/utils/permission' // 权限判断函数
 export default {
   name: 'roles',
   data() {
@@ -107,6 +108,7 @@ export default {
     this.getAntRouter()
   },
   methods: {
+    checkPermission,
     //搜索角色
     toQuery() {
     },

@@ -70,9 +70,6 @@ import { getChild, trainingCoursewareDetail, edittrainingCourse, getteachers } f
 export default {
   data() {
     return {
-      key: 'file',
-      imgFlag: false,
-      percent: 0,
       id: this.$route.params.id,
       type: this.$route.query.type || localStorage.getItem("type"),
       thirdId: this.$route.query.thirdId || localStorage.getItem("thirdId"),

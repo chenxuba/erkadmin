@@ -16,7 +16,6 @@ import '../public/NEditor/neditor.config'
 import '../public/NEditor/neditor.all.min.js'
 import '../public/NEditor/dialogs/xiumi-ue-dialog-v5'
 import '../public/NEditor/dialogs/xiumi-ue-v5.css'
-
 import '@/icons' // icon
 import '@/permission' // permission control
 import '@/assets/css/reset.css'
