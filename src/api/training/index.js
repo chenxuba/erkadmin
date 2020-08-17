@@ -158,3 +158,36 @@ export function EditExamination(data,id) {
     data
   })
 }
+// 证书
+// 获取列表 /certificate_order
+export function getCertificate_order(params) {
+  return request({
+    url: `/certificate_order`,
+    method: 'get',
+    params
+  })
+}
+// /certificate_order/{:id}/status/0
+export function putCertificate_order(id,status,data) {
+  return request({
+    url: `/certificate_order/${id}/status/${status}`,
+    method: 'put',
+    data
+  })
+}
+// 录入单号 /certificate_order/{:id}
+export function submitNumber(data,id) {
+  return request({
+    url: `/certificate_order/`+id,
+    method: 'put',
+    data
+  })
+}
+// 考试列表 /examlog
+export function getExamlog(params) {
+  return request({
+    url: `/examlog`,
+    method: 'get',
+    params
+  })
+}

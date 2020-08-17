@@ -32,7 +32,7 @@
         <div class="wrap">
           <el-form-item label="考场规则" prop="content" ref="content">
             <div class="ueditor">
-              <Ueditor @change='changeContent' ref="childUeditor"></Ueditor>
+              <vue-ueditor-wrap v-model="formData.content" :config='myConfig' @ready="ready" @before-init="addCustomButtom"></vue-ueditor-wrap>
             </div>
             <div class="box">
               <div v-html="formData.content"></div>
@@ -70,7 +70,7 @@
           <span class="tishi">判断题每道题的分数</span>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" style="width:200px" @click="submitForm('form')">确认修改{{id}}</el-button>
+          <el-button type="primary" style="width:200px" @click="submitForm('form')">确认修改</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -80,6 +80,7 @@
 <script>
 import uploadImage from "@/components/Common/uploadImage";
 import { EditExamination, getcourseType, getCourseWare, getexaminationDetail } from "@/api/training";
+import VueUeditorWrap from 'vue-ueditor-wrap'
 export default {
   data() {
     return {
@@ -118,7 +119,42 @@ export default {
       courseTypeArr: [],//选中的课程分类id数组
       courseType: [],//课程分类数组
       id: this.$route.params.id,
-      showPreview: true
+      showPreview: true,
+      myConfig: {
+        toolbars: [
+          [
+            'fullscreen',//全屏
+            'source',//源码
+            'undo', //撤销
+            'redo', //前进
+            'bold', //加粗
+            'italic', //斜体
+            'underline', //下划线
+            'strikethrough', //删除线
+            'fontborder', //字符边框
+            'formatmatch', //格式刷
+            // 'fontfamily', //字体
+            'fontsize', //字号
+            'justifyleft', //居左对齐
+            'justifycenter', //居中对齐
+            'justifyright', //居右对齐
+            // 'justifyjustify', //两端对齐
+            'insertorderedlist', //有序列表
+            'insertunorderedlist', //无序列表
+            // 'lineheight',//行间距
+          ]
+        ],
+        // 编辑器不自动被内容撑高
+        autoHeightEnabled: false,
+        // 初始容器高度
+        initialFrameHeight: 200,
+        // 初始容器宽度
+        initialFrameWidth: '70%',
+        // 上传文件接口（这个地址是我为了方便各位体验文件上传功能搭建的临时接口，请勿在生产环境使用！！！）
+        serverUrl: 'http://35.201.165.105:8000/controller.php',
+        // UEditor 资源文件的存放路径，如果你使用的是 vue-cli 生成的项目，通常不需要设置该选项，vue-ueditor-wrap 会自动处理常见的情况，如果需要特殊配置，参考下方的常见问题2
+        UEDITOR_HOME_URL: '/UEditor/'
+      },
     }
   },
   methods: {
@@ -138,7 +174,7 @@ export default {
             radio_number: this.formData.radio_number,
             checkbox_number: this.formData.checkbox_number,
             judge_number: this.formData.judge_number
-          },this.formData.id).then(res => {
+          }, this.formData.id).then(res => {
             if (res.code == 0) {
               this.$message.success('修改试卷成功！')
               this.$store.dispatch('tagsView/delView', this.$route); //关闭当前tabview
@@ -176,12 +212,12 @@ export default {
         this.courseItemArr = res.data
       })
     },
+    ready(){},
+    addCustomButtom(){}
   },
   components: {
-    Ueditor: resolve => {
-      require(['@/components/Ueditor/index'], resolve)
-    },
-    uploadImage
+    uploadImage,
+    VueUeditorWrap
   },
   mounted() {
     this.getcourseType();
@@ -197,7 +233,7 @@ export default {
       this.formData.title = res.data.title //试卷名字
       this.formData.imgUrl = res.data.thumb //封面
       this.formData.content = res.data.content //考场规则
-      this.$refs.childUeditor.content = res.data.content
+      this.formData.content = res.data.content
       this.formData.examination_time = res.data.examination_time
       this.formData.examination_number = res.data.examination_number
       this.formData.pass_number = res.data.pass_number

@@ -19,6 +19,11 @@ import '../public/NEditor/dialogs/xiumi-ue-v5.css'
 import '@/icons' // icon
 import '@/permission' // permission control
 import '@/assets/css/reset.css'
+import '../public/UEditor/ueditor.config'
+import '../public/UEditor/ueditor.all.js'
+// import '../public/UEditor/ueditor.parse.js'
+import '../public/UEditor/dialogs/xiumi-ue-dialog-v5'
+import '../public/UEditor/dialogs/xiumi-ue-v5.css'
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api

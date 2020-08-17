@@ -49,7 +49,7 @@
     </el-card>
     <!--分页-->
     <div class="fenye" style="margin-top:6px;">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 30, 40]" :page-size="page_size" layout="total, prev, pager, next,sizes" :total="total">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 30, 40]" :page-size="page_size" layout="total, prev, pager, next,sizes" :total="total">
       </el-pagination>
     </div>
   </div>
