@@ -14,8 +14,8 @@
         <el-form-item v-if="formData.type != '3'" label="菜单图标" >
           <el-popover placement="bottom-start" width="450" trigger="click" @show="$refs['iconSelect'].reset()">
             <IconSelect ref="iconSelect" @selected="selected" />
-            <el-input slot="reference" v-model="formData.icon" style="width: 450px;" placeholder="点击选择图标" readonly>
-              <svg-icon v-if="formData.icon" slot="prefix" :icon-class="formData.icon" class="el-input__icon" style="height: 32px;width: 16px;" />
+            <el-input slot="reference"  v-model="formData.icon" style="width: 450px;" placeholder="点击选择图标" readonly>
+              <svg-icon v-if="formData.icon"  slot="prefix" :icon-class="formData.icon" class="el-input__icon" style="height: 32px;width: 16px;" />
               <i v-else slot="prefix" class="el-icon-search el-input__icon" />
             </el-input>
           </el-popover>
@@ -98,8 +98,6 @@ export default {
   methods: {
     // 选中图标
     selected(name) {
-      console.log(name);
-
       this.formData.icon = name
     },
     // 改变上级菜单的id

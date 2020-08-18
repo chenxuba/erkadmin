@@ -12,21 +12,17 @@
         <span style="font-size:12px;">该分类是课程的名字</span> -->
       </el-form-item>
       <!-- 封面图 顶级分类不需要上传图片 imgUrl edit -->
-      <div v-if="dialogMenu.option == 'edit'">
+      <div v-if="dialogMenu.option == 'edit' && dialogMenu.show == true">
         <el-form-item label="封面图" prop="imgUrl" v-if="formData.label == 2 || formData.label == 3">
-          <el-upload class="avatar-uploader" action="http://aoaoe.ybc365.com/api/upImg" :show-file-list="false" :name="key" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-            <img v-if="formData.imgUrl" :src="formData.imgUrl" class="imgUrl">
-            <el-button type="primary" v-else>点击上传</el-button>
-          </el-upload>
+        
+           <uploadImage @uploadSuccessImg='uploadSuccessImg' accept='image/png,image/jpeg,image/jpg' ref='childuploadImage' label2=''></uploadImage>
+            <img v-if="formData.imgUrl && showpreview == true" :src="formData.imgUrl" class="imgUrl">
         </el-form-item>
       </div>
       <!-- 封面图 顶级分类不需要上传图片 imgUrl  add -->
-      <div v-if="dialogMenu.option == 'add'">
+      <div v-if="dialogMenu.option == 'add' && dialogMenu.show == true">
         <el-form-item label="封面图" prop="imgUrl" v-if="formData.label == 1 || formData.label == 2">
-          <el-upload class="avatar-uploader" action="http://aoaoe.ybc365.com/api/upImg" :show-file-list="false" :name="key" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-            <img v-if="formData.imgUrl" :src="formData.imgUrl" class="imgUrl">
-            <el-button type="primary" v-else>点击上传</el-button>
-          </el-upload>
+           <uploadImage @uploadSuccessImg='uploadSuccessImg' accept='image/png,image/jpeg,image/jpg' ref='childuploadImage' label2=''></uploadImage>
         </el-form-item>
       </div>
       <!-- 课程分类 is_platform -->
@@ -68,6 +64,7 @@
 
 <script>
 import { getcourseType, AddcourseType, PutcourseType } from "@/api/training";
+import uploadImage from "@/components/Common/uploadImage";
 export default {
   props: {
     dialogMenu: Object,
@@ -75,7 +72,7 @@ export default {
   },
   data() {
     return {
-      key: 'file',
+      showpreview:true,
       options: [],
       rules: {
         type_name: [{ required: true, message: '请输入分类名称', trigger: 'blur' }],
@@ -88,21 +85,10 @@ export default {
     }
   },
   methods: {
-    handleAvatarSuccess(res, file, fileList) {
-      this.formData.imgUrl = res.data.url;
-    },
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
-      const isPNG = file.type === 'image/png';
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG && !isPNG) {
-        this.$message.error('上传图片只能是JPG或者PNG格式!');
-      }
-      if (!isLt2M) {
-        this.$message.error('上传图片大小不能超过 2MB!');
-      }
-      return (isJPG || isPNG) && isLt2M;
+    //上传成功回调
+    uploadSuccessImg(url) {
+      this.formData.imgUrl = url
+      this.showpreview = false
     },
     // 提交
     submit(formName) {
@@ -114,7 +100,7 @@ export default {
               type_name: this.formData.type_name,
               thumb: this.formData.imgUrl,
               is_platform: this.formData.is_platform,
-              is_course: this.formData.is_tuozhan ? this.formData.is_tuozhan : '1',
+              is_course: this.formData.is_course ? this.formData.is_course : '1',
               sort: this.formData.sort,
               disabled: 1
             }
@@ -137,7 +123,7 @@ export default {
               type_name: this.formData.type_name,
               thumb: this.formData.imgUrl,
               is_platform: this.formData.is_platform,
-              is_course: this.formData.is_tuozhan ? this.formData.is_tuozhan : '1',
+              is_course: this.formData.is_course ? this.formData.is_course : '1',
               sort: this.formData.sort,
               disabled: 1
             }
@@ -163,6 +149,7 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
       this.dialogMenu.show = false
+      
     },
     // 打开弹窗触发的方法，渲染上级类目的名字
     openDialog() {
@@ -189,8 +176,11 @@ export default {
         }
 
       })
-
+      this.showpreview = true
     }
+  },
+  components: {
+    uploadImage,
   },
   mounted() {
     getcourseType().then(res => {
@@ -204,7 +194,7 @@ export default {
 
 <style lang="scss" scoped>
 .imgUrl {
-  width: 270px;
-  height: 120px;
+  width: 160px;
+  height: 80px;
 }
 </style>

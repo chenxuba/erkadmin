@@ -147,13 +147,15 @@ export default {
         componentName: "",
         component: "",
         permission: "",
-        pid: "",
+        pid: "0",
         menuSort: "",
         hidden: '1'
       };
     },
     // 编辑
     handleEdit(row) {
+      console.log(row.type);
+      
       this.dialogMenu = {
         show: true,
         title: "编辑菜单",

@@ -12,10 +12,6 @@ import store from './store'
 import router from './router'
 
 //引入必要的文件 集成秀米所需
-import '../public/NEditor/neditor.config'
-import '../public/NEditor/neditor.all.min.js'
-import '../public/NEditor/dialogs/xiumi-ue-dialog-v5'
-import '../public/NEditor/dialogs/xiumi-ue-v5.css'
 import '@/icons' // icon
 import '@/permission' // permission control
 import '@/assets/css/reset.css'

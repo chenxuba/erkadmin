@@ -5,10 +5,10 @@
       <div>
         <!-- 搜索 -->
         <span>
-          <el-input clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" />
+          <!-- <el-input clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" /> -->
           <span class='filter-item'>
-            <el-button type="success" icon="el-icon-search">搜索</el-button>
-            <el-button type="warning" icon="el-icon-refresh-left">重置</el-button>
+            <!-- <el-button type="success" icon="el-icon-search">搜索</el-button>
+            <el-button type="warning" icon="el-icon-refresh-left">重置</el-button> -->
             <el-button type="primary" icon="el-icon-plus" @click="handleAdd()">创建课程</el-button>
             <el-button type="primary" icon="el-icon-plus" @click="handleAdd()">创建须知</el-button>
           </span>

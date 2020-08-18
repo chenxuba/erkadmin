@@ -25,7 +25,7 @@
     </div>
     <!--菜单管理-->
     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="margin-top: 20px">
-      <el-table ref="table" :data="data" v-loading='loading' height="400">
+      <el-table ref="table" :data="data" v-loading='loading' :max-height="tableHeight">
         <el-table-column label="ID" prop="id" width="50" />
         <el-table-column prop="type_name" label="分类" align="center" />
         <el-table-column prop="course_name" label="课程名称" width="300" align="center">
@@ -88,6 +88,7 @@ import { gettrainingCourseItem, DeltrainingCourseware } from "@/api/training";
 export default {
   data() {
     return {
+      tableHeight: document.documentElement.clientHeight || document.body.clientHeight,
       pageSize: 10,
       page: 1,
       total: 40,

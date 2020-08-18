@@ -21,7 +21,7 @@
       <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style='margin-top: 10px;'>
         <!--表格渲染-->
         <el-card style="margin:10px 0;">
-          <el-table ref="table" :data="data" style="width: 100%;">
+          <el-table ref="table" :data="data" style="width: 100%;" :max-height="tableHeight">
             <el-table-column :show-overflow-tooltip="true" prop="id" label="ID" width="40" />
             <!-- 标题 title -->
             <el-table-column :show-overflow-tooltip="true" prop="title" label="标题" width="140" align="center" />
@@ -44,13 +44,13 @@
             <!-- 价格/密码 pwdOrPrice -->
             <el-table-column :show-overflow-tooltip="true" prop="pwdOrPrice" label="价格/密码" align="center" />
             <!-- VIP折扣 vip -->
-            <el-table-column :show-overflow-tooltip="true" prop="vip" label="VIP折扣" align="center">
+            <el-table-column prop="vip" label="VIP折扣" align="center">
               <template slot-scope="scope">
                 <el-tag effect="dark" type="success">{{scope.row.vip}}</el-tag>
               </template>
             </el-table-column>
             <!-- SVIP折扣 svip -->
-            <el-table-column :show-overflow-tooltip="true" prop="svip" label="SVIP折扣" align="center">
+            <el-table-column prop="svip" label="SVIP折扣" align="center">
               <template slot-scope="scope">
                 <el-tag effect="dark" type="warning">{{scope.row.svip}}</el-tag>
               </template>
@@ -65,21 +65,21 @@
             <el-table-column :show-overflow-tooltip="true" prop="createTime" label="创建时间" align="center" width="130" />
             <el-table-column label="操作" width="150" align="center" fixed="right">
               <template slot-scope="scope">
-                  <el-tooltip class="item" effect="dark" content="编辑视频" placement="top" >
-                    <el-button @click="handleClick(scope.row)" circle icon="el-icon-edit" type="primary" />
-                  </el-tooltip>
-                  <el-tooltip class="item" effect="dark" content="删除视频" placement="top">
-                    <el-button type="danger" circle class="btn" icon="el-icon-delete"></el-button>
-                  </el-tooltip>
-                  <el-tooltip class="item" effect="dark" content="查看评论" placement="top">
-                    <el-button type="warning" circle icon="el-icon-s-comment"></el-button>
-                  </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="编辑视频" placement="top">
+                  <el-button @click="handleClick(scope.row)" circle icon="el-icon-edit" type="primary" />
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="删除视频" placement="top">
+                  <el-button type="danger" circle class="btn" icon="el-icon-delete"></el-button>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="查看评论" placement="top">
+                  <el-button type="warning" circle icon="el-icon-s-comment"></el-button>
+                </el-tooltip>
               </template>
             </el-table-column>
           </el-table>
           <!--分页-->
           <div class="fenye" style="margin-top:20px;">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="total, prev, pager, next,sizes" :total="40">
+            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="total, prev, pager, next,sizes" :total="40">
             </el-pagination>
           </div>
         </el-card>
@@ -92,6 +92,7 @@
 export default {
   data() {
     return {
+      tableHeight: document.documentElement.clientHeight || document.body.clientHeight,
       teacher: "",
       teacherArr: [{
         value: '选项1',

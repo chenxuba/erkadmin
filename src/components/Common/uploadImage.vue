@@ -4,8 +4,8 @@
     <el-form-item :label="name" :prop='checking' ref="imgUrl">
       <el-button @click="vExampleAdd">点击上传<i class="el-icon-upload el-icon--right"></i></el-button>
       <span class="spans" v-if="uploaderInfos.progress != 0">
-        <el-progress  :percentage="uploaderInfos.progress * 100" class="progress"   />
-        <el-button @click="resetUp" v-if="uploaderInfos.progress != 1 && uploaderInfos.progress != 0" v-show="showReBtn">取消上传<i class="el-icon-upload el-icon--right"></i></el-button>
+        <!-- <el-progress  :percentage="uploaderInfos.progress * 100" class="progress"   /> -->
+        <!-- <el-button @click="resetUp" v-if="uploaderInfos.progress != 1 && uploaderInfos.progress != 0" v-show="showReBtn">取消上传<i class="el-icon-upload el-icon--right"></i></el-button> -->
       </span>
       <span v-html="uploadLoading" class="spans" v-if="showupType"></span>
       <form ref="vExample">
@@ -17,10 +17,10 @@
       <img :src="uploaderInfos.imageUrl" class="img" alt="">
     </el-form-item>
     <!-- 上传进度 -->
-    <!-- <el-form-item label="上传进度" v-if="uploaderInfos.progress != 0" :prop='checking'>
+    <el-form-item :label="label2" v-if="uploaderInfos.progress != 0" :prop='checking'>
       <el-progress status="success" :percentage="uploaderInfos.progress * 100" class="progress" :text-inside="true" :stroke-width="15" />
       <el-button @click="resetUp" v-if="uploaderInfos.progress != 1 && uploaderInfos.progress != 0" v-show="showReBtn">取消上传<i class="el-icon-upload el-icon--right"></i></el-button>
-    </el-form-item> -->
+    </el-form-item>
   </div>
 </template>
 
@@ -40,6 +40,10 @@ export default {
     },
     label: {
       type: String,
+    },
+    label2:{
+      type: String,
+      default:'上传进度'
     }
   },
   data() {
