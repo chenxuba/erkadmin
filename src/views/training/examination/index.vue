@@ -117,9 +117,9 @@ export default {
     // 添加试题
     hanlAdd(row) {
       this.$router.push({
-        path: "/training/questions/" + row.id,
+        path: "/training/questions/" + row.courseware_id,
         query: {
-          type: row.name
+          type: row.title
         }
       })
     },

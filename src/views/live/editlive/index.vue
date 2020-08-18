@@ -84,7 +84,7 @@
           <el-form-item label="直播详情" prop="guize">
             <div class="ueditor">
               <!-- <vue-ueditor-wrap v-model="msg" :config="myConfig"></vue-ueditor-wrap> -->
-                  <Ueditor @change='changeContent'></Ueditor>
+                  <!-- <Ueditor @change='changeContent'></Ueditor> -->
             </div>
             <div class="box">
               <div v-html="msg"></div>
@@ -178,9 +178,9 @@ export default {
   },
   components: {
     // VueUeditorWrap
-     Ueditor: resolve => {
-      require(['@/components/Ueditor/index'], resolve)
-    },
+    //  Ueditor: resolve => {
+    //   require(['@/components/Ueditor/index'], resolve)
+    // },
   },
 }
 </script>

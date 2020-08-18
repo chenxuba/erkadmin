@@ -59,7 +59,7 @@ export function PuttrainingCourse(data, id) {
   })
 }
 // 查看课件  /trainingCourse/{:id}/getCourseware
-export function gettrainingCourseItem(params,id) {
+export function gettrainingCourseItem(params, id) {
   return request({
     url: `/trainingCourse/${id}/getCourseware`,
     method: 'get',
@@ -105,7 +105,7 @@ export function trainingCoursewareDetail(id) {
 }
 //编辑课件
 // /trainingCourseware/{:id}
-export function edittrainingCourse(data,id) {
+export function edittrainingCourse(data, id) {
   return request({
     url: `/trainingCourseware/${id}`,
     method: 'put',
@@ -151,9 +151,9 @@ export function getexaminationDetail(id) {
   })
 }
 // EditExamination
-export function EditExamination(data,id) {
+export function EditExamination(data, id) {
   return request({
-    url: `/examination/`+id,
+    url: `/examination/` + id,
     method: 'put',
     data
   })
@@ -168,7 +168,7 @@ export function getCertificate_order(params) {
   })
 }
 // /certificate_order/{:id}/status/0
-export function putCertificate_order(id,status,data) {
+export function putCertificate_order(id, status, data) {
   return request({
     url: `/certificate_order/${id}/status/${status}`,
     method: 'put',
@@ -176,9 +176,9 @@ export function putCertificate_order(id,status,data) {
   })
 }
 // 录入单号 /certificate_order/{:id}
-export function submitNumber(data,id) {
+export function submitNumber(data, id) {
   return request({
-    url: `/certificate_order/`+id,
+    url: `/certificate_order/` + id,
     method: 'put',
     data
   })
@@ -189,5 +189,36 @@ export function getExamlog(params) {
     url: `/examlog`,
     method: 'get',
     params
+  })
+}
+// 试题 列表 /problems/:paper_id
+export function getProblems(paper_id, params) {
+  return request({
+    url: `/problems/${paper_id}`,
+    method: 'get',
+    params
+  })
+}
+// 删除 /problems/{:id}
+export function DelProblems(id) {
+  return request({
+    url: `/problems/${id}`,
+    method: 'delete',
+  })
+}
+// 新增 /problems/:paper_id
+export function AddProblems(id, data) {
+  return request({
+    url: `/problems/${id}`,
+    method: 'post',
+    data
+  })
+}
+// 编辑  /problems/:paper_id
+export function PutProblems(id, data) {
+  return request({
+    url: `/problems/${id}`,
+    method: 'put',
+    data
   })
 }

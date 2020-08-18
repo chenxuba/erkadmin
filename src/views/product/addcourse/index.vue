@@ -44,7 +44,7 @@
           <el-form-item label="视频详情" prop="message">
             <div class="ueditor">
               <!-- <vue-ueditor-wrap v-model="formData.message" :config="myConfig"></vue-ueditor-wrap> -->
-               <Ueditor @change='changeContent'></Ueditor>
+               <!-- <Ueditor @change='changeContent'></Ueditor> -->
             </div>
             <div class="box">
               <div v-html="formData.message"></div>
@@ -336,9 +336,9 @@ export default {
   },
   components: {
     // VueUeditorWrap,
-    Ueditor: resolve => {
-      require(['@/components/Ueditor/index'], resolve)
-    },
+    // Ueditor: resolve => {
+    //   require(['@/components/Ueditor/index'], resolve)
+    // },
     uploadImage,
     uploadVideo
   },

@@ -28,7 +28,7 @@
         <div class="wrap">
           <el-form-item label="考场规则" prop="content" ref="content">
             <div class="ueditor">
-              <Ueditor @change='changeContent'></Ueditor>
+              <!-- <Ueditor @change='changeContent'></Ueditor> -->
             </div>
             <div class="box">
               <div v-html="formData.content"></div>
@@ -171,9 +171,9 @@ export default {
     },
   },
   components: {
-    Ueditor: resolve => {
-      require(['@/components/Ueditor/index'], resolve)
-    },
+    // Ueditor: resolve => {
+    //   require(['@/components/Ueditor/index'], resolve)
+    // },
     uploadImage
   },
   mounted() {
