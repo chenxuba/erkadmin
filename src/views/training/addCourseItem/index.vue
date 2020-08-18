@@ -26,7 +26,7 @@
           <el-button type="text">查看示例<i class="el-icon-question"></i></el-button>
         </el-form-item>
         <!-- 封面图 imgUrl -->
-        <uploadImage @uploadSuccessImg='uploadSuccessImg' ref="childImage" name='封面图' accept='image/*' checking='imgUrl'></uploadImage>
+        <uploadImage @uploadSuccessImg='uploadSuccessImg' ref="childImage" name='封面图' accept='image/png,image/jpg,image/jpeg,' checking='imgUrl'></uploadImage>
         <!-- 排序 sort -->
         <el-form-item label="排序" prop="sort">
           <el-input-number v-model.number="formData.sort" placeholder='数字越大越靠前' :min="0" :max="999" controls-position="right" style="width: 200px;" />
@@ -134,6 +134,8 @@ export default {
             this.$refs.childVideo.uploaderInfos.progress = 0
             this.$refs.childImage.showupType = false
             this.$refs.childVideo.showupType = false
+            this.$store.dispatch('tagsView/delView', this.$route); //关闭当前tabview
+            this.$router.go(-1)
           })
         } else {
           console.log('error submit!!');

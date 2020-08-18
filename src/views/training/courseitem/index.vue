@@ -88,7 +88,7 @@ import { gettrainingCourseItem, DeltrainingCourseware } from "@/api/training";
 export default {
   data() {
     return {
-      tableHeight: document.documentElement.clientHeight || document.body.clientHeight,
+      tableHeight: document.documentElement.clientHeight - 300 || document.body.clientHeight - 300,
       pageSize: 10,
       page: 1,
       total: 40,
