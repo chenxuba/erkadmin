@@ -3,7 +3,8 @@
     <el-card>
       <el-row>
         <el-col>
-          <el-cascader :show-all-levels="false" filterable v-model="courseTypeArr" placeholder="请选择分类" clearable :props='props' :options="courseType" @change="handleChangeCourseType"></el-cascader>
+          <el-cascader :show-all-levels="false" filterable v-model="courseTypeArr" placeholder="请选择分类" clearable :props='props' :options="courseType"
+                       @change="handleChangeCourseType"></el-cascader>
           <el-select v-model="courseItem_id" placeholder="请选择课件" style="margin:0 10px;">
             <el-option v-for="item in courseItemArr" :key="item.id" :label="item.course_name" :value="item.id">
             </el-option>
@@ -49,7 +50,8 @@
     </el-card>
     <!--分页-->
     <div class="fenye" style="margin-top:6px;">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 30, 40]" :page-size="page_size" layout="total, prev, pager, next,sizes" :total="total">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 30, 40]"
+                     :page-size="page_size" layout="total, prev, pager, next,sizes" :total="total">
       </el-pagination>
     </div>
   </div>
@@ -117,7 +119,7 @@ export default {
     // 添加试题
     hanlAdd(row) {
       this.$router.push({
-        path: "/training/questions/" + row.courseware_id,
+        path: "/training/questions/" + row.id,
         query: {
           type: row.title
         }

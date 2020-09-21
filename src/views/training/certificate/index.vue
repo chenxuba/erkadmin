@@ -3,7 +3,8 @@
     <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
       <!--工具栏-->
       <div class="head-container">
-        <el-cascader filterable v-model="courseTypeArr" style="margin:0 10px;width:350px" placeholder="请选择课程类别" clearable :props='props' :options="courseType" @change="handleChangeCourseType"></el-cascader>
+        <el-cascader filterable v-model="courseTypeArr" style="margin:0 10px;width:350px" placeholder="请选择课程类别" clearable :props='props'
+                     :options="courseType" @change="handleChangeCourseType"></el-cascader>
         <el-button type="primary" style="width:100px;" size="mini" @click="hanldSearch">筛 选</el-button>
         <el-button type="warning" style="width:100px;" size="mini" @click="reset">重 置</el-button>
       </div>
@@ -32,7 +33,8 @@
           <el-table-column prop="create_time" label="申请时间" align="center" />
           <el-table-column prop="ems" label="快递单号" align="center">
             <template slot-scope="scope">
-              <el-button type="primary" v-if="scope.row.courier_number == ''" :disabled="scope.row.status == 1 ? false:true" @click="entryEms(scope.row)">录入单号</el-button>
+              <el-button type="primary" v-if="scope.row.courier_number == ''" :disabled="scope.row.status == 1 ? false:true"
+                         @click="entryEms(scope.row)">录入单号</el-button>
               <span v-else>{{scope.row.courier_number}}</span>
             </template>
           </el-table-column>
@@ -50,7 +52,8 @@
         </el-table>
         <!--分页-->
         <div class="fenye" style="margin-top:20px;">
-          <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="total, prev, pager, next,sizes" :total="total">
+          <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 30, 40]"
+                         :page-size="10" layout="total, prev, pager, next,sizes" :total="total">
           </el-pagination>
         </div>
       </el-card>
@@ -60,7 +63,7 @@
       <el-input type="textarea" :rows="4" placeholder="请填写驳回理由" v-model="rejectMsg">
       </el-input>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible2 = false">取 消</el-button>
+        <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="sure">确 定</el-button>
       </span>
     </el-dialog>
@@ -246,7 +249,7 @@ export default {
       })
     },
     sureNumber() {
-      submitNumber({ courier_number: this.number },this.id).then(res => {
+      submitNumber({ courier_number: this.number }, this.id).then(res => {
         if (res.code == 0) {
           this.$message.success('录入单号成功！')
           this.dialogVisible2 = false

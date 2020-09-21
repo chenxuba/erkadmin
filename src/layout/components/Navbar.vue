@@ -45,7 +45,7 @@ export default {
     Hamburger,
     Screenfull,
     SizeSelect,
-     Search // 添加部分
+    Search // 添加部分
   },
   computed: {
     ...mapGetters([

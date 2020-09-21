@@ -4,7 +4,8 @@
       <el-form ref="form" :model="formData" :rules="rules" label-width="100px">
         <!-- 课程分类 courseType -->
         <el-form-item label="课程分类" prop="courseType">
-          <el-cascader style="width: 60%;" filterable v-model="courseTypeArr" placeholder="请选择课件进行筛选" clearable :props='props' :options="courseType" @change="handleChangeCourseType"></el-cascader>
+          <el-cascader style="width: 60%;" filterable v-model="courseTypeArr" placeholder="请选择课件进行筛选" clearable :props='props' :options="courseType"
+                       @change="handleChangeCourseType"></el-cascader>
         </el-form-item>
         <!-- 选择课件 courseItem -->
         <el-form-item label="选择课件" prop="courseItem" ref="courseItem">
@@ -41,32 +42,38 @@
         </div>
         <!-- 考试时长 examination_time -->
         <el-form-item label="考试时长" prop="examination_time">
-          <el-input-number v-model.number="formData.examination_time" placeholder='请填写考试时长' :min="0" :max="999" controls-position="right" style="width: 200px;" />
+          <el-input-number v-model.number="formData.examination_time" placeholder='请填写考试时长' :min="0" :max="999" controls-position="right"
+                           style="width: 200px;" />
           <span class="tishi">考试时长限制;填写0不限制时长;单位：分钟</span>
         </el-form-item>
         <!-- 考试次数 examination_number -->
         <el-form-item label="考试次数" prop="examination_number">
-          <el-input-number v-model.number="formData.examination_number" placeholder='请填写考试次数' :min="0" :max="999" controls-position="right" style="width: 200px;" />
+          <el-input-number v-model.number="formData.examination_number" placeholder='请填写考试次数' :min="0" :max="999" controls-position="right"
+                           style="width: 200px;" />
           <span class="tishi">考试次数;填写0不限制次数</span>
         </el-form-item>
         <!-- 及格分数 pass_number -->
         <el-form-item label="及格分数" prop="pass_number">
-          <el-input-number v-model.number="formData.pass_number" placeholder='请填写及格分数' :min="0" :max="999" controls-position="right" style="width: 200px;" />
+          <el-input-number v-model.number="formData.pass_number" placeholder='请填写及格分数' :min="0" :max="999" controls-position="right"
+                           style="width: 200px;" />
           <span class="tishi">填写0表示没有不及格分数</span>
         </el-form-item>
         <!-- 单选题分数 radio_number -->
         <el-form-item label="单选题分数" prop="radio_number">
-          <el-input-number v-model.number="formData.radio_number" placeholder='请填写单选题分数' :min="0" :max="999" controls-position="right" style="width: 200px;" />
+          <el-input-number v-model.number="formData.radio_number" placeholder='请填写单选题分数' :min="0" :max="999" controls-position="right"
+                           style="width: 200px;" />
           <span class="tishi">单选题每道题的分数</span>
         </el-form-item>
         <!-- 多选题分数 checkbox_number -->
         <el-form-item label="多选题分数" prop="checkbox_number">
-          <el-input-number v-model.number="formData.checkbox_number" placeholder='请填写多选题分数' :min="0" :max="999" controls-position="right" style="width: 200px;" />
+          <el-input-number v-model.number="formData.checkbox_number" placeholder='请填写多选题分数' :min="0" :max="999" controls-position="right"
+                           style="width: 200px;" />
           <span class="tishi">多选题每道题的分数</span>
         </el-form-item>
         <!-- 判断题分数 judge_number -->
         <el-form-item label="判断题分数" prop="judge_number">
-          <el-input-number v-model.number="formData.judge_number" placeholder='请填写判断题分数' :min="0" :max="999" controls-position="right" style="width: 200px;" />
+          <el-input-number v-model.number="formData.judge_number" placeholder='请填写判断题分数' :min="0" :max="999" controls-position="right"
+                           style="width: 200px;" />
           <span class="tishi">判断题每道题的分数</span>
         </el-form-item>
         <el-form-item>
@@ -153,7 +160,7 @@ export default {
         // 上传文件接口（这个地址是我为了方便各位体验文件上传功能搭建的临时接口，请勿在生产环境使用！！！）
         serverUrl: 'http://35.201.165.105:8000/controller.php',
         // UEditor 资源文件的存放路径，如果你使用的是 vue-cli 生成的项目，通常不需要设置该选项，vue-ueditor-wrap 会自动处理常见的情况，如果需要特殊配置，参考下方的常见问题2
-        UEDITOR_HOME_URL: '/UEditor/'
+        UEDITOR_HOME_URL: '/newadmin/UEditor/'
       },
     }
   },
@@ -212,8 +219,8 @@ export default {
         this.courseItemArr = res.data
       })
     },
-    ready(){},
-    addCustomButtom(){}
+    ready() { },
+    addCustomButtom() { }
   },
   components: {
     uploadImage,

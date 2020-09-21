@@ -5,70 +5,81 @@
       <div class="head-container">
         <div>
           <!-- 搜索 -->
-          <el-input clearable placeholder="输入课程名称搜索" style="width: 150px;margin-right:10px;" class="filter-item" />
+          <el-input clearable v-model="course_name" placeholder="输入课程名称搜索" style="width: 150px;margin-right:10px;" class="filter-item" />
           <!-- 选择导师 -->
-          <el-select v-model="teacher" placeholder="请选择导师">
-            <el-option v-for="item in teacherArr" :key="item.value" :label="item.label" :value="item.value">
+          <el-select v-model="teacher" placeholder="请选择导师" filterable clearable>
+            <el-option v-for="item in teacherArr" :key="item.id" :label="item.teacher_name" :value="item.id">
             </el-option>
           </el-select>
-          <el-date-picker :default-time="['00:00:00','23:59:59']" style="margin:0 10px;" type="daterange" range-separator=":" class="date-item" value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
-          <el-button type="success" icon="el-icon-search">搜索</el-button>
-          <el-button type="primary" icon="el-icon-refresh-left">重置</el-button>
-          <el-button type="warning" icon="el-icon-edit" @click="handleAdd">新增视频</el-button>
+          <el-date-picker :default-time="['00:00:00','23:59:59']" style="margin:0 10px;" type="daterange" range-separator="-" class="date-item"
+                          value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" v-model="seleteTime" />
+          <el-button type="success" icon="el-icon-search" @click="search">搜索</el-button>
+          <el-button type="primary" icon="el-icon-refresh-left" @click="resetting">重置</el-button>
+          <el-button type="warning" icon="el-icon-edit" @click="handleAdd">新增课程</el-button>
         </div>
       </div>
       <!-- 表格渲染 -->
-      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style='margin-top: 10px;'>
+      <el-col style='margin-top: 10px;'>
         <!--表格渲染-->
         <el-card style="margin:10px 0;">
-          <el-table ref="table" :data="data" style="width: 100%;" :max-height="tableHeight">
-            <el-table-column :show-overflow-tooltip="true" prop="id" label="ID" width="40" />
+          <el-table ref="table" :data="data" style="width: 100%;" v-loading='loading' :max-height="tableHeight" border>
+            <el-table-column type="index" label="#" width="45" align="center" />
             <!-- 标题 title -->
-            <el-table-column :show-overflow-tooltip="true" prop="title" label="标题" width="140" align="center" />
+            <el-table-column :show-overflow-tooltip="true" prop="course_name" label="标题" width="140" align="center" />
             <!-- 封面图片 img -->
-            <el-table-column prop="img" label="封面图片" align="center">
+            <el-table-column prop="course_thumb" label="封面图片" align="center" width="110">
               <template slot-scope="scope">
-                <img :src="scope.row.img" width="100%" alt="">
+                <img :src="scope.row.course_thumb" width="80" height="40" alt="">
               </template>
             </el-table-column>
             <!-- 所属分类 category -->
-            <el-table-column :show-overflow-tooltip="true" prop="category" label="所属分类" align="center" />
-            <!-- 媒体类型 type -->
-            <el-table-column :show-overflow-tooltip="true" prop="type" label="媒体类型" align="center">
+            <el-table-column :show-overflow-tooltip="true" prop="type_name" label="所属分类" align="center">
               <template slot-scope="scope">
-                <el-tag type="danger">{{scope.row.type}}</el-tag>
+                <span v-if="scope.row.type_id == 0">每周一课</span>
+                <span v-else>{{scope.row.type_name}}</span>
+              </template>
+            </el-table-column>
+            <!-- 类型 course_type -->
+            <el-table-column :show-overflow-tooltip="true" prop="course_type" label="类型" align="center" width="60">
+              <template slot-scope="scope">
+                <el-tag type="danger" size="mini">{{scope.row.course_type}}</el-tag>
               </template>
             </el-table-column>
             <!-- 课程归属 from -->
-            <el-table-column :show-overflow-tooltip="true" prop="from" label="课程归属" align="center" />
+            <el-table-column :show-overflow-tooltip="true" prop="teacher_title" label="归属" align="center" width="60" />
             <!-- 价格/密码 pwdOrPrice -->
-            <el-table-column :show-overflow-tooltip="true" prop="pwdOrPrice" label="价格/密码" align="center" />
-            <!-- VIP折扣 vip -->
-            <el-table-column prop="vip" label="VIP折扣" align="center">
+            <el-table-column :show-overflow-tooltip="true" prop="course_price" label="价格/密码" align="center">
               <template slot-scope="scope">
-                <el-tag effect="dark" type="success">{{scope.row.vip}}</el-tag>
+                <el-tag v-if="scope.row.course_price == 0.00" size="mini">免费</el-tag>
+                <el-tag v-else size="mini">{{scope.row.course_price}}</el-tag>
+              </template>
+            </el-table-column>
+            <!-- VIP折扣 vip -->
+            <el-table-column prop="is_vip_text" label="VIP折扣" align="center">
+              <template slot-scope="scope">
+                <el-tag effect="dark" type="success" size="mini">{{scope.row.is_vip_text}}</el-tag>
               </template>
             </el-table-column>
             <!-- SVIP折扣 svip -->
-            <el-table-column prop="svip" label="SVIP折扣" align="center">
+            <el-table-column prop="is_svip_text" label="SVIP折扣" align="center">
               <template slot-scope="scope">
-                <el-tag effect="dark" type="warning">{{scope.row.svip}}</el-tag>
+                <el-tag effect="dark" type="warning" size="mini">{{scope.row.is_svip_text}}</el-tag>
               </template>
             </el-table-column>
             <!-- 分享收益 share -->
-            <el-table-column :show-overflow-tooltip="true" prop="share" label="分享收益" align="center" width="100">
+            <el-table-column :show-overflow-tooltip="true" prop="recommend_price" label="分享收益" align="center" width="100">
               <template slot-scope="scope">
-                <el-tag>{{scope.row.share}}</el-tag>
+                <el-tag size="mini">{{scope.row.recommend_price}}</el-tag>
               </template>
             </el-table-column>
             <!-- 创建时间 createTime  -->
-            <el-table-column :show-overflow-tooltip="true" prop="createTime" label="创建时间" align="center" width="130" />
+            <el-table-column :show-overflow-tooltip="true" prop="create_time" label="创建时间" align="center" width="110" />
             <el-table-column label="操作" width="150" align="center" fixed="right">
               <template slot-scope="scope">
-                <el-tooltip class="item" effect="dark" content="编辑视频" placement="top">
+                <el-tooltip class="item" effect="dark" content="编辑" placement="top">
                   <el-button @click="handleClick(scope.row)" circle icon="el-icon-edit" type="primary" />
                 </el-tooltip>
-                <el-tooltip class="item" effect="dark" content="删除视频" placement="top">
+                <el-tooltip class="item" effect="dark" content="删除" placement="top">
                   <el-button type="danger" circle class="btn" icon="el-icon-delete"></el-button>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" content="查看评论" placement="top">
@@ -78,10 +89,8 @@
             </el-table-column>
           </el-table>
           <!--分页-->
-          <div class="fenye" style="margin-top:20px;">
-            <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="total, prev, pager, next,sizes" :total="40">
-            </el-pagination>
-          </div>
+          <pagination :page="page" :total="total" :page_size="page_size" :background="true" @handleCurrentChange="handleCurrentChange"
+                      @handleSizeChange="handleSizeChange" />
         </el-card>
       </el-col>
     </el-card>
@@ -89,53 +98,93 @@
 </template>
 
 <script>
+import { getCourseList, getTeachersList } from "@/api/product/index";
+import pagination from "@/components/Common/pagination"
+
 export default {
   data() {
     return {
-      tableHeight: document.documentElement.clientHeight || document.body.clientHeight,
-      teacher: "",
-      teacherArr: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
-      data: [
-        {
-          id: "1",
-          title: "四步走，让感统训练更有效",
-          img: "http://erkong.ybc365.com/04093202006221440435272.jpg",
-          category: "自闭症",
-          type: "视频",
-          from: "周永福",
-          pwdOrPrice: "20.00",
-          vip: "会员免费",
-          svip: "会员免费",
-          share: "推荐/99.00",
-          createTime: "2020-02-02 12:00"
-        }
-      ]
+      loading: false,
+      tableHeight: document.documentElement.clientHeight - 300 || document.body.clientHeight - 300,
+      teacher: "",//选择导师筛选
+      teacherArr: [],//导师列表
+      data: [],
+      page: 1,
+      page_size: 10,
+      total: 0,
+      course_name: "",
+      seleteTime: "",//选择时间筛选
     }
   },
   methods: {
     handleClick(row) {
     },
+    // 跳转到新增课程页面
     handleAdd() {
       this.$router.push('/product/addcourse')
     },
-    handleSizeChange() { },
-    handleCurrentChange() { },
+    // 翻页
+    handleCurrentChange(val) {
+      this.page = val;
+      this.getCourseList();
+    },
+    // 翻页
+    handleSizeChange(val) {
+      this.page_size = val;
+      this.page = 1;
+      this.getCourseList();
+    },
     handleClickTabs() { },
+    // 获取课程列表
+    getCourseList() {
+      this.loading = true
+      this.data = []
+      getCourseList({ disabled: 1, page_size: this.page_size, page: this.page, course_name: this.course_name, teacher_name: this.teacher, start_time: this.start_time, end_time: this.end_time }).then(res => {
+        this.data = res.data.list
+        this.loading = false
+        this.total = res.data.count
+      })
+    },
+    //搜索
+    search() {
+      this.getCourseList()
+    },
+    //获取导师列表
+    getTeachersList() {
+      getTeachersList().then(res => {
+        this.teacherArr = res.data.list
+      })
+    },
+    //重置
+    resetting() {
+      this.seleteTime = ''
+      this.course_name = ''
+      this.teacher = ''
+      this.getCourseList()
+    }
+  },
+  mounted() {
+    this.getCourseList();
+    this.getTeachersList()
+  },
+  components: {
+    pagination,
+  },
+  computed: {
+    start_time() {
+      if (this.seleteTime == '' || this.seleteTime == null) {
+        return ""
+      } else {
+        return (new Date(this.seleteTime[0]).getTime()) / 1000
+      }
+    },
+    end_time() {
+      if (this.seleteTime == '' || this.seleteTime == null) {
+        return ""
+      } else {
+        return (new Date(this.seleteTime[1]).getTime()) / 1000
+      }
+    },
   },
 }
 </script>

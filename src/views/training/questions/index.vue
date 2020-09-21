@@ -35,7 +35,8 @@
       </el-table>
       <!--分页-->
       <div class="fenye" style="margin-top:20px;">
-        <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="total, prev, pager, next,sizes" :total="total">
+        <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 30, 40]" :page-size="10"
+                       layout="total, prev, pager, next,sizes" :total="total">
         </el-pagination>
       </div>
     </el-card>
@@ -114,7 +115,7 @@ import { getProblems, DelProblems, AddProblems, PutProblems } from "@/api/traini
 export default {
   data() {
     return {
-      timuID:"",
+      timuID: "",
       loading: true,
       type: this.$route.query.type,
       id: this.$route.params.id,
@@ -346,8 +347,8 @@ export default {
       margin-bottom: 20px;
     }
   }
-  ::v-deep .el-radio-button__orig-radio:disabled:checked+.el-radio-button__inner{
-    background-color: #409EFF;
+  ::v-deep .el-radio-button__orig-radio:disabled:checked + .el-radio-button__inner {
+    background-color: #409eff;
     color: #fff;
   }
 }

@@ -23,7 +23,7 @@
       </el-form-item>
       <!-- 证书价格 -->
       <el-form-item label="证书价格" prop="zhengshu_price">
-        <el-input-number v-model.number="formData.zhengshu_price" placeholder='单位(元)' :min="1" :max="9999" controls-position="right" style="width: 200px;" />
+        <el-input-number v-model.number="formData.zhengshu_price" placeholder='单位(元)' :min="0" :max="9999" controls-position="right" style="width: 200px;" />
         <span class="tishi">单位元，建议为整数</span>
       </el-form-item>
       <!-- 虚拟购买量 -->

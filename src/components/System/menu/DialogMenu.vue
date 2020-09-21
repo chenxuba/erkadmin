@@ -1,6 +1,7 @@
 <template>
   <div class="dialogmenu">
-    <el-dialog :title="dialogMenu.title" :visible.sync="dialogMenu.show" width="55%" destroy-on-close @open='openDialog' :close-on-click-modal="false" :close-on-press-escape="false" :modal-append-to-body="false">
+    <el-dialog :title="dialogMenu.title" :visible.sync="dialogMenu.show" width="55%" destroy-on-close @open='openDialog' :close-on-click-modal="false"
+               :close-on-press-escape="false" :modal-append-to-body="false">
       <el-form ref="form" :inline="true" :model="formData" :rules="rules" label-width="80px">
         <!-- 菜单类型 type -->
         <el-form-item label="菜单类型" prop="type">
@@ -11,11 +12,11 @@
           </el-radio-group>
         </el-form-item>
         <!-- 点击选择图标 icon -->
-        <el-form-item v-if="formData.type != '3'" label="菜单图标" >
+        <el-form-item v-if="formData.type != '3'" label="菜单图标">
           <el-popover placement="bottom-start" width="450" trigger="click" @show="$refs['iconSelect'].reset()">
             <IconSelect ref="iconSelect" @selected="selected" />
-            <el-input slot="reference"  v-model="formData.icon" style="width: 450px;" placeholder="点击选择图标" readonly>
-              <svg-icon v-if="formData.icon"  slot="prefix" :icon-class="formData.icon" class="el-input__icon" style="height: 32px;width: 16px;" />
+            <el-input slot="reference" v-model="formData.icon" style="width: 450px;" placeholder="点击选择图标" readonly>
+              <svg-icon v-if="formData.icon" slot="prefix" :icon-class="formData.icon" class="el-input__icon" style="height: 32px;width: 16px;" />
               <i v-else slot="prefix" class="el-icon-search el-input__icon" />
             </el-input>
           </el-popover>
@@ -47,7 +48,8 @@
         </el-form-item>
         <!-- 菜单排序  menuSort-->
         <el-form-item label="菜单排序" prop="menuSort">
-          <el-input-number v-model.number="formData.menuSort" placeholder='数字越大越靠前' :min="0" :max="999" controls-position="right" style="width: 178px;" />
+          <el-input-number v-model.number="formData.menuSort" placeholder='数字越大越靠前' :min="0" :max="999" controls-position="right"
+                           style="width: 178px;" />
         </el-form-item>
         <!-- 组件名称 componentName-->
         <el-form-item v-if="formData.type == '2'" label="组件名称" prop="componentName">
