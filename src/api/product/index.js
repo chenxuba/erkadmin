@@ -70,3 +70,11 @@ export function getCourseDetail(id) {
         method: 'get',
     })
 }
+// 编辑课程 
+export function editCourse(data, id) {
+    return request({
+        url: "/course/" + id,
+        method: 'put',
+        data
+    })
+}

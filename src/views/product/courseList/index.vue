@@ -40,9 +40,9 @@
               </template>
             </el-table-column>
             <!-- 类型 course_type -->
-            <el-table-column :show-overflow-tooltip="true" prop="course_type" label="类型" align="center" width="60">
+            <el-table-column :show-overflow-tooltip="true" prop="course_type_text" label="类型" align="center" width="60">
               <template slot-scope="scope">
-                <el-tag type="danger" size="mini">{{scope.row.course_type}}</el-tag>
+                <el-tag type="danger" size="mini">{{scope.row.course_type_text}}</el-tag>
               </template>
             </el-table-column>
             <!-- 课程归属 from -->
@@ -67,9 +67,9 @@
               </template>
             </el-table-column>
             <!-- 分享收益 share -->
-            <el-table-column :show-overflow-tooltip="true" prop="recommend_price" label="分享收益" align="center" width="100">
+            <el-table-column :show-overflow-tooltip="true" prop="recommend_price_text" label="分享收益" align="center" width="100">
               <template slot-scope="scope">
-                <el-tag size="mini">{{scope.row.recommend_price}}</el-tag>
+                <el-tag size="mini">{{scope.row.recommend_price_text}}</el-tag>
               </template>
             </el-table-column>
             <!-- 创建时间 createTime  -->

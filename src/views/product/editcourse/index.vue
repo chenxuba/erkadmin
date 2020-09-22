@@ -62,7 +62,7 @@
         </div>
         <!-- 片段试看 TryTime -->
         <el-form-item label="片段试看" prop="try_time">
-          <el-checkbox v-model="formData.checkedTryTime" :disabled="formData.payType == 2">开启片段试看</el-checkbox>
+          <el-checkbox v-model="formData.checkedTryTime" :disabled="formData.payType != 1">开启片段试看</el-checkbox>
           <span class="tishi">为用户提供一段时间的试看内容，刺激用户购买。</span>
           <div class="setting-wrapper" v-if="formData.checkedTryTime">
             试看设置
@@ -95,20 +95,20 @@
         <!-- vip折扣 is_vip -->
         <el-form-item label="VIP折扣" prop="is_vip">
           <el-radio-group v-model="formData.is_vip">
-            <el-radio label="0">是
+            <el-radio label="0" :disabled="formData.payType != 1">是
             </el-radio>
             <el-radio label="1">否</el-radio>
-            <el-radio label="2">免费
+            <el-radio label="2" :disabled="formData.payType != 1">免费
             </el-radio>
           </el-radio-group>
         </el-form-item>
         <!-- svip折扣 is_svip -->
         <el-form-item label="SVIP折扣" prop="is_svip">
           <el-radio-group v-model="formData.is_svip">
-            <el-radio label="0">是
+            <el-radio label="0" :disabled="formData.payType != 1">是
             </el-radio>
             <el-radio label="1">否</el-radio>
-            <el-radio label="2">免费
+            <el-radio label="2" :disabled="formData.payType != 1">免费
             </el-radio>
           </el-radio-group>
         </el-form-item>
@@ -140,7 +140,8 @@
         </el-form-item>
         <!-- 抽成比例 proportion-->
         <el-form-item label="抽成比例" prop="proportion">
-          <el-input-number v-model="formData.proportion" :min="0" :max="100" placeholder='请输入抽成比例' style="width: 200px;" />
+          <el-input-number v-model="formData.proportion" :min="0" :max="100" :disabled="formData.payType != 1" placeholder='请输入抽成比例'
+                           style="width: 200px;" />
           <span class="tishi">上级抽取下级,与平台或机构协商设置（单位%）</span>
         </el-form-item>
         <!-- 排序 -->
@@ -158,7 +159,7 @@
         <!-- 推荐分享收益 is_recommend-->
         <el-form-item label="推荐分享收益" prop="is_recommend">
           <el-radio-group v-model="formData.is_recommend">
-            <el-radio label="1" :disabled="formData.payType == 2">是
+            <el-radio label="1" :disabled="formData.payType != 1">是
             </el-radio>
             <el-radio label="0">否</el-radio>
           </el-radio-group>
@@ -199,8 +200,11 @@
           <el-button type="text">查看示例<i class="el-icon-question"></i></el-button>
         </el-form-item>
         <div class="addqun" v-if="addgroup">
-          <!-- 导师二维码 Wxcode_img-->
-          <uploadImage @uploadSuccessImg='uploadSuccessQrImg' accept='image/*' ref="Wxcode_img" checking='Wxcode_img' name='二维码上传'></uploadImage>
+          <!-- 导师二维码 wxcode_img-->
+          <uploadImage @uploadSuccessImg='uploadSuccessQrImg' accept='image/*' ref="wxcode_img" checking='wxcode_img' name='二维码上传'></uploadImage>
+          <el-form-item>
+            <img :src="formData.wxcode_img" v-if="addgroupwxcode_img" width="80" height="80" style="object-fit: cover;" alt="">
+          </el-form-item>
           <!-- 二维码提示语 wxcode_text-->
           <el-form-item label="提示语" prop="wxcode_text">
             <el-input v-model="formData.wxcode_text" placeholder='可输入群名称' style="width: 300px;" maxlength="30" />
@@ -209,7 +213,7 @@
         </div>
         <el-form-item>
           <el-button type="warning" style="width:150px" @click="resetForm('form')">重置</el-button>
-          <el-button type="primary" style="width:150px" @click="submitForm('form')">确认提交</el-button>
+          <el-button type="primary" style="width:150px" @click="submitForm('form')">确认修改</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -220,15 +224,16 @@
 import VueUeditorWrap from 'vue-ueditor-wrap'
 import uploadImage from "@/components/Common/uploadImage";
 import uploadVideo from "@/components/Common/uploadVideo";
-import { getcourseCategory, getTeachersList, getCourseDetail } from "@/api/product/index";
+import { getcourseCategory, getTeachersList, getCourseDetail, editCourse } from "@/api/product/index";
 export default {
   data() {
     return {
       id: this.$route.params.id,
       showProview: true,
+      addgroupwxcode_img: true,
       addgroup: false,//是否引导加群
       formData: {
-        checkedTryTime: false, //是否开启试看
+        checkedTryTime: false, //是否开启试看 默认不开启
         type: [],
         type_id: "",//类别
         course_name: "", //标题
@@ -251,7 +256,7 @@ export default {
         recommend_price: "",//分享收益价格
         disabled: "",//是否上架
         is_index: "",//是否推荐到首页
-        Wxcode_img: "",//二维码
+        wxcode_img: "",//二维码
         wxcode_text: "",//二维码提示语
         // video: "",
       },
@@ -273,7 +278,7 @@ export default {
         is_recommend: [{ required: true, message: '请选择是否推荐分享', trigger: 'change' }],//分享收益
         disabled: [{ required: true, message: '请选择是否上架', trigger: 'change' }],//是否上架
         is_index: [{ required: true, message: '请选择是否推荐到首页', trigger: 'change' }],//是否推荐到首页
-        Wxcode_img: [{ required: true, message: '请上传二维码', trigger: 'blur' }],//二维码
+        wxcode_img: [{ required: true, message: '请上传二维码', trigger: 'blur' }],//二维码
         wxcode_text: [{ required: true, message: '请填写提示语', trigger: 'blur' }],//二维码提示语
         course_thumb: [{ required: true, message: '请上传封面图', trigger: 'blur' }],//二封面图
         // video: [{ required: true, message: '请上传视频', trigger: 'blur' }],//二封面图
@@ -335,8 +340,9 @@ export default {
     },
     //图片上传完成回调函数
     uploadSuccessQrImg(url) {
-      this.formData.Wxcode_img = url
-      this.$refs.Wxcode_img.$refs.imgUrl.clearValidate() //上传成功后去除校验
+      this.formData.wxcode_img = url
+      this.$refs.wxcode_img.$refs.imgUrl.clearValidate() //上传成功后去除校验
+      this.addgroupwxcode_img = false
     },
     //提交表单
     submitForm(formName) {
@@ -373,9 +379,8 @@ export default {
               type: 'error',
             });
           } else {
-            console.log(this.formData);
-            addCourse(this.formData).then(res => {
-              this.$message.success("新增成功！")
+            editCourse(this.formData, this.id).then(res => {
+              this.$message.success("修改成功！")
               this.$store.dispatch('tagsView/delView', this.$route); //关闭当前tabview
               this.$router.go(-1)
             })
@@ -396,16 +401,6 @@ export default {
       getcourseCategory().then(res => {
         this.options = res.data.list
         this.getCourseDetail()
-      })
-    },
-    //获取导师列表
-    getTeachersList() {
-      getTeachersList().then(res => {
-        res.data.list.unshift({
-          id: 0,
-          teacher_name: '平台课程'
-        })
-        this.teacherArr = res.data.list
       })
     },
     //获取课程详情
@@ -433,17 +428,48 @@ export default {
         this.formData.course_thumb = res.data.course_thumb //课程封面
         this.formData.course_introduction = res.data.course_introduction //课程简介
         this.formData.content = res.data.content //课程详情 
-        if (res.data.course_price == '0.00') {
-          this.formData.payType = '2'
+        if (res.data.course_price == '0.00' && res.data.code == '') {
+          this.formData.payType = '2' //免费
+          this.formData.try_time = 0 //试看时长
         } else if (res.data.code != '') {
-          this.formData.payType = '3'
+          this.formData.payType = '3' //密码
+          this.formData.code = res.data.code //课程密码
         } else {
-          this.formData.payType = '1'
+          this.formData.payType = '1' //付费
+          this.formData.course_price = res.data.course_price //课程价格
         }
-        // if (res.data.try_time != 0) {
-        //   this.formData.checkedTryTime = true
-        //   this.formData.try_time = res.data.try_time
-        // }
+        if (res.data.try_time == 0) {
+          this.formData.checkedTryTime = false
+        } else {
+          this.formData.checkedTryTime = true
+          this.formData.try_time = res.data.try_time//试看时长
+        }
+        if (this.formData.payType == '1') {
+          this.formData.is_vip = res.data.is_vip
+          this.formData.is_svip = res.data.is_svip
+        }
+        this.formData.course_type = res.data.course_type + ''
+        // 获取导师列表，渲染导师
+        getTeachersList().then(ele => {
+          ele.data.list.unshift({
+            id: 0,
+            teacher_name: '平台课程'
+          })
+          this.teacherArr = ele.data.list
+          this.formData.teacher_name = Number(res.data.teacher_name)
+        })
+        this.formData.virtual_stock = res.data.virtual_stock
+        this.formData.proportion = res.data.proportion
+        this.formData.sort = res.data.sort
+        this.formData.is_recommend = res.data.is_recommend + ''
+        this.formData.recommend_price = res.data.recommend_price
+        this.formData.is_index = res.data.is_index + ''
+        this.formData.disabled = res.data.disabled + ''
+        if (res.data.wxcode_text != '') {
+          this.formData.wxcode_text = res.data.wxcode_text
+          this.addgroup = true
+          this.formData.wxcode_img = res.data.wxcode_img
+        }
       })
     }
   },
@@ -454,19 +480,27 @@ export default {
   },
   mounted() {
     this.getcourseCategory();
-    this.getTeachersList()
   },
   watch: {
     'formData.payType'(newValue, oldValue) {
       if (this.formData.payType == 2) {
         this.formData.course_price = 0
         this.formData.code = ''
-        this.formData.try_time = ''
+        this.formData.try_time = 0
         this.formData.checkedTryTime = false
         this.formData.is_recommend = '0'
         this.formData.recommend_price = ''
+        this.formData.is_vip = '1'
+        this.formData.is_svip = '1'
       } else if (this.formData.payType == 1) {
         this.formData.code = ''
+      } else {
+        this.formData.checkedTryTime = false
+        this.formData.try_time = 0
+        this.formData.is_vip = '1'
+        this.formData.is_svip = '1'
+        this.formData.is_recommend = '0'
+        this.formData.recommend_price = 0
       }
     },
     'formData.is_recommend'() {
@@ -567,6 +601,7 @@ export default {
     align-items: center;
     transform: scale(0.7);
     margin-top: -100px;
+    z-index: 9;
     > div {
       height: 660px;
       width: 375px;
