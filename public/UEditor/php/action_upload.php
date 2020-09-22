@@ -58,24 +58,54 @@ switch (htmlspecialchars($_GET['action'])) {
         $fieldName = $CONFIG['fileFieldName'];
         break;
 }
- //覆盖上传
-$expires = 3600;
-//自定义返回值
-$returnBody = '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"name":"$(x:name)","ext":${ext}}';
 $policy = array(
-    'returnBody' => $returnBody
+  'callbackBody' => 'key=$(key)&hash=$(etag)&bucket=$(bucket)&fsize=$(fsize)&name=$(x:name)',
+  'callbackBodyType' => 'application/json'
 );
-//七牛云上传
-$uploadToken=$auth->uploadToken($bucket,$fieldName,$expires,$policy,true);
-$tokenData=json_decode($uploadToken,true);
-$response=[
+$token = $auth->uploadToken($bucket, null, $expires, $policy, true);
+
+// 构建 UploadManager 对象
+$uploadMgr = new UploadManager();
+// 要上传文件的本地路径
+$filePath = $_FILES['upfile']['tmp_name'];
+
+$file_type = $_FILES["upfile"]["type"];
+
+$type = '';
+
+switch ($file_type) {
+  case 'image/png':
+    $type = '.png';
+    break;
+  case 'image/gif':
+    $type = '.gif';
+    break;
+  case 'image/jpeg':
+    $type = '.jpg';
+    break;
+}
+$savename = date('YmdHis',time()).mt_rand(0,9999);
+// 上传到七牛后保存的文件名
+$name = $savename.$type;
+
+
+list($ret, $err) = $uploadMgr->putFile($token, $name, $filePath);
+if ($err !== null) {
+  $data["code"] = 500;
+  $data["msg"] = '上传失败';
+  $data["errno"] = $_FILES["file"]["error"];
+  echo json_encode($data);
+} else {
+  	$response=[
 	 "state" => "SUCCESS",          //上传状态，上传成功时必须返回"SUCCESS"
-	 "url" => $uploadToken['key'],            //返回的地址
-     "title" => $uploadToken['name'],          //新文件名
-     "original" => $uploadToken['key'],       //原始文件名
-     "type" => $uploadToken['ext'],            //文件类型
-     "size" => $uploadToken['fsize'],           //文件大小
-];
+	 "url" => 'http://erkong.ybc365.com/'.$ret['key'],            //返回的地址 //改这里
+     "title" => $ret['key'],          //新文件名
+     "original" => $filePath,       //原始文件名
+     "type" => $ret['mimeType'],           //文件类型
+     "size" => $ret['fsize'],  
+	 "source" => htmlspecialchars($filePath)	 //文件大小
+    ];
+  }
 /* 生成上传实例对象并完成上传 */
 //$up = new Uploader($fieldName, $config, $base64);
 
@@ -93,3 +123,5 @@ $response=[
 
 /* 返回数据 */
 return json_encode($response);
+
+

@@ -12,13 +12,13 @@ use Qiniu\Auth;
 use Qiniu\Storage\UploadManager;
 
 //用于签名的公钥和密钥
-$accessKey = 'OrL5f2-qfhJ1zmiMoPuePKFuHhxowE4VkdJn28vx';
-$secretKey = 'A__fv3mNu2v9-cT0M1Z6PuekZDZOMLszwdc3ax6K';
+$accessKey = 'OrL5f2-qfhJ1zmiMoPuePKFuHhxowE4VkdJn28vx';//改这里
+$secretKey = 'A__fv3mNu2v9-cT0M1Z6PuekZDZOMLszwdc3ax6K';//改这里
 
   // 初始化签权对象
 $auth = new Auth($accessKey, $secretKey);
 
-$bucket = 'erkang-zhushou';
+$bucket = 'erkang-zhushou';//改这里
 
  //覆盖上传
 $expires = 3600;
@@ -60,7 +60,7 @@ if ($err !== null) {
 } else {
   	$response=[
 	 "state" => "SUCCESS",          //上传状态，上传成功时必须返回"SUCCESS"
-	 "url" => 'http://erkong.ybc365.com/'.$ret['key'],            //返回的地址
+	 "url" => 'http://erkong.ybc365.com/'.$ret['key'],            //返回的地址 //改这里
      "title" => $ret['key'],          //新文件名
      "original" => $imgUrl,       //原始文件名
      "type" => $ret['mimeType'],           //文件类型

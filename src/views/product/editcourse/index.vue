@@ -25,6 +25,7 @@
           <el-cascader v-model="formData.type" :options="options" :props='props' style="width:300px;" placeholder="请选择课件分类" @change="handleChange">
           </el-cascader>
         </el-form-item>
+        <!-- {{formData.type}} -->
         <!-- 课程名称 course_name -->
         <el-form-item label="课程名称" prop="course_name">
           <el-input v-model="formData.course_name" placeholder='课程名称' style="width: 500px;" />
@@ -43,6 +44,9 @@
         </el-form-item>
         <!-- 封面图 course_thumb -->
         <uploadImage @uploadSuccessImg='uploadSuccessImg' accept='image/*' ref="course_thumb" checking='course_thumb' name='上传封面'></uploadImage>
+        <el-form-item v-if="showProview">
+          <img :src="formData.course_thumb" width="130px" height="70px" alt="">
+        </el-form-item>
         <!-- 视频文件 -->
         <!-- <uploadVideo @uploadSuccess='uploadSuccess' accept='video/*' checking='video'></uploadVideo> -->
         <!-- 视频详情  message-->
@@ -221,31 +225,32 @@ export default {
   data() {
     return {
       id: this.$route.params.id,
+      showProview: true,
       addgroup: false,//是否引导加群
       formData: {
         checkedTryTime: false, //是否开启试看
-        type: [15, 18],
+        type: [],
         type_id: "",//类别
         course_name: "", //标题
         sub_title: "",//副标题
         course_introduction: "",//简介
         content: "",//详情
         course_thumb: "",//封面图
-        try_time: 0,//试看时间
-        payType: "2",//支付方式
+        try_time: "",//试看时间
+        payType: "",//支付方式
         course_price: "",//课程价格
         code: "",//密码
-        is_vip: "1",//VIP折扣
-        is_svip: "1",//sVIP折扣
-        course_type: "0", //类型
+        is_vip: "",//VIP折扣
+        is_svip: "",//sVIP折扣
+        course_type: "", //类型
         teacher_name: "",//选择导师
         virtual_stock: "",//虚拟人数
-        proportion: "30", //抽成比例
+        proportion: "", //抽成比例
         sort: "", //排序
         is_recommend: "0",//是否推荐分享
         recommend_price: "",//分享收益价格
-        disabled: "1",//是否上架
-        is_index: "0",//是否推荐到首页
+        disabled: "",//是否上架
+        is_index: "",//是否推荐到首页
         Wxcode_img: "",//二维码
         wxcode_text: "",//二维码提示语
         // video: "",
@@ -307,10 +312,10 @@ export default {
         // 初始容器宽度
         initialFrameWidth: '70%',
         // 上传文件接口（这个地址是我为了方便各位体验文件上传功能搭建的临时接口，请勿在生产环境使用！！！）
-        serverUrl: 'https://muyue.ybc365.com/newadmin/UEditor/php/controller.php',
+        serverUrl: 'http://muyue.ybc365.com/newadmin/UEditor/php/controller.php',
         // UEditor 资源文件的存放路径，如果你使用的是 vue-cli 生成的项目，通常不需要设置该选项，vue-ueditor-wrap 会自动处理常见的情况，如果需要特殊配置，参考下方的常见问题2
         // UEDITOR_HOME_URL: '/newadmin/UEditor/'
-        UEDITOR_HOME_URL: '/UEditor/'
+        UEDITOR_HOME_URL: process.env.NODE_ENV == 'development' ? '/UEditor/' : '/newadmin/UEditor/'
       },//编辑器配置
       props: {
         value: 'id',
@@ -326,6 +331,7 @@ export default {
     uploadSuccessImg(url) {
       this.formData.course_thumb = url
       this.$refs.course_thumb.$refs.imgUrl.clearValidate() //上传成功后去除校验
+      this.showProview = false
     },
     //图片上传完成回调函数
     uploadSuccessQrImg(url) {
@@ -407,12 +413,37 @@ export default {
       getCourseDetail(this.id).then(res => {
         // this.formData = res.data
         this.formData.type_id = res.data.type_id
+        // 渲染所属分类
         this.options.forEach(item => {
-          if (res.data.type_id == item.id && item.pid == 0 && item.children) {
-            console.log(item.children);
-
+          if (res.data.type_id == item.id && item.p_id == 0) {
+            // if(item.children)为undefined，说明这是一级菜单
+            this.formData.type = [res.data.type_id]
+          } else {
+            if (item.children) {
+              item.children.forEach(ele => {
+                if (res.data.type_id == ele.id) {
+                  this.formData.type = [ele.p_id, res.data.type_id]
+                }
+              })
+            }
           }
-        })
+        })//所属分类
+        this.formData.course_name = res.data.course_name //课程名称
+        this.formData.sub_title = res.data.sub_title //课程副标题
+        this.formData.course_thumb = res.data.course_thumb //课程封面
+        this.formData.course_introduction = res.data.course_introduction //课程简介
+        this.formData.content = res.data.content //课程详情 
+        if (res.data.course_price == '0.00') {
+          this.formData.payType = '2'
+        } else if (res.data.code != '') {
+          this.formData.payType = '3'
+        } else {
+          this.formData.payType = '1'
+        }
+        // if (res.data.try_time != 0) {
+        //   this.formData.checkedTryTime = true
+        //   this.formData.try_time = res.data.try_time
+        // }
       })
     }
   },
