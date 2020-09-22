@@ -77,10 +77,10 @@
             <el-table-column label="操作" width="150" align="center" fixed="right">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" content="编辑" placement="top">
-                  <el-button @click="handleClick(scope.row)" circle icon="el-icon-edit" type="primary" />
+                  <el-button @click="handleEdit(scope.row)" circle icon="el-icon-edit" type="primary" />
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" content="删除" placement="top">
-                  <el-button type="danger" circle class="btn" icon="el-icon-delete"></el-button>
+                  <el-button type="danger" circle class="btn" icon="el-icon-delete" @click="handleDel(scope.row)"></el-button>
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" content="查看评论" placement="top">
                   <el-button type="warning" circle icon="el-icon-s-comment"></el-button>
@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import { getCourseList, getTeachersList } from "@/api/product/index";
+import { getCourseList, getTeachersList, delCourse } from "@/api/product/index";
 import pagination from "@/components/Common/pagination"
 
 export default {
@@ -117,7 +117,10 @@ export default {
     }
   },
   methods: {
-    handleClick(row) {
+    handleEdit(row) {
+      this.$router.push({
+        path: '/product/editcourse/' + row.id
+      })
     },
     // 跳转到新增课程页面
     handleAdd() {
@@ -161,6 +164,24 @@ export default {
       this.course_name = ''
       this.teacher = ''
       this.getCourseList()
+    },
+    //删除课程
+    handleDel(row) {
+      this.$confirm('此操作将删除该课程, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        delCourse(row.id).then(res => {
+          this.$message.success("删除成功！")
+          this.getCourseList()
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
     }
   },
   mounted() {

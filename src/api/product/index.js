@@ -56,3 +56,17 @@ export function addCourse(data) {
         data
     })
 }
+// 删除课程 /course/:id
+export function delCourse(id) {
+    return request({
+        url: "/course/" + id,
+        method: 'delete',
+    })
+}
+//获取课程详情 /course/:id
+export function getCourseDetail(id) {
+    return request({
+        url: "/course/" + id,
+        method: 'get',
+    })
+}

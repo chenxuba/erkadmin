@@ -216,14 +216,15 @@
 import VueUeditorWrap from 'vue-ueditor-wrap'
 import uploadImage from "@/components/Common/uploadImage";
 import uploadVideo from "@/components/Common/uploadVideo";
-import { getcourseCategory, getTeachersList, addCourse } from "@/api/product/index";
+import { getcourseCategory, getTeachersList, getCourseDetail } from "@/api/product/index";
 export default {
   data() {
     return {
+      id: this.$route.params.id,
       addgroup: false,//是否引导加群
       formData: {
         checkedTryTime: false, //是否开启试看
-        type: "",
+        type: [15, 18],
         type_id: "",//类别
         course_name: "", //标题
         sub_title: "",//副标题
@@ -308,8 +309,8 @@ export default {
         // 上传文件接口（这个地址是我为了方便各位体验文件上传功能搭建的临时接口，请勿在生产环境使用！！！）
         serverUrl: 'https://muyue.ybc365.com/newadmin/UEditor/php/controller.php',
         // UEditor 资源文件的存放路径，如果你使用的是 vue-cli 生成的项目，通常不需要设置该选项，vue-ueditor-wrap 会自动处理常见的情况，如果需要特殊配置，参考下方的常见问题2
-        UEDITOR_HOME_URL: '/newadmin/UEditor/'
-        // UEDITOR_HOME_URL: '/UEditor/'
+        // UEDITOR_HOME_URL: '/newadmin/UEditor/'
+        UEDITOR_HOME_URL: '/UEditor/'
       },//编辑器配置
       props: {
         value: 'id',
@@ -388,6 +389,7 @@ export default {
     getcourseCategory() {
       getcourseCategory().then(res => {
         this.options = res.data.list
+        this.getCourseDetail()
       })
     },
     //获取导师列表
@@ -398,6 +400,19 @@ export default {
           teacher_name: '平台课程'
         })
         this.teacherArr = res.data.list
+      })
+    },
+    //获取课程详情
+    getCourseDetail() {
+      getCourseDetail(this.id).then(res => {
+        // this.formData = res.data
+        this.formData.type_id = res.data.type_id
+        this.options.forEach(item => {
+          if (res.data.type_id == item.id && item.pid == 0 && item.children) {
+            console.log(item.children);
+
+          }
+        })
       })
     }
   },
