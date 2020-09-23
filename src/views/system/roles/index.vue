@@ -5,28 +5,29 @@
       <div>
         <!-- 搜索 -->
         <span>
-          <el-input v-model="rolesName"  clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+          <el-input v-model="rolesName" clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
           <span class='filter-item'>
-            <el-button  type="success" icon="el-icon-search">搜索</el-button>
-            <el-button  type="warning" icon="el-icon-refresh-left">重置</el-button>
-            <el-button  type="primary" icon="el-icon-plus" @click="hanldAdd" v-permission="['add']">新增</el-button>
+            <el-button type="success" icon="el-icon-search">搜索</el-button>
+            <el-button type="warning" icon="el-icon-refresh-left">重置</el-button>
+            <el-button type="primary" icon="el-icon-plus" @click="hanldAdd" v-permission="['add']">新增</el-button>
           </span>
         </span>
         <span>
           <el-button-group>
-            <el-button icon="el-icon-search" ></el-button>
-            <el-button icon="el-icon-refresh"  @click="refresh"></el-button>
+            <el-button icon="el-icon-search"></el-button>
+            <el-button icon="el-icon-refresh" @click="refresh"></el-button>
           </el-button-group>
         </span>
       </div>
     </div>
     <!--角色管理-->
-    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="margin-top: 20px">
+    <el-col style="margin-top: 20px">
       <el-card class="box-card" shadow="never">
         <div slot="header" class="clearfix">
           <span class="role-span">角色列表</span>
         </div>
-        <el-table ref="table" v-loading="loading"  highlight-current-row style="width: 100%;" :data="data" @selection-change="selectionChangeHandler" @current-change="handleCurrentChange">
+        <el-table ref="table" v-loading="loading" highlight-current-row style="width: 100%;" :data="data" @selection-change="selectionChangeHandler"
+                  @current-change="handleCurrentChange">
           <el-table-column type="expand" width="55">
             <template slot-scope="scope">
               <el-row :class="['bdbottom','vcenter',index === 0 ? 'bdtop' : '']" v-for="(item1,index) in scope.row.children" :key="index">
@@ -69,7 +70,8 @@
           <el-table-column :show-overflow-tooltip="true" prop="desc" label="描述" />
           <el-table-column :show-overflow-tooltip="true" prop="desc" label="是否启用">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.status" @change='hanldChange(scope.row)' :active-value="1" :inactive-value="0" active-color="#13ce66" inactive-color="#ff4949">
+              <el-switch v-model="scope.row.status" @change='hanldChange(scope.row)' :active-value="1" :inactive-value="0" active-color="#13ce66"
+                         inactive-color="#ff4949">
               </el-switch>
             </template>
           </el-table-column>
@@ -81,9 +83,9 @@
 
           <el-table-column label="操作" align="center" fixed="right" width="300">
             <template slot-scope="scope">
-              <el-button  type="primary" icon="el-icon-edit"  @click="hanldEdit(scope.row)" v-permission="['edit']">编辑</el-button>
-              <el-button  type="danger" icon="el-icon-delete" v-permission="['delete']">删除</el-button>
-              <el-button  type="warning" icon="el-icon-s-tools" v-permission="['give']" @click="showSetRolesDialog(scope.row)">分配权限</el-button>
+              <el-button type="primary" icon="el-icon-edit" @click="hanldEdit(scope.row)" v-permission="['edit']">编辑</el-button>
+              <el-button type="danger" icon="el-icon-delete" v-permission="['delete']">删除</el-button>
+              <el-button type="warning" icon="el-icon-s-tools" v-permission="['give']" @click="showSetRolesDialog(scope.row)">分配权限</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -92,12 +94,13 @@
       </el-card>
     </el-col>
     <!-- 分配权限dialog -->
-    <el-dialog title="分配权限" :visible.sync="rolesDialogVisible" width="50%" @close="colseDialog">
+    <el-dialog title="分配权限" :visible.sync="rolesDialogVisible" width="20%" @close="colseDialog">
       <!-- 树形控件 -->
-      <el-tree :data="rolesList"  show-checkbox :props="treeProps" node-key="id" default-expand-all :default-checked-keys='defKeys' ref='treeRef'></el-tree>
+      <el-tree :data="rolesList" show-checkbox :props="treeProps" node-key="id" default-expand-all :default-checked-keys='defKeys' ref='treeRef'>
+      </el-tree>
       <span slot="footer" class="dialog-footer">
-        <el-button @click="rolesDialogVisible = false" >取 消</el-button>
-        <el-button type="primary" @click="PostAuthorize" >确 定</el-button>
+        <el-button @click="rolesDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="PostAuthorize">确 定</el-button>
       </span>
     </el-dialog>
     <DialogRoles :dialogRoles="dialogRoles" :formData="formData" @addOk="getRoles"></DialogRoles>
@@ -106,7 +109,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { getRole, getAntRouter, PutRoleStatus, PostAuthorize,DeleteAuthorize } from "@/api/system/index";
+import { getRole, getAntRouter, PutRoleStatus, PostAuthorize, DeleteAuthorize } from "@/api/system/index";
 export default {
   name: 'roles',
   data() {
@@ -117,7 +120,7 @@ export default {
       loading: false,
       rolesDialogVisible: false,
       treeProps: {
-        label: function (data, node) {
+        label: function(data, node) {
           return data.meta.title;
         },
         children: "children"
@@ -169,8 +172,8 @@ export default {
           }
         })
       }
-      DeleteAuthorize(row.id,{rules:roles.join(",")}).then(res=>{
-        if(res.code == 0){
+      DeleteAuthorize(row.id, { rules: roles.join(",") }).then(res => {
+        if (res.code == 0) {
           this.$message.success('删除权限成功')
           this.getRoles()
         }
@@ -224,6 +227,7 @@ export default {
         name: "",
         desc: "",
         status: 1,//默认开启
+        tag: ""
       };
     },
     //获取列表
@@ -251,7 +255,7 @@ export default {
       console.log(idStr);
       PostAuthorize(this.roleId, { rules: idStr }).then(res => {
         console.log(res);
-        if(res.code == 0){
+        if (res.code == 0) {
           this.$message.success("分配权限成功")
           this.rolesDialogVisible = false
           this.getRoles()
@@ -270,6 +274,7 @@ export default {
         name: row.title,
         desc: row.desc,
         status: row.status,
+        tag: row.tag
       };
     }
   },

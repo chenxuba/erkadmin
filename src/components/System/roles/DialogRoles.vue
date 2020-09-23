@@ -1,21 +1,25 @@
 <template>
   <div class="dialogmenu">
-    <el-dialog :title="dialogRoles.title" :visible.sync="dialogRoles.show" destroy-on-close @open='openDialog' :close-on-click-modal="false" :close-on-press-escape="false" :modal-append-to-body="false">
-      <el-form ref="form" :model="formData" :rules="rules"  label-width="80px">
+    <el-dialog :title="dialogRoles.title" :visible.sync="dialogRoles.show" destroy-on-close @open='openDialog' :close-on-click-modal="false"
+               width="30%" :close-on-press-escape="false" :modal-append-to-body="false">
+      <el-form ref="form" :model="formData" :rules="rules" label-width="80px">
         <el-form-item label="角色名称" prop="name">
-          <el-input v-model="formData.name" style="width: 380px;" placeholder="请输入角色名称" />
+          <el-input v-model="formData.name" style="width: 80%;" placeholder="请输入角色名称" />
         </el-form-item>
         <el-form-item label="是否启用" prop="status">
           <el-switch v-model="formData.status" :active-value="1" :inactive-value="0" active-color="#13ce66" inactive-color="#ff4949">
           </el-switch>
         </el-form-item>
         <el-form-item label="描述信息" prop="desc">
-          <el-input v-model="formData.desc" style="width: 380px;" rows="5" type="textarea" placeholder="请输入描述信息" />
+          <el-input v-model="formData.desc" style="width: 80%;" rows="1" type="textarea" placeholder="请输入描述信息" />
+        </el-form-item>
+        <el-form-item label="角色标识" prop="tag">
+          <el-input v-model="formData.tag" style="width: 80%;" type="text" placeholder="请输入角色标识" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="cancel('form')" >取 消</el-button>
-        <el-button type="primary" @click="submitForm('form')" >确 定</el-button>
+        <el-button @click="cancel('form')">取 消</el-button>
+        <el-button type="primary" @click="submitForm('form')">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -34,6 +38,7 @@ export default {
         name: [{ required: true, message: '请输入角色名称', trigger: 'blur' }],
         desc: [{ required: true, message: '请输入描述信息', trigger: 'blur' }],
         status: [{ required: true, message: '请选择是否启用', trigger: 'blur' }],
+        tag: [{ required: true, message: '请输入角色标识', trigger: 'blur' }],
       }
     }
   },
@@ -48,7 +53,7 @@ export default {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           if (this.dialogRoles.option == 'add') {
-            addRole({ title: this.formData.name, desc: this.formData.desc, status: this.formData.status }).then(res => {
+            addRole({ title: this.formData.name, desc: this.formData.desc, status: this.formData.status, tag: this.formData.tag }).then(res => {
               console.log(res);
               if (res.code == 0) {
                 this.$message.success("添加成功")
@@ -57,7 +62,7 @@ export default {
               }
             })
           } else {
-            editRole(this.formData.id, { title: this.formData.name, desc: this.formData.desc, status: this.formData.status }).then(res => {
+            editRole(this.formData.id, { title: this.formData.name, desc: this.formData.desc, status: this.formData.status, tag: this.formData.tag }).then(res => {
               if (res.code == 0) {
                 this.$message.success("修改成功")
                 this.dialogRoles.show = false
