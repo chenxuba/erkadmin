@@ -124,7 +124,7 @@ export default {
     // 去编辑页面
     handleEdit(row) {
       this.$router.push({
-        path: '/product/editcourse/' + row.id
+        path: '/product/editcourse/' + row.id + '?weekType=week'
       })
     },
     // 跳转到新增课程页面Z

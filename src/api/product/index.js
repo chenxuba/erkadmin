@@ -140,3 +140,11 @@ export function editWord(data, id) {
         data
     })
 }
+//获取审核资源列表 course/commitList
+export function getCommitList(data) {
+    return request({
+        url: "/course/commitList",
+        method: 'get',
+        params: data
+    })
+}

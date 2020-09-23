@@ -89,9 +89,9 @@
         <!-- vip折扣 is_vip -->
         <el-form-item label="VIP折扣" prop="is_vip">
           <el-radio-group v-model="formData.is_vip">
-            <el-radio label="0" :disabled="formData.payType != 1">是
+            <el-radio label="1" :disabled="formData.payType != 1">是
             </el-radio>
-            <el-radio label="1">否</el-radio>
+            <el-radio label="0">否</el-radio>
             <el-radio label="2" :disabled="formData.payType != 1">免费
             </el-radio>
           </el-radio-group>
@@ -99,9 +99,9 @@
         <!-- svip折扣 is_svip -->
         <el-form-item label="SVIP折扣" prop="is_svip">
           <el-radio-group v-model="formData.is_svip">
-            <el-radio label="0" :disabled="formData.payType != 1">是
+            <el-radio label="1" :disabled="formData.payType != 1">是
             </el-radio>
-            <el-radio label="1">否</el-radio>
+            <el-radio label="0">否</el-radio>
             <el-radio label="2" :disabled="formData.payType != 1">免费
             </el-radio>
           </el-radio-group>
@@ -111,6 +111,7 @@
           <el-radio-group v-model="formData.course_type">
             <el-radio label="0">视频</el-radio>
             <el-radio label="1">音频</el-radio>
+            <el-radio label="2">图文</el-radio>
           </el-radio-group>
         </el-form-item>
         <!-- 商品配置 -->
@@ -166,7 +167,7 @@
           </div>
         </el-form-item>
         <!-- 是否上架 disabled-->
-        <el-form-item label="是否上架" prop="disabled">
+        <el-form-item label="是否发布" prop="disabled">
           <el-radio-group v-model="formData.disabled">
             <el-radio label="1">是</el-radio>
             <el-radio label="0">否</el-radio>
@@ -236,8 +237,8 @@ export default {
         payType: "2",//支付方式
         course_price: "",//课程价格
         code: "",//密码
-        is_vip: "1",//VIP折扣
-        is_svip: "1",//sVIP折扣
+        is_vip: "0",//VIP折扣
+        is_svip: "0",//sVIP折扣
         course_type: "0", //类型
         teacher_name: '',//选择导师
         virtual_stock: "",//虚拟人数
@@ -419,15 +420,15 @@ export default {
         this.formData.checkedTryTime = false
         this.formData.is_recommend = '0'
         this.formData.recommend_price = ''
-        this.formData.is_vip = '1'
-        this.formData.is_svip = '1'
+        this.formData.is_vip = '0'
+        this.formData.is_svip = '0'
       } else if (this.formData.payType == 1) {
         this.formData.code = ''
       } else {
         this.formData.checkedTryTime = false
         this.formData.try_time = 0
-        this.formData.is_vip = '1'
-        this.formData.is_svip = '1'
+        this.formData.is_vip = '0'
+        this.formData.is_svip = '0'
         this.formData.is_recommend = '0'
         this.formData.recommend_price = 0
       }
