@@ -5,42 +5,45 @@
       <div>
         <!-- 搜索 -->
         <span>
-          <el-input v-model="searchKey"  clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+          <el-input v-model="searchKey" clearable placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
           <span class='filter-item'>
-            <el-button  type="success" icon="el-icon-search">搜索</el-button>
-            <el-button  type="warning" icon="el-icon-refresh-left">重置</el-button>
-            <el-button  type="primary" icon="el-icon-plus" @click="handleAdd()" v-permission="['add']">新增</el-button>
+            <el-button type="success" icon="el-icon-search">搜索</el-button>
+            <el-button type="warning" icon="el-icon-refresh-left">重置</el-button>
+            <el-button type="primary" icon="el-icon-plus" @click="handleAdd()" v-permission="['add']">新增</el-button>
           </span>
         </span>
         <span>
           <el-button-group>
-            <el-button icon="el-icon-search" ></el-button>
-            <el-button icon="el-icon-refresh"  @click="refresh"></el-button>
+            <el-button icon="el-icon-search"></el-button>
+            <el-button icon="el-icon-refresh" @click="refresh"></el-button>
           </el-button-group>
         </span>
       </div>
     </div>
     <!-- 列表渲染 -->
-    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="margin-top: 20px">
+    <el-col style="margin-top: 20px">
       <el-card class="box-card" shadow="never">
-        <el-table ref="table" v-loading="loading" :data="data" style="width: 100%;" >
+        <el-table ref="table" v-loading="loading" :data="data" style="width: 100%;">
           <el-table-column type="index" label="#" width="55" />
-          <el-table-column :show-overflow-tooltip="true" prop="username" label="用户名" />
-          <el-table-column :show-overflow-tooltip="true" prop="nickname" label="昵称" />
+          <el-table-column :show-overflow-tooltip="true" prop="username" label="用户名" align="center" />
+          <el-table-column :show-overflow-tooltip="true" prop="nickname" label="昵称" align="center" />
+          <el-table-column :show-overflow-tooltip="true" prop="group_title" label="所属角色" align="center" />
           <el-table-column label="状态" align="center" prop="status">
             <template slot-scope="scope">
-              <el-switch v-model="scope.row.status" :disabled="scope.row.uid == 1"  :active-value="1" :inactive-value="0" @change="changeEnabled(scope.row.uid, scope.row.status)" />
+              <el-switch v-model="scope.row.status" :disabled="scope.row.uid == 1" :active-value="1" :inactive-value="0"
+                         @change="changeEnabled(scope.row.uid, scope.row.status)" />
             </template>
           </el-table-column>
-          <el-table-column :show-overflow-tooltip="true" prop="create_time" label="创建日期">
+          <el-table-column :show-overflow-tooltip="true" prop="create_time" label="创建日期" align="center">
             <template slot-scope="scope">
               <span>{{ (scope.row.create_time) }}</span>
             </template>
           </el-table-column>
           <el-table-column label="操作" width="200" align="center">
             <template slot-scope="scope">
-              <el-button  type="primary" icon="el-icon-edit"  v-permission="['edit']" @click="handleEdit(scope.row)">编辑</el-button>
-              <el-button  type="danger" icon="el-icon-delete" :disabled="scope.row.uid == 1" v-permission="['delete']">删除</el-button>
+              <el-button type="primary" icon="el-icon-edit" :disabled="scope.row.uid == 1" v-permission="['edit']" @click="handleEdit(scope.row)">编辑
+              </el-button>
+              <el-button type="danger" icon="el-icon-delete" :disabled="scope.row.uid == 1" v-permission="['delete']">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -54,7 +57,7 @@
 </template>
 
 <script>
-import { getuser,PutUserStatus } from "@/api/system/index";
+import { getuser, PutUserStatus } from "@/api/system/index";
 export default {
   name: "user",
   data() {
@@ -74,14 +77,14 @@ export default {
     //刷新
     refresh() { },
     //切换状态
-    changeEnabled(id,value) {
-      console.log(id,value);
-      PutUserStatus(id,value).then(res=>{
-        if(res.code == 0){
+    changeEnabled(id, value) {
+      console.log(id, value);
+      PutUserStatus(id, value).then(res => {
+        if (res.code == 0) {
           this.$message.success("切换状态成功")
         }
       })
-     },
+    },
     //编辑
     handleEdit(row) {
       this.dialogUser = {

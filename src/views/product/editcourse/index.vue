@@ -127,14 +127,14 @@
           </div>
         </div>
         <!-- 选择导师 teacher_name -->
-        <el-form-item label="选择导师" prop="teacher_name">
+        <el-form-item label="选择导师" prop="teacher_name" v-if="checkPermission(['seleteTeacher'])">
           <el-select v-model="formData.teacher_name" filterable clearable placeholder="请选择" style="width: 200px;">
             <el-option v-for="item in teacherArr" :key="item.id" :label="item.teacher_name" :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
         <!-- 虚拟购买人数 virtual_stock-->
-        <el-form-item label="虚拟人数" prop="virtual_stock">
+        <el-form-item label="虚拟人数" prop="virtual_stock" v-if="checkPermission(['virtual'])">
           <el-input-number v-model="formData.virtual_stock" placeholder='请输入虚拟购买人数' style="width: 200px;" :min="0" />
           <span class="tishi">请输入虚拟购买人数</span>
         </el-form-item>
@@ -145,7 +145,7 @@
           <span class="tishi">上级抽取下级,与平台或机构协商设置（单位%）</span>
         </el-form-item>
         <!-- 排序 -->
-        <el-form-item label="排序" prop="sort">
+        <el-form-item label="排序" prop="sort" v-if="checkPermission(['sort'])">
           <el-input-number v-model.number="formData.sort" placeholder='数字越大越靠前' :min="0" style="width: 200px;" />
           <span class="tishi">数字越大越靠前</span>
         </el-form-item>
@@ -179,7 +179,7 @@
           </el-radio-group>
         </el-form-item>
         <!-- 推荐到首页 is_index -->
-        <el-form-item label="推荐首页" prop="is_index">
+        <el-form-item label="推荐首页" prop="is_index" v-if="checkPermission(['pushIndex'])">
           <el-radio-group v-model="formData.is_index">
             <el-radio label="1">是
             </el-radio>
@@ -212,7 +212,7 @@
           </el-form-item>
         </div>
         <el-form-item>
-          <el-button type="warning" style="width:150px" @click="resetForm('form')">重置</el-button>
+          <el-button type="warning" style="width:150px" @click="resetForm('form')" v-permission="['reset']">重置</el-button>
           <el-button type="primary" style="width:150px" @click="submitForm('form')">确认修改</el-button>
         </el-form-item>
       </el-form>
@@ -221,6 +221,7 @@
 </template>
 
 <script>
+import checkPermission from '@/utils/permission' // 权限判断函数
 import VueUeditorWrap from 'vue-ueditor-wrap'
 import uploadImage from "@/components/Common/uploadImage";
 import uploadVideo from "@/components/Common/uploadVideo";
@@ -329,9 +330,7 @@ export default {
     }
   },
   methods: {
-    // uploadSuccess(url) {
-    //   this.formData.video = url
-    // },
+    checkPermission,
     //图片上传完成回调函数
     uploadSuccessImg(url) {
       this.formData.course_thumb = url
@@ -445,8 +444,8 @@ export default {
           this.formData.try_time = res.data.try_time//试看时长
         }
         if (this.formData.payType == '1') {
-          this.formData.is_vip = res.data.is_vip
-          this.formData.is_svip = res.data.is_svip
+          this.formData.is_vip = res.data.is_vip + ''
+          this.formData.is_svip = res.data.is_svip + ''
         }
         this.formData.course_type = res.data.course_type + ''
         // 获取导师列表，渲染导师

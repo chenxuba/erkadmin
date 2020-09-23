@@ -15,7 +15,7 @@
                           value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" v-model="seleteTime" />
           <el-button type="success" icon="el-icon-search" @click="search">搜索</el-button>
           <el-button type="primary" icon="el-icon-refresh-left" @click="resetting">重置</el-button>
-          <el-button type="warning" icon="el-icon-edit" @click="handleAdd">新增课程</el-button>
+          <el-button type="warning" icon="el-icon-edit" @click="handleAdd">新增图文课程</el-button>
         </div>
       </div>
       <!-- 表格渲染 -->
@@ -26,52 +26,52 @@
           <!-- 标题 title -->
           <el-table-column :show-overflow-tooltip="true" prop="course_name" label="标题" align="center" />
           <!-- 封面图片 img -->
-          <el-table-column prop="course_thumb" label="封面图片" align="center" width="110">
+          <el-table-column prop="course_thumb" label="封面图片" align="center">
             <template slot-scope="scope">
               <img :src="scope.row.course_thumb" width="80" height="40" alt="">
             </template>
           </el-table-column>
           <!-- 所属分类 category -->
-          <el-table-column :show-overflow-tooltip="true" prop="type_name" label="所属分类" align="center" width="140">
+          <el-table-column :show-overflow-tooltip="true" prop="type_name" label="所属分类" align="center">
             <template slot-scope="scope">
               <span>{{scope.row.type_name}}</span>
             </template>
           </el-table-column>
           <!-- 类型 course_type -->
-          <el-table-column :show-overflow-tooltip="true" prop="course_type_text" label="类型" align="center" width="60">
+          <el-table-column :show-overflow-tooltip="true" prop="course_type_text" label="类型" align="center">
             <template slot-scope="scope">
               <el-tag type="danger" size="mini">{{scope.row.course_type_text}}</el-tag>
             </template>
           </el-table-column>
           <!-- 课程归属 from -->
-          <el-table-column :show-overflow-tooltip="true" prop="teacher_title" label="归属" align="center" width="70" />
+          <el-table-column :show-overflow-tooltip="true" prop="teacher_title" label="归属" align="center" />
           <!-- 价格/密码 pwdOrPrice -->
-          <el-table-column :show-overflow-tooltip="true" prop="course_price" label="价格/密码" align="center" width="100">
+          <el-table-column :show-overflow-tooltip="true" prop="course_price" label="价格/密码" align="center">
             <template slot-scope="scope">
               <el-tag v-if="scope.row.course_price == 0.00" size="mini">免费</el-tag>
               <el-tag v-else size="mini">{{scope.row.course_price}}</el-tag>
             </template>
           </el-table-column>
           <!-- VIP折扣 vip -->
-          <el-table-column prop="is_vip_text" label="VIP折扣" align="center" width="100">
+          <el-table-column prop="is_vip_text" label="VIP折扣" align="center">
             <template slot-scope="scope">
               <el-tag effect="dark" type="success" size="mini">{{scope.row.is_vip_text}}</el-tag>
             </template>
           </el-table-column>
           <!-- SVIP折扣 svip -->
-          <el-table-column prop="is_svip_text" label="SVIP折扣" align="center" width="100">
+          <el-table-column prop="is_svip_text" label="SVIP折扣" align="center">
             <template slot-scope="scope">
               <el-tag effect="dark" type="warning" size="mini">{{scope.row.is_svip_text}}</el-tag>
             </template>
           </el-table-column>
           <!-- 分享收益 share -->
-          <el-table-column :show-overflow-tooltip="true" prop="recommend_price_text" label="分享收益" align="center" width="100">
+          <el-table-column :show-overflow-tooltip="true" prop="recommend_price_text" label="分享收益" align="center">
             <template slot-scope="scope">
               <el-tag size="mini">{{scope.row.recommend_price_text}}</el-tag>
             </template>
           </el-table-column>
           <!-- 创建时间 createTime  -->
-          <el-table-column :show-overflow-tooltip="true" prop="create_time" label="创建时间" align="center" width="110" />
+          <el-table-column :show-overflow-tooltip="true" prop="create_time" label="创建时间" align="center" />
           <el-table-column label="操作" align="center" fixed="right" width="120">
             <template slot-scope="scope">
               <el-tooltip class="item" effect="dark" content="编辑" placement="top">
@@ -84,7 +84,7 @@
               <el-tooltip class="item" effect="dark" content="查看评论" placement="top">
                 <el-button type="warning" icon="el-icon-s-comment"></el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="上传图文" placement="top">
+              <el-tooltip class="item" effect="dark" content="撰写章节" placement="top">
                 <el-button type="success" icon="el-icon-upload" @click="uploadItem(scope.row)"></el-button>
               </el-tooltip>
             </template>

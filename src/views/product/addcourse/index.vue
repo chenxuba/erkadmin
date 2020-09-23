@@ -121,14 +121,14 @@
           </div>
         </div>
         <!-- 选择导师 teacher_name -->
-        <el-form-item label="选择导师" prop="teacher_name">
+        <el-form-item label="选择导师" v-if="checkPermission(['seleteTeacher'])" prop="teacher_name">
           <el-select v-model="formData.teacher_name" filterable clearable placeholder="请选择" style="width: 200px;">
             <el-option v-for="item in teacherArr" :key="item.id" :label="item.teacher_name" :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
         <!-- 虚拟购买人数 virtual_stock-->
-        <el-form-item label="虚拟人数" prop="virtual_stock">
+        <el-form-item label="虚拟人数" prop="virtual_stock" v-if="checkPermission(['virtual'])">
           <el-input-number v-model="formData.virtual_stock" placeholder='请输入虚拟购买人数' style="width: 200px;" :min="0" />
           <span class="tishi">请输入虚拟购买人数</span>
         </el-form-item>
@@ -139,7 +139,7 @@
           <span class="tishi">上级抽取下级,与平台或机构协商设置（单位%）</span>
         </el-form-item>
         <!-- 排序 -->
-        <el-form-item label="排序" prop="sort">
+        <el-form-item label="排序" prop="sort" v-if="checkPermission(['sort'])">
           <el-input-number v-model.number="formData.sort" placeholder='数字越大越靠前' :min="0" style="width: 200px;" />
           <span class="tishi">数字越大越靠前</span>
         </el-form-item>
@@ -173,7 +173,7 @@
           </el-radio-group>
         </el-form-item>
         <!-- 推荐到首页 is_index -->
-        <el-form-item label="推荐首页" prop="is_index">
+        <el-form-item label="推荐首页" prop="is_index" v-if="checkPermission(['pushIndex'])">
           <el-radio-group v-model="formData.is_index">
             <el-radio label="1">是
             </el-radio>
@@ -203,7 +203,7 @@
           </el-form-item>
         </div>
         <el-form-item>
-          <el-button type="warning" style="width:150px" @click="resetForm('form')">重置</el-button>
+          <el-button type="warning" style="width:150px" v-permission="['reset']" @click="resetForm('form')">重置</el-button>
           <el-button type="primary" style="width:150px" @click="submitForm('form')">确认提交</el-button>
         </el-form-item>
       </el-form>
@@ -215,6 +215,9 @@
 import VueUeditorWrap from 'vue-ueditor-wrap'
 import uploadImage from "@/components/Common/uploadImage";
 import { getcourseCategory, getTeachersList, addCourse } from "@/api/product/index";
+import { mapGetters } from 'vuex'
+import checkPermission from '@/utils/permission' // 权限判断函数
+
 export default {
   data() {
     return {
@@ -236,7 +239,7 @@ export default {
         is_vip: "1",//VIP折扣
         is_svip: "1",//sVIP折扣
         course_type: "0", //类型
-        teacher_name: "",//选择导师
+        teacher_name: '',//选择导师
         virtual_stock: "",//虚拟人数
         proportion: "30", //抽成比例
         sort: "", //排序
@@ -317,6 +320,7 @@ export default {
     }
   },
   methods: {
+    checkPermission,
     //图片上传完成回调函数
     uploadSuccessImg(url) {
       this.formData.course_thumb = url
@@ -388,10 +392,12 @@ export default {
     //获取导师列表
     getTeachersList() {
       getTeachersList().then(res => {
-        res.data.list.unshift({
-          id: 0,
-          teacher_name: '平台课程'
-        })
+        if (this.roles == 'admin') {
+          res.data.list.unshift({
+            id: 0,
+            teacher_name: '平台课程'
+          })
+        }
         this.teacherArr = res.data.list
       })
     }
@@ -440,8 +446,20 @@ export default {
       if (this.formData.content != '') {
         this.$refs.content.clearValidate()
       }
+    },
+    roles: {
+      handler(o, n) {
+        if (o == 'platform_teacher' || o == 'org_teacher') {
+          this.formData.teacher_name = this.teacher_id
+        }
+      },
+      immediate: true
     }
   },
+  computed: {
+    ...mapGetters(['roles', 'teacher_id']),
+  },
+
 }
 </script>
 <style lang="scss" scoped>
