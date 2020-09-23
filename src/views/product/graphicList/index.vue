@@ -34,8 +34,7 @@
           <!-- 所属分类 category -->
           <el-table-column :show-overflow-tooltip="true" prop="type_name" label="所属分类" align="center" width="140">
             <template slot-scope="scope">
-              <span v-if="scope.row.type_id == 0">每周一课</span>
-              <span v-else>{{scope.row.type_name}}</span>
+              <span>{{scope.row.type_name}}</span>
             </template>
           </el-table-column>
           <!-- 类型 course_type -->
@@ -85,7 +84,7 @@
               <el-tooltip class="item" effect="dark" content="查看评论" placement="top">
                 <el-button type="warning" icon="el-icon-s-comment"></el-button>
               </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="上传课时" placement="top">
+              <el-tooltip class="item" effect="dark" content="上传图文" placement="top">
                 <el-button type="success" icon="el-icon-upload" @click="uploadItem(scope.row)"></el-button>
               </el-tooltip>
             </template>
@@ -129,9 +128,9 @@ export default {
     handleAdd() {
       this.$router.push('/product/addcourse')
     },
-    // 去上传课时页面
+    // 去上传图文页面
     uploadItem(row) {
-      this.$router.push('/product/uploadItem/' + row.id)
+      this.$router.push('/product/uploadWord/' + row.id)
     },
     // 翻页
     handleCurrentChange(val) {
@@ -149,7 +148,7 @@ export default {
     getCourseList() {
       this.loading = true
       this.data = []
-      getCourseList({ type: 1, code: 0, teacher_type: 1, disabled: 1, page_size: this.page_size, page: this.page, course_name: this.course_name, teacher_name: this.teacher, start_time: this.start_time, end_time: this.end_time }).then(res => {
+      getCourseList({ course_type: 2, type: 1, code: 0, teacher_type: 1, disabled: 1, page_size: this.page_size, page: this.page, course_name: this.course_name, teacher_name: this.teacher, start_time: this.start_time, end_time: this.end_time }).then(res => {
         this.data = res.data.list
         this.loading = false
         this.total = res.data.count
@@ -221,30 +220,3 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.main {
-  margin: 10px;
-  // 工具栏
-  .head {
-    &-container1 {
-      text-indent: -10px;
-      > div {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        > span {
-          display: flex;
-          align-items: center;
-        }
-        .filter {
-          &-item {
-            margin-left: 10px;
-          }
-        }
-      }
-    }
-  }
-  .flex {
-    display: flex;
-  }
-}
-</style>

@@ -109,3 +109,34 @@ export function editVideo(data, id) {
         data
     })
 }
+//获取文章列表 chapter
+export function getWordList(id, data) {
+    return request({
+        url: "/chapter/" + id,
+        method: 'get',
+        params: data
+    })
+}
+//新增word
+export function addWord(data, id) {
+    return request({
+        url: "/chapter/" + id,
+        method: 'post',
+        data
+    })
+}
+// 删除文章
+export function delWord(id) {
+    return request({
+        url: "/chapter/" + id,
+        method: 'delete',
+    })
+}
+// 编辑文章
+export function editWord(data, id) {
+    return request({
+        url: "/chapter/" + id,
+        method: 'put',
+        data
+    })
+}
