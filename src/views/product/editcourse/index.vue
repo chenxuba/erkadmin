@@ -202,7 +202,7 @@
         <div class="addqun" v-if="addgroup">
           <!-- 导师二维码 wxcode_img-->
           <uploadImage @uploadSuccessImg='uploadSuccessQrImg' accept='image/*' ref="wxcode_img" checking='wxcode_img' name='二维码上传'></uploadImage>
-          <el-form-item>
+          <el-form-item v-if="formData.wxcode_img">
             <img :src="formData.wxcode_img" v-if="addgroupwxcode_img" width="80" height="80" style="object-fit: cover;" alt="">
           </el-form-item>
           <!-- 二维码提示语 wxcode_text-->

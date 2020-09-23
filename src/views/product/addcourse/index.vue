@@ -21,7 +21,7 @@
           </div>
         </div>
         <!-- 所属分类  type_id -->
-        <el-form-item label="所属分类" prop="type">
+        <el-form-item label="所属分类" prop="type" v-if="weekType == undefined ">
           <el-cascader v-model="formData.type" :options="options" :props='props' style="width:300px;" placeholder="请选择课件分类" @change="handleChange">
           </el-cascader>
         </el-form-item>
@@ -43,8 +43,6 @@
         </el-form-item>
         <!-- 封面图 course_thumb -->
         <uploadImage @uploadSuccessImg='uploadSuccessImg' accept='image/*' ref="course_thumb" checking='course_thumb' name='上传封面'></uploadImage>
-        <!-- 视频文件 -->
-        <!-- <uploadVideo @uploadSuccess='uploadSuccess' accept='video/*' checking='video'></uploadVideo> -->
         <!-- 视频详情  message-->
         <div class="wrap">
           <el-form-item label="课程详情" prop="content" ref="content">
@@ -216,16 +214,16 @@
 <script>
 import VueUeditorWrap from 'vue-ueditor-wrap'
 import uploadImage from "@/components/Common/uploadImage";
-// import uploadVideo from "@/components/Common/uploadVideo";
 import { getcourseCategory, getTeachersList, addCourse } from "@/api/product/index";
 export default {
   data() {
     return {
+      weekType: this.$route.query.weekType,
       addgroup: false,//是否引导加群
       formData: {
         checkedTryTime: false, //是否开启试看
         type: "",
-        type_id: "",//类别
+        type_id: this.$route.query.weekType == 'week' ? 0 : '',//类别
         course_name: "", //标题
         sub_title: "",//副标题
         course_introduction: "",//简介
@@ -261,7 +259,7 @@ export default {
         is_vip: [{ required: true, message: '请选择是否折扣', trigger: 'change' }],//VIP折扣
         is_svip: [{ required: true, message: '请选择是否折扣', trigger: 'change' }],//sVIP折扣
         course_type: [{ required: true, message: '请选择资源类型', trigger: 'change' }], //类型
-        teacher_name: [{ required: true, message: '请选择所属导师', trigger: 'blur' }],//选择导师
+        teacher_name: [{ required: true, message: '请选择所属导师', trigger: 'change' }],//选择导师
         virtual_stock: [{ required: true, message: '请填写虚拟人数', trigger: 'blur' }],//虚拟人数
         proportion: [{ required: true, message: '请填写抽成比例', trigger: 'blur' }], //抽成比例
         sort: [{ required: true, message: '请排序', trigger: 'blur' }], //排序
@@ -271,7 +269,6 @@ export default {
         wxcode_img: [{ required: true, message: '请上传二维码', trigger: 'blur' }],//二维码
         wxcode_text: [{ required: true, message: '请填写提示语', trigger: 'blur' }],//二维码提示语
         course_thumb: [{ required: true, message: '请上传封面图', trigger: 'blur' }],//二封面图
-        // video: [{ required: true, message: '请上传视频', trigger: 'blur' }],//二封面图
       },
       options: [],//类别列表
       teacherArr: [],//老师列表
@@ -320,9 +317,6 @@ export default {
     }
   },
   methods: {
-    // uploadSuccess(url) {
-    //   this.formData.video = url
-    // },
     //图片上传完成回调函数
     uploadSuccessImg(url) {
       this.formData.course_thumb = url
@@ -405,7 +399,6 @@ export default {
   components: {
     VueUeditorWrap,
     uploadImage,
-    // uploadVideo
   },
   mounted() {
     this.getcourseCategory();
