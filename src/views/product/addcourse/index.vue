@@ -216,7 +216,7 @@
 <script>
 import VueUeditorWrap from 'vue-ueditor-wrap'
 import uploadImage from "@/components/Common/uploadImage";
-import uploadVideo from "@/components/Common/uploadVideo";
+// import uploadVideo from "@/components/Common/uploadVideo";
 import { getcourseCategory, getTeachersList, addCourse } from "@/api/product/index";
 export default {
   data() {
@@ -405,7 +405,7 @@ export default {
   components: {
     VueUeditorWrap,
     uploadImage,
-    uploadVideo
+    // uploadVideo
   },
   mounted() {
     this.getcourseCategory();

@@ -24,7 +24,7 @@
       </div>
     </div>
     <!--菜单管理-->
-    <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style="margin-top: 20px">
+    <el-col style="margin-top: 20px">
       <el-table ref="table" :data="data" v-loading='loading' :max-height="tableHeight">
         <el-table-column label="ID" prop="id" width="50" />
         <el-table-column prop="type_name" label="分类" align="center" />
@@ -70,7 +70,8 @@
       </el-table>
       <!--分页组件-->
       <div class="fenye" style="margin-top:10px;">
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[5,10, 20, 30, 40]" :page-size="pageSize" layout="total, prev, pager, next,sizes" :total="total">
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[5,10, 20, 30, 40]" :page-size="pageSize"
+                       layout="total, prev, pager, next,sizes" :total="total">
         </el-pagination>
       </div>
     </el-col>
@@ -88,7 +89,7 @@ import { gettrainingCourseItem, DeltrainingCourseware } from "@/api/training";
 export default {
   data() {
     return {
-      tableHeight: document.documentElement.clientHeight - 300 || document.body.clientHeight - 300,
+      tableHeight: document.documentElement.clientHeight - 300 || document.body.clientHeight - 300,
       pageSize: 10,
       page: 1,
       total: 40,

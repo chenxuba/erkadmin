@@ -78,3 +78,34 @@ export function editCourse(data, id) {
         data
     })
 }
+//获取指定课程的视频列表
+export function getVideoList(id, data) {
+    return request({
+        url: "/video/" + id,
+        method: 'get',
+        params: data
+    })
+}
+//新增视频 
+export function addVideo(data, id) {
+    return request({
+        url: "/video/" + id,
+        method: 'post',
+        data
+    })
+}
+// 删除视频
+export function delVideo(id) {
+    return request({
+        url: "/video/" + id,
+        method: 'delete',
+    })
+}
+// 编辑视频
+export function editVideo(data, id) {
+    return request({
+        url: "/video/" + id,
+        method: 'put',
+        data
+    })
+}

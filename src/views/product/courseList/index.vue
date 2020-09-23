@@ -74,16 +74,20 @@
             </el-table-column>
             <!-- 创建时间 createTime  -->
             <el-table-column :show-overflow-tooltip="true" prop="create_time" label="创建时间" align="center" width="110" />
-            <el-table-column label="操作" width="150" align="center" fixed="right">
+            <el-table-column label="操作" align="center" fixed="right">
               <template slot-scope="scope">
                 <el-tooltip class="item" effect="dark" content="编辑" placement="top">
-                  <el-button @click="handleEdit(scope.row)" circle icon="el-icon-edit" type="primary" />
+                  <el-button @click="handleEdit(scope.row)" icon="el-icon-edit" type="primary" />
                 </el-tooltip>
                 <el-tooltip class="item" effect="dark" content="删除" placement="top">
-                  <el-button type="danger" circle class="btn" icon="el-icon-delete" @click="handleDel(scope.row)"></el-button>
+                  <el-button type="danger" class="btn" icon="el-icon-delete" @click="handleDel(scope.row)"></el-button>
                 </el-tooltip>
+                <p style="margin:5px 0;"></p>
                 <el-tooltip class="item" effect="dark" content="查看评论" placement="top">
-                  <el-button type="warning" circle icon="el-icon-s-comment"></el-button>
+                  <el-button type="warning" icon="el-icon-s-comment"></el-button>
+                </el-tooltip>
+                <el-tooltip class="item" effect="dark" content="上传课时" placement="top">
+                  <el-button type="success" icon="el-icon-upload" @click="uploadItem(scope.row)"></el-button>
                 </el-tooltip>
               </template>
             </el-table-column>
@@ -117,14 +121,19 @@ export default {
     }
   },
   methods: {
+    // 去编辑页面
     handleEdit(row) {
       this.$router.push({
         path: '/product/editcourse/' + row.id
       })
     },
-    // 跳转到新增课程页面
+    // 跳转到新增课程页面Z
     handleAdd() {
       this.$router.push('/product/addcourse')
+    },
+    // 去上传课时页面
+    uploadItem(row) {
+      this.$router.push('/product/uploadItem/' + row.id)
     },
     // 翻页
     handleCurrentChange(val) {

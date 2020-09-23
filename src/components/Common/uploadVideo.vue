@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- 视频上传 -->
-    <el-form-item label="视频上传" :prop='checking'>
+    <el-form-item label="视频上传" :prop='checking' :ref="checking">
       <el-button @click="vExampleAdd">点击上传<i class="el-icon-upload el-icon--right"></i></el-button>
       <span v-html="uploadLoading" v-if="showupType"></span>
       <form ref="vExample">
@@ -19,7 +19,8 @@
     <!-- 上传进度 -->
     <el-form-item label="上传进度" v-if="uploaderInfos.progress != 0" :prop='checking'>
       <el-progress :percentage="uploaderInfos.progress * 100" class="progress" :text-inside="true" :stroke-width="15" />
-      <el-button @click="resetUp" v-if="uploaderInfos.progress != 1 && uploaderInfos.progress != 0" v-show="showReBtn">取消上传<i class="el-icon-upload el-icon--right"></i></el-button>
+      <el-button @click="resetUp" v-if="uploaderInfos.progress != 1 && uploaderInfos.progress != 0" v-show="showReBtn">取消上传<i
+           class="el-icon-upload el-icon--right"></i></el-button>
     </el-form-item>
     <!-- 预览 -->
     <el-dialog title="预览" :visible.sync="dialogVisible" width="40%" destroy-on-close append-to-body>
@@ -68,16 +69,21 @@ export default {
       this.uploadLoading = '<span class="span"><i class="el-icon-loading icon"></i>解析中...</span> '
       var self = this;
       var mediaFile = this.$refs.vExampleFile.files[0]
+      if (mediaFile.size / 1024 > 1024000) {
+        this.$message.error("上传大小限制1G以内，请剪辑后上传")
+        this.uploadLoading = '<span class="span">上传文件过大</span> '
+        return false
+      }
       this.uploader = this.tcVod.upload({
         mediaFile: mediaFile,
       })
       // 视频上传进度
-      this.uploader.on('media_progress', function (info) {
+      this.uploader.on('media_progress', function(info) {
         self.uploadLoading = '<span class="span"><i class="el-icon-loading icon"></i>上传中...</span> '
         self.uploaderInfos.progress = info.percent;
       })
       // 视频上传完成时
-      this.uploader.on('media_upload', function (info) {
+      this.uploader.on('media_upload', function(info) {
         self.uploaderInfos.isVideoUploadSuccess = true;
         self.$message.success('上传成功')
         self.uploadLoading = '<span class="span">上传成功 <i class="el-icon-check"></i></span> '
@@ -85,7 +91,7 @@ export default {
 
       self.uploaderInfos.videoInfo = this.uploader.videoInfo //用来展示视频的名字和type 例如：xxx.mp4
 
-      this.uploader.done().then(function (doneResult) {
+      this.uploader.done().then(function(doneResult) {
         self.uploaderInfos.videoUrl = doneResult.video.url
         self.$emit("uploadSuccess", self.uploaderInfos.videoUrl)
         self.$refs.vExample.reset();
@@ -111,7 +117,7 @@ export default {
     function getSignature() {
       return getsign(JSON.stringify({
         "Action": "GetUgcUploadSign"
-      })).then(function (response) {
+      })).then(function(response) {
         return response.data.sign
       })
     };
