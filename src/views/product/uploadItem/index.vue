@@ -25,6 +25,13 @@
         </el-table-column>
         <el-table-column prop="sort" label="排序" align="center">
         </el-table-column>
+        <el-table-column prop="commit_status" label="审核状态" align="center">
+          <template slot-scope="scope">
+            <el-tag effect="dark" v-if="scope.row.commit_status == 0" size="mini" type="warning">审核中</el-tag>
+            <el-tag effect="dark" v-if="scope.row.commit_status == 1" size="mini" type="success">审核通过</el-tag>
+            <el-tag effect="dark" v-if="scope.row.commit_status == 2" size="mini" type="danger">已驳回</el-tag>
+          </template>
+        </el-table-column>
         <el-table-column prop="create_time" label="上传时间" align="center">
         </el-table-column>
         <el-table-column prop="create_time" label="预览" align="center">

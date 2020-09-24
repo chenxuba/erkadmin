@@ -148,3 +148,42 @@ export function getCommitList(data) {
         params: data
     })
 }
+
+//审核通过 :id/commitStatus/1
+export function chenkOfcommitStatus1(id) {
+    return request({
+        url: `/course/${id}/commitStatus/1`,
+        method: 'put',
+    })
+}
+//审核驳回 :id/commitStatus/1
+export function chenkOfcommitStatus0(id, data) {
+    return request({
+        url: `/course/${id}/commitStatus/2`,
+        method: 'put',
+        data
+    })
+}
+//获取审核资源列表 video/commitList
+export function getVideoCommitList(data) {
+    return request({
+        url: "/video/commitList",
+        method: 'get',
+        params: data
+    })
+}
+//审核通过 :id/commitStatus/1
+export function chenkOfcommitStatus3(id) {
+    return request({
+        url: `/video/${id}/commitStatus/1`,
+        method: 'put',
+    })
+}
+//审核驳回 :id/commitStatus/1
+export function chenkOfcommitStatus4(id, data) {
+    return request({
+        url: `/video/${id}/commitStatus/2`,
+        method: 'put',
+        data
+    })
+}
