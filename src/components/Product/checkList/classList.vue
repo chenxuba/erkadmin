@@ -133,7 +133,8 @@ export default {
       total: 0,
       course_name: "",
       seleteTime: "",//选择时间筛选
-      checkFalseArr: [],
+      checkFalseArr: [],//已驳回的数组数据
+      checkLoadingArr: [],//审核中的数组数据
       videoUrl: "",
       dialogPreview: false,
       dialogVideo: {
@@ -188,6 +189,10 @@ export default {
           if (element.commit_status == 2) {
             this.checkFalseArr.push(element)
             this.$emit('badge2', this.checkFalseArr.length)
+          }
+          if (element.commit_status == 0) {
+            this.checkLoadingArr.push(element)
+            this.$emit('badge3', this.checkLoadingArr.length)
           }
         });
       }).catch(err => {
