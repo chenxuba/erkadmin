@@ -7,9 +7,11 @@
           <el-button type="warning" icon="el-icon-download" @click="unFoldAll">全部展开</el-button>
           <el-button type="success" icon="el-icon-upload2" @click="foldAll">全部收起</el-button>
           <el-button type="danger" icon="el-icon-refresh" @click="refresh">刷新</el-button>
+          <el-button type="danger" icon="el-icon-s-operation" @click="settingPrice">配置价格区间</el-button>
         </el-col>
       </el-row>
-      <el-table :data="tableData" v-loading="loading" style="width: 100%;margin-bottom: 20px;" row-key="id" border :tree-props="{children: 'children', hasChildren: 'hasChildren'}" :row-class-name="tableRowClassName" v-if="isShowTable">
+      <el-table :data="tableData" v-loading="loading" style="width: 100%;margin-bottom: 20px;" row-key="id" border
+                :tree-props="{children: 'children', hasChildren: 'hasChildren'}" :row-class-name="tableRowClassName" v-if="isShowTable">
         <el-table-column type="index" label="#" width="50">
         </el-table-column>
         <el-table-column prop="id" label="分类ID">
@@ -27,15 +29,22 @@
     </el-card>
     <!-- 添加分类弹窗 -->
     <Dialogcategory :Dialogcategory="Dialogcategory" :formData='formData' @addok='getcourseCategory'></Dialogcategory>
+    <!-- 价格区间配置弹窗 -->
+    <DialogPrice :dialogPrice='dialogPrice'></DialogPrice>
   </div>
 </template>
 
 <script>
-import { getcourseCategory,DelcourseCategory } from "@/api/product";
+import { getcourseCategory, DelcourseCategory } from "@/api/product";
+import DialogPrice from "@/components/Product/dialogPrice";
 export default {
   name: "category",
   data() {
     return {
+      dialogPrice: {
+        show: false,
+        title: ""
+      },
       Dialogcategory: {},
       formData: {},
       // 默认true
@@ -142,10 +151,10 @@ export default {
      */
     unFoldAll() {
       this.isShowTable = false
-      this.$nextTick(function () {
+      this.$nextTick(function() {
         this.isShowTable = true
         let _this = this
-        window.setTimeout(function () {
+        window.setTimeout(function() {
           _this.expandAll()
         }, 10)
       })
@@ -155,7 +164,7 @@ export default {
      */
     foldAll() {
       this.isShowTable = false
-      this.$nextTick(function () {
+      this.$nextTick(function() {
         this.isShowTable = true
       })
     },
@@ -171,14 +180,22 @@ export default {
       })
 
     },
+    //刷新
     refresh() {
       this.getcourseCategory()
+    },
+    //配置价格区间
+    settingPrice() {
+      this.dialogPrice = {
+        show: true,
+        title: '配置价格区间'
+      }
     }
 
   },
 
   watch: {
-    tableDate: function () {
+    tableDate: function() {
       this.$nextTick(() => {
         this.expandAll()
       })
@@ -188,6 +205,7 @@ export default {
     Dialogcategory: resolve => {
       require(['@/components/Product/category/Dialogcategory.vue'], resolve)
     },
+    DialogPrice
   },
   mounted() {
     this.getcourseCategory();

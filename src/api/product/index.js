@@ -187,3 +187,31 @@ export function chenkOfcommitStatus4(id, data) {
         data
     })
 }
+//获取价格区间 /prices
+export function getpricesQu(data) {
+    return request({
+        url: "/prices",
+        method: 'get',
+        params: data
+    })
+}
+export function addPricesQu(data) {
+    return request({
+        url: "/prices",
+        method: 'post',
+        params: data
+    })
+}
+export function editPricesQu(data, id) {
+    return request({
+        url: "/prices/" + id,
+        method: 'put',
+        params: data
+    })
+}
+export function delPricesQu(id) {
+    return request({
+        url: "/prices/" + id,
+        method: 'delete',
+    })
+}
