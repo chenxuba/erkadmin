@@ -101,13 +101,14 @@
             <el-radio label="2" :disabled="formData.payType != 1">免费
             </el-radio>
           </el-radio-group>
+          <el-tag size="mini" style="margin-left:30px;">VIP的权益不能超过SVIP的权益</el-tag>
         </el-form-item>
         <!-- svip折扣 is_svip -->
         <el-form-item label="SVIP折扣" prop="is_svip">
           <el-radio-group v-model="formData.is_svip">
-            <el-radio label="1" :disabled="formData.payType != 1">是
+            <el-radio label="1" :disabled="formData.payType != 1 || isDiscount">是
             </el-radio>
-            <el-radio label="0">否</el-radio>
+            <el-radio label="0" :disabled="isDiscount || svipFalse">否</el-radio>
             <el-radio label="2" :disabled="formData.payType != 1">免费
             </el-radio>
           </el-radio-group>
@@ -230,6 +231,8 @@ import { getcourseCategory, getTeachersList, getCourseDetail, editCourse } from 
 export default {
   data() {
     return {
+      isDiscount: false,
+      svipFalse: false,
       weekType: this.$route.query.weekType,
       id: this.$route.params.id,
       showProview: true,
@@ -518,7 +521,23 @@ export default {
       if (this.formData.content != '') {
         this.$refs.content.clearValidate()
       }
-    }
+    },
+    'formData.is_vip'() {
+      if (this.formData.is_vip == 1) {
+        this.formData.is_svip = '1'
+        this.isDiscount = false
+        this.svipFalse = true
+      }
+      if (this.formData.is_vip == 2) {
+        this.formData.is_svip = '2'
+        this.isDiscount = true
+        this.svipFalse = false
+      }
+      if (this.formData.is_vip == 0) {
+        this.isDiscount = false
+        this.svipFalse = false
+      }
+    },
   },
 }
 </script>
