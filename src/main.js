@@ -59,10 +59,10 @@ Vue.directive('permission', {
     }
 })
 
+Vue.component('pagination', () => import('@/components/Common/pagination'))
 
 // set ElementUI lang to EN
 // Vue.use(ElementUI, { locale })
-
 Vue.use(ElementUI, {
     size: Cookies.get('size') || 'small' // set element-ui default size
 })
@@ -71,7 +71,8 @@ Vue.use(ElementUI, {
 // 点击复制插件
 import Clipboard from 'v-clipboard'
 Vue.use(Clipboard)
-
+// filters
+import './filters'
 Vue.config.productionTip = false
 
 new Vue({

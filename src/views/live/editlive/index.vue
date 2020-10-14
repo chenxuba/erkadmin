@@ -1,235 +1,267 @@
 <template>
-  <div class="main">
-    <el-card style="margin-top: 10px;">
-      <el-form ref="form" :model="formData" :rules="rules"  label-width="100px">
-        <!-- 直播名称 -->
-        <el-form-item label="直播名称" prop="menu">
-          <el-input v-model="formData.title" placeholder='请输入直播间名称' style="width: 500px;" />
-        </el-form-item>
-        <!-- 封面图 -->
-        <el-form-item label="封面图" prop="imgUrl">
-          <el-upload class="avatar-uploader" action="http://aoaoe.ybc365.com/api/upImg" :show-file-list="false" :name="key" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" :on-progress='onProgress'>
-            <img v-if="formData.imgUrl" :src="formData.imgUrl" class="imgUrl">
-            <el-button v-else >点击上传<i class="el-icon-upload el-icon--right"></i></el-button>
-            <span class="tishi block">建议尺寸《750*460》</span>
-            <el-progress v-show="imgFlag == true" :percentage="percent"></el-progress>
-          </el-upload>
-        </el-form-item>
-        <!-- 直播简介 -->
-        <el-form-item label="直播简介" prop="title">
-          <el-input v-model="formData.title" placeholder='请输入直播简介' style="width: 500px;" />
-          <span class="tishi">请输入直播简介</span>
-        </el-form-item>
-        <!-- 直播开始时间 -->
-        <el-form-item label="直播开始时间" prop="guize">
-          <el-date-picker v-model="value1" type="datetimerange" start-placeholder="开始时间" end-placeholder="结束时间" :default-time="['12:00:00']">
-          </el-date-picker>
-          <span class="tishi">直播开始结束时间;结束时间设定后,时间到期直播会自动结束</span>
-        </el-form-item>
-        <!-- 支付方式 -->
-        <el-form-item label="支付方式" prop="is_up">
-          <el-radio v-model="formData.is_up" label="1">付费
-            <el-input-number v-if="formData.is_up == 1" v-model.number="formData.sort" placeholder='请填写价格' :min="0" controls-position="right" style="width: 200px;" />
-          </el-radio>
-          <el-radio v-model="formData.is_up" label="2">免费</el-radio>
-          <el-radio v-model="formData.is_up" label="3">密码
-            <el-input v-if="formData.is_up == 3" v-model="formData.sort" placeholder='请填写密码' :min="0" style="width: 200px;" />
-          </el-radio>
-        </el-form-item>
-        <!-- 划线价格 -->
-        <el-form-item label="划线价格" prop="menu">
-          <el-input-number v-model.number="formData.sort" placeholder='请填写划线价格' :min="0" controls-position="right" style="width: 200px;" />
-        </el-form-item>
-        <!-- 引导文字 -->
-        <el-form-item label="引导文字" prop="menu">
-          <el-input v-model="formData.title" placeholder='请输入引导文字' style="width: 500px;" />
-          <span class="tishi">直播详情界面引导文字;15字以内效果更好</span>
-        </el-form-item>
-        <!-- 引导图片 -->
-        <el-form-item label="引导图片" prop="imgUrl">
-          <el-upload class="avatar-uploader" action="http://aoaoe.ybc365.com/api/upImg" :show-file-list="false" :name="key" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" :on-progress='onProgress'>
-            <img v-if="formData.imgUrl" :src="formData.imgUrl" class="imgUrl">
-            <el-button v-else >点击上传<i class="el-icon-upload el-icon--right"></i></el-button>
-            <span class="tishi block">建议上传正方形二维码</span>
-            <el-progress v-show="imgFlag == true" :percentage="percent"></el-progress>
-          </el-upload>
-        </el-form-item>
-        <!-- 虚拟观看人数 -->
-        <el-form-item label="虚拟人数" prop="menu">
-          <el-input-number v-model.number="formData.sort" placeholder='请填写虚拟人数' :min="0" controls-position="right" style="width: 200px;" />
-          <span class="tishi">划线价格;可以不填,不填默认不显示</span>
-        </el-form-item>
-        <!-- 排序 -->
-        <el-form-item label="排序" prop="menu">
-          <el-input-number v-model.number="formData.sort" placeholder='请排序' :min="0" controls-position="right" style="width: 200px;" />
-        </el-form-item>
-
-        <!-- 是否支持回看 -->
-        <el-form-item label="是否可回看" prop="is_up">
-          <el-radio v-model="formData.is_up" label="1">是</el-radio>
-          <el-radio v-model="formData.is_up" label="2">否</el-radio>
-        </el-form-item>
-        <!-- 是否上架 -->
-        <el-form-item label="是否上架" prop="is_up">
-          <el-radio v-model="formData.is_up" label="1">是</el-radio>
-          <el-radio v-model="formData.is_up" label="2">否</el-radio>
-        </el-form-item>
-        <!-- 打赏开关 -->
-        <el-form-item label="打赏开关" prop="is_up">
-          <el-radio v-model="formData.is_up" label="1">开</el-radio>
-          <el-radio v-model="formData.is_up" label="2">关</el-radio>
-        </el-form-item>
-        <!-- 直播详情 -->
-        <div class="wrap">
-          <el-form-item label="直播详情" prop="guize">
-            <div class="ueditor">
-              <!-- <vue-ueditor-wrap v-model="msg" :config="myConfig"></vue-ueditor-wrap> -->
-                  <!-- <Ueditor @change='changeContent'></Ueditor> -->
-            </div>
-            <div class="box">
-              <div v-html="msg"></div>
-            </div>
-          </el-form-item>
-        </div>
-
-        <el-form-item>
-          <el-button type="primary"  style="width:200px" @click="submitForm('form')">确认提交</el-button>
-        </el-form-item>
-      </el-form>
+  <div class="main" style="margin:10px;">
+    <el-card>
+      <el-row>
+        <el-col :span="14">
+          <el-form ref="form" :rules="rules" :model="form" label-width="100px">
+            <!-- 直播名称 -->
+            <el-form-item label="直播名称" prop="name">
+              <el-input v-model="form.name" style="width:70%;" placeholder="请输入直播间名称"></el-input>
+            </el-form-item>
+            <!-- 直播简介 -->
+            <el-form-item label="直播简介" prop="desc">
+              <el-input type="textarea" v-model="form.desc" style="width:70%;" placeholder="请输入直播间简介"></el-input>
+            </el-form-item>
+            <!-- 开播时间 -->
+            <el-form-item label="开播时间" prop="time">
+              <el-date-picker v-model="form.time" style="width:70%;" value-format="yyyy-MM-dd HH:mm:ss" format="yyyy-MM-dd HH:mm:ss"
+                              :picker-options="expireTimeOption" :default-time="['12:00:00', '08:00:00']" type="datetimerange" range-separator="至"
+                              start-placeholder="开始时间" end-placeholder="结束时间">
+              </el-date-picker>
+            </el-form-item>
+            <!-- 封面图 course_thumb -->
+            <uploadImage @uploadSuccessImg='uploadSuccessImg' accept='image/*' ref="thumb" checking='thumb' name='直播封面'></uploadImage>
+            <el-form-item v-if="showImg1">
+              <img :src="form.thumb" alt="" width="120" height="60" style="object-fit: cover;">
+            </el-form-item>
+            <!-- 支付方式 -->
+            <el-form-item label="支付方式">
+              <el-radio-group v-model="form.pay_type">
+                <el-radio :label="1">付费</el-radio>
+                <el-radio :label="2">免费</el-radio>
+                <el-radio :label="0">密码</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <!-- 输入框 -->
+            <el-form-item label="收费价格" v-if='form.pay_type == 1' prop="price">
+              <el-input-number v-model="form.price" style="width:25%;" :precision="2" :min="1" controls-position="right" placeholder="请输入价格">
+              </el-input-number>
+            </el-form-item>
+            <el-form-item label="房间密码" v-if='form.pay_type == 3' prop="pwd">
+              <el-input v-model="form.pwd" onkeyup="value=value.replace(/[^\d]/g,'')" style="width:40%;" :maxlength="8" placeholder="请输入8位内的数字密码">
+              </el-input>
+            </el-form-item>
+            <!-- 划线价格 -->
+            <el-form-item label="划线价格" v-if='form.pay_type != 3' prop="line_price">
+              <el-input-number v-model="form.line_price" style="width:25%;" :min="0" controls-position="right" placeholder="请输入划线价格">
+              </el-input-number>
+            </el-form-item>
+            <!-- 引导文字 -->
+            <el-form-item label="引导文字">
+              <el-input v-model="form.text" style="width:50%;" placeholder="请输入15个字符内的引导文字" :maxlength="15"></el-input>
+            </el-form-item>
+            <!-- 导师二维码 wxcode_img-->
+            <uploadImage @uploadSuccessImg='uploadSuccessQrImg' accept='image/*' ref="wxcode_img" checking='wxcode_img' name='二维码上传'></uploadImage>
+            <el-form-item v-if="showImg2">
+              <img :src="form.wxcode_img" alt="" width="100" height="100" style="object-fit: cover;">
+            </el-form-item>
+            <!-- 打赏开关 -->
+            <el-form-item label="打赏开关">
+              <el-radio-group v-model="form.off">
+                <el-radio :label="1">开</el-radio>
+                <el-radio :label="2">关</el-radio>
+              </el-radio-group>
+            </el-form-item>
+            <!-- 虚拟人数 -->
+            <el-form-item label="虚拟人数" prop="falseNum">
+              <el-input-number v-model="form.falseNum" style="width:25%;" :min="0" controls-position="right" placeholder="请输入虚拟人数">
+              </el-input-number>
+            </el-form-item>
+            <!-- 排序 -->
+            <el-form-item label="排序" prop="sort">
+              <el-input-number v-model="form.sort" style="width:25%;" controls-position="right" placeholder="请输入排序序号">
+              </el-input-number>
+            </el-form-item>
+          </el-form>
+        </el-col>
+        <el-col :span="10">
+          <div class="ueditor">
+            <p>直播详情</p>
+            <VueUeditorWrap v-model="form.content" :config="myConfig"></VueUeditorWrap>
+          </div>
+        </el-col>
+      </el-row>
+      <div class="btn" style="text-align:center;padding:50px 0;">
+        <el-button type="success" @click="hanldSubmit('form')">确认提交</el-button>
+        <el-button type="danger">重置表单</el-button>
+      </div>
     </el-card>
   </div>
 </template>
 
 <script>
-// import VueUeditorWrap from 'vue-ueditor-wrap'
+import VueUeditorWrap from 'vue-ueditor-wrap'
+import uploadImage from "@/components/Common/uploadImage";
+import { getLivetDetail, putLivetDetail } from "@/api/live";
 export default {
   data() {
     return {
-      value: "",
-      value1: "",
-      msg: "",
-     
-      props: {
-        value: "id",
+      showImg1: true,
+      showImg2: true,
+      id: this.$route.params.id,
+      expireTimeOption: {
+        disabledDate(date) {
+          //disabledDate 文档上：设置禁用状态，参数为当前日期，要求返回 Boolean
+          return date.getTime() < Date.now() - 24 * 60 * 60 * 1000;
+        }
       },
-      key: 'file',
-      imgFlag: false,
-      percent: 0,
-      formData: {
-        imgUrl: "",
+      form: {
+        name: '',
+        desc: "",
+        time: "",
+        thumb: "",
+        content: "",
+        price: 1,
+        line_price: 0,
+        falseNum: 0,
+        sort: 0,
+        off: 0,//打赏开关
+        pay_type: 1,//支付方式
       },
+      myConfig: {
+        toolbars: [
+          [
+            'fullscreen',//全屏
+            'source',//源码
+            'undo', //撤销
+            'redo', //前进
+            'bold', //加粗
+            'fontsize', //字号
+            'justifyleft', //居左对齐
+            'justifycenter', //居中对齐
+            'justifyright', //居右对齐
+            'insertimage',
+          ]
+        ],
+        // 编辑器不自动被内容撑高
+        autoHeightEnabled: false,
+        // 初始容器高度
+        initialFrameHeight: 460,
+        // 初始容器宽度
+        initialFrameWidth: '100%',
+        // 上传文件接口（这个地址是我为了方便各位体验文件上传功能搭建的临时接口，请勿在生产环境使用！！！）
+        serverUrl: 'https://muyue.ybc365.com/newadmin/UEditor/php/controller.php',
+        // UEditor 资源文件的存放路径，如果你使用的是 vue-cli 生成的项目，通常不需要设置该选项，vue-ueditor-wrap 会自动处理常见的情况，如果需要特殊配置，参考下方的常见问题2
+        // UEDITOR_HOME_URL: '/newadmin/UEditor/'
+        UEDITOR_HOME_URL: process.env.NODE_ENV == 'development' ? '/UEditor/' : '/newadmin/UEditor/'
+        // UEDITOR_HOME_URL: '/UEditor/'
+      },//编辑器配置
       rules: {
-        menu: [{ required: true, message: '请选择课件分类', trigger: 'blur' }],
-        title: [{ required: true, message: '请输入课程名称', trigger: 'blur' }],
-        desc: [{ required: true, message: '请输入课程简介', trigger: 'blur' }],
-        imgUrl: [{ required: true, message: '请上传封面图', trigger: 'blur' }],
-        sort: [{ required: true, message: '请排序', trigger: 'blur' }],
-        is_up: [{ required: true, message: '请选择是否上下架', trigger: 'blur' }],
-        type: [{ required: true, message: '请选择资源类型', trigger: 'blur' }],
-        teacher: [{ required: true, message: '请选择所属导师', trigger: 'blur' }],
-        video: [{ required: true, message: '请选择所属导师', trigger: 'blur' }],
-      },
+        name: [{ required: true, message: '不能为空', trigger: 'blur' }],
+        desc: [{ required: true, message: '不能为空', trigger: 'blur' }],
+        time: [{ required: true, message: '不能为空', trigger: 'blur' }],
+        pwd: [{ required: true, message: '不能为空', trigger: 'blur' }],
+        text: [{ required: true, message: '不能为空', trigger: 'blur' }],
+        falseNum: [{ required: true, message: '不能为空', trigger: 'blur' }],
+        sort: [{ required: true, message: '不能为空', trigger: 'blur' }],
+        price: [{ required: true, message: '不能为空', trigger: 'blur' }],
+        line_price: [{ required: true, message: '不能为空', trigger: 'blur' }],
+        content: [{ required: true, message: '不能为空', trigger: 'blur' }],
+      }
     }
   },
+  components: {
+    VueUeditorWrap,
+    uploadImage,
+  },
   methods: {
-    //上传封面图成功回调
-    handleAvatarSuccess(res, file, fileList) {
-      this.imgFlag = false;
-      this.percent = 0;
-      this.formData.imgUrl = res.data.url;
-    },
-    // 上传封面图前校验
-    beforeAvatarUpload(file) {
-      const isJPG = file.type === 'image/jpeg';
-      const isPNG = file.type === 'image/png';
-      const isLt2M = file.size / 1024 / 1024 < 2;
-
-      if (!isJPG && !isPNG) {
-        this.$message.error('上传图片只能是JPG或者PNG格式!');
-      }
-      if (!isLt2M) {
-        this.$message.error('上传图片大小不能超过 2MB!');
-      }
-      return (isJPG || isPNG) && isLt2M;
-    },
-    // 上传中的钩子
-    onProgress(event, file, fileList) {
-      console.log(file);
-      this.imgFlag = true;
-      console.log(event.percent);
-      this.percent = Math.floor(event.percent);
-    },
-    //提交表单
-    submitForm(formName) {
+    //确认提交
+    hanldSubmit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.formData);
-
+          if (this.form.content == '') {
+            this.$message.error('请完善直播详情')
+          } else if (this.form.thumb == '') {
+            this.$message.error('请上传封面图')
+          } else {
+            putLivetDetail({
+              broadcast_name: this.form.name,
+              broadcast_desc: this.form.desc,
+              broadcast_content: this.form.content,
+              broadcast_img: this.form.thumb,
+              support: 1,
+              broadcast_sort: this.form.sort,
+              broadcast_price: this.form.price,
+              is_admission: this.form.pay_type,
+              encryption: this.form.pwd,
+              munber: this.form.falseNum,
+              start_time: new Date(this.form.time[0]).getTime() / 1000,
+              end_time: new Date(this.form.time[1]).getTime() / 1000,
+              guide_text: this.form.text,
+              guide_img: this.form.wxcode_img,
+              guide_text: this.form.text,
+              line_price: this.form.line_price
+            }, this.id).then(res => {
+              this.$message.success('修改成功！')
+              this.$store.dispatch('tagsView/delView', this.$route); //关闭当前tabview
+              this.$router.go(-1)
+            })
+          }
         } else {
           console.log('error submit!!');
           return false;
         }
       });
     },
-    handleChange() { },
-    changeContent(v){
-      this.msg = v
+    //图片上传成功回调
+    uploadSuccessImg(url) {
+      this.form.thumb = url
+      this.showImg1 = false
+      this.$refs.thumb.$refs.imgUrl.clearValidate() //上传成功后去除校验
+    },
+    //引导二维码回调
+    uploadSuccessQrImg(url) {
+      this.form.wxcode_img = url
+      this.showImg2 = false
+      this.$refs.wxcode_img.$refs.imgUrl.clearValidate() //上传成功后去除校验
+    },
+    //获取直播间详情
+    getLivetDetail() {
+      getLivetDetail(this.id).then(res => {
+        this.form.name = res.data.broadcast_name
+        this.form.content = res.data.broadcast_content
+        this.form.desc = res.data.broadcast_desc
+        this.form.time = [this.$formatDate(res.data.start_time * 1000, 'yyyy-MM-dd hh:mm:ss'), this.$formatDate(res.data.end_time * 1000, 'yyyy-MM-dd hh:mm:ss')]
+        this.form.thumb = res.data.broadcast_img
+        this.form.pay_type = res.data.is_admission
+        this.form.line_price = res.data.line_price
+        this.form.falseNum = res.data.munber
+        this.form.sort = res.data.broadcast_sort
+        this.form.text = res.data.guide_text
+        this.form.wxcode_img = res.data.guide_img
+        this.form.off = res.data.is_reward
+      })
     }
   },
-  components: {
-    // VueUeditorWrap
-    //  Ueditor: resolve => {
-    //   require(['@/components/Ueditor/index'], resolve)
-    // },
+  mounted() {
+    this.getLivetDetail();
+  },
+  watch: {
+    'form.pay_type'(newValue, oldValue) {
+      if (this.form.pay_type != 1) {
+        this.form.price = ''
+      }
+      if (this.form.pay_type != 3) {
+        this.form.pwd = ''
+      } else {
+        this.form.line_price = ''
+      }
+    }
+
   },
 }
 </script>
+
 <style lang="scss" scoped>
-.main {
-  margin: 10px;
-  .tishi {
-    color: #999;
-    font-size: 12px;
-    margin-left: 10px;
-    margin-right: 15px;
-  }
-  .imgUrl {
-    width: 150px;
-    height: 80px;
-  }
-  .wrap {
-    width: 100%;
-    position: relative;
-  }
-  .ueditor {
-    width: 80%;
-  }
-  .box {
-    width: 375px;
-    height: 750px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    background: url("http://erkong.ybc365.com/0211120200624132601137.png");
-    background-size: 100% 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    transform: scale(0.7);
-    margin-top: -100px;
-    > div {
-      height: 660px;
-      width: 375px;
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding: 0 25px;
-      box-sizing: border-box;
-      transform: scale(0.95);
-      &::-webkit-scrollbar {
-        display: none;
-      }
-    }
+.ueditor {
+  width: 70%;
+  p {
+    text-align: center;
+    background: #82d7d5;
+    color: #fff;
+    padding: 5px 0;
+    margin-bottom: 10px;
+    border-radius: 2px;
   }
 }
 </style>

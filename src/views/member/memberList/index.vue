@@ -8,13 +8,14 @@
             <!-- 输入用户名称搜索 -->
             <el-input clearable placeholder="输入用户名称搜索" v-model="searchName" style="width: 150px;" class="filter-item" />
             <!-- 是否绑定手机号 -->
-            <el-select v-model="teacher" placeholder="是否绑定手机号" clearable @clear='clear' @change='changePhone'>
+            <el-select v-model="teacher" style="margin:0 10px;" placeholder="是否绑定手机号" clearable @clear='clear' @change='changePhone'>
               <el-option v-for="item in teacherArr" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
-            <el-date-picker :default-time="['00:00:00','23:59:59']" type="daterange" range-separator=":" class="date-item" value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
+            <el-date-picker :default-time="['00:00:00','23:59:59']" type="daterange" range-separator=":" class="date-item"
+                            value-format="yyyy-MM-dd HH:mm:ss" start-placeholder="开始日期" end-placeholder="结束日期" />
             <!-- 输入手机号码搜索 -->
-            <el-input clearable placeholder="输入手机号码搜索" style="width: 150px;" class="filter-item" />
+            <el-input clearable placeholder="输入手机号码搜索" style="width: 150px;margin:0 10px;" class="filter-item" />
             <!-- 请选择用户状态 -->
             <el-select v-model="teacher" placeholder="请选择用户状态">
               <el-option v-for="item in teacherArr" :key="item.value" :label="item.label" :value="item.value">
@@ -30,10 +31,10 @@
         </el-form>
       </div>
       <!-- 表格渲染 -->
-      <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" style='margin-top: 10px;'>
+      <el-col style='margin-top: 10px;'>
         <!--表格渲染-->
         <el-card style="margin:10px 0;">
-          <el-table ref="table" :data="data" style="width: 100%;" v-loading="loading" height="395">
+          <el-table ref="table" :data="data" style="width: 100%;" v-loading="loading" :max-height="tableHeight">
             <!-- 用户名称 nickname -->
             <el-table-column :show-overflow-tooltip="true" prop="nickname" label="用户名称" align="center" />
             <!-- 手机号 -->
@@ -93,7 +94,8 @@
           </el-table>
           <!--分页-->
           <div class="fenye" style="margin-top:20px;">
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 30, 40]" :page-size="page_size" layout="total, prev, pager, next,sizes" :total="total">
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :page-sizes="[10, 20, 30, 40]" :page-size="page_size"
+                           layout="total, prev, pager, next,sizes" :total="total">
             </el-pagination>
           </div>
         </el-card>
@@ -107,6 +109,7 @@ import { getmemberList } from "@/api/member";
 export default {
   data() {
     return {
+      tableHeight: document.documentElement.clientHeight - 330 || document.body.clientHeight - 330,
       loading: true,
       searchName: "",
       teacher: "",
@@ -165,7 +168,7 @@ export default {
           type: 'success',
           message: '导出成功!'
         });
-        window.location.href = process.env.VUE_APP_BASE_API + '/members/export?page_size=99999'
+        window.location.href = process.env.VUE_APP_BASE_API + '/members/export'
       }).catch(() => {
         this.$message({
           type: 'info',
