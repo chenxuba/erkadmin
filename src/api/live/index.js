@@ -122,3 +122,11 @@ export function putConfig(data) {
         data
     })
 }
+// 禁用用户  /broadcast/scene/14/status/0
+export function putscenestatus(id, type, data) {
+    return request({
+        url: `/broadcast/scene/${id}/status/${type}`,
+        method: 'put',
+        data
+    })
+}

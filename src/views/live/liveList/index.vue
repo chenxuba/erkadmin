@@ -102,7 +102,7 @@
     </el-card>
 
     <!-- 会员列表 -->
-    <el-dialog title="会员列表" :visible.sync="dialogViplist" width="60%">
+    <el-dialog title="会员列表" :visible.sync="dialogViplist" width="60%" @close='memberCloseFun'>
       <el-table :data="LiveMemberList" style="width: 100%;margin-top:10px;" v-loading='loading'>
         <el-table-column prop="nickname" label="会员昵称" align="center">
         </el-table-column>
@@ -116,7 +116,7 @@
         </el-table-column>
         <el-table-column prop="disabled" label="状态" align="center">
           <template slot-scope="scope">
-            <el-switch disabled v-model="scope.row.disabled" :active-value="1" :inactive-value="0">
+            <el-switch disabled v-model="scope.row.disabled" @click.native="changeMember(scope.row)" disabled :active-value="1" :inactive-value="0">
             </el-switch>
           </template>
         </el-table-column>
@@ -130,7 +130,7 @@
       </span>
     </el-dialog>
     <!-- 直播带货 -->
-    <el-dialog title="直播带货" :visible.sync="dialogShoplist" width="70%">
+    <el-dialog title="直播带货" :visible.sync="dialogShoplist" width="70%" @close='memberCloseFun'>
       <!--工具栏-->
       <div class="head-container1" style="margin: -20px 0 10px 0;">
         <div>
@@ -183,7 +183,7 @@
       </span>
     </el-dialog>
     <!-- 直播配置 -->
-    <el-dialog title="直播配置" :visible.sync="dialogLiveConfig" style="padding-bottom:30px;" width="60%">
+    <el-dialog title="直播配置" :visible.sync="dialogLiveConfig" @close='memberCloseFun' style="padding-bottom:30px;" width="60%">
       <el-collapse accordion>
         <el-collapse-item>
           <template slot="title">
@@ -269,7 +269,7 @@
       </span>
     </el-dialog>
     <!-- 导师助教 -->
-    <el-dialog title="导师助教" :visible.sync="dialogTealist" width="60%">
+    <el-dialog title="导师助教" :visible.sync="dialogTealist" @close='memberCloseFun' width="60%">
       <el-table :data="tableTealist" style="width: 100%;margin-top:10px;">
         <el-table-column prop="img" label="头像" align="center">
           <template slot-scope="scope">
@@ -339,7 +339,7 @@
 </template>
 
 <script>
-import { getLivetList, shenheLive, delRoom, getInfo, getLiveConfig, getLiveMemberList, getLiveGoods, putliveWithGoods, getLiveGuests, getmemberList, putliveWithGuest } from "@/api/live";
+import { getLivetList, shenheLive, delRoom, getInfo, putscenestatus, getLiveConfig, getLiveMemberList, getLiveGoods, putliveWithGoods, getLiveGuests, getmemberList, putliveWithGuest } from "@/api/live";
 import vueQr from 'vue-qr'
 export default {
   data() {
@@ -670,6 +670,27 @@ export default {
     //移除
     deleteRow(row, index) {
       this.tableTealist.splice(index, 1)
+    },
+    memberCloseFun() {
+      this.getLivetList()
+    },
+    changeMember(row) {
+      if (row.disabled == 1) {
+        putscenestatus(this.liveId, 0, { scene: 'member', scene_member_id: row.member_id }).then(res => {
+          getLiveMemberList(this.liveId, { page: this.page, page_size: this.page_size }).then(res => {
+            this.LiveMemberList = res.data.list
+            this.total = res.data.count
+          })
+        })
+      } else {
+        putscenestatus(this.liveId, 1, { scene: 'member', scene_member_id: row.member_id }).then(res => {
+          getLiveMemberList(this.liveId, { page: this.page, page_size: this.page_size }).then(res => {
+            this.LiveMemberList = res.data.list
+            this.total = res.data.count
+          })
+        })
+      }
+
     }
   },
   mounted() {
