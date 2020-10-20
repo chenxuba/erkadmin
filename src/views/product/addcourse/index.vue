@@ -81,7 +81,7 @@
                                controls-position="right" style="width: 200px;" />
             </el-radio>
             <el-radio label="2">免费</el-radio>
-            <el-radio label="3">密码
+            <el-radio label="3" :disabled="weekType == 'week'">密码
               <el-input v-if="formData.payType == 3" v-model="formData.code" placeholder='请填写密码(六位以内字符或数字组合)' maxlength="6" style="width: 260px;" />
             </el-radio>
           </el-radio-group>

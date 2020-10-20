@@ -48,7 +48,9 @@
             <el-table-column :show-overflow-tooltip="true" prop="broadcast_sort" label="排序" width="55" align="center" />
             <el-table-column :show-overflow-tooltip="true" prop="broadcast_status" label="状态" align="center">
               <template slot-scope="scope">
-                <el-tag size="mini" v-if="scope.row.broadcast_status">回播中</el-tag>
+                <el-tag size="mini" v-if="scope.row.live_status == 0">即将直播</el-tag>
+                <el-tag size="mini" v-if="scope.row.live_status == 1">直播中</el-tag>
+                <el-tag size="mini" v-if="scope.row.live_status == 2">直播结束</el-tag>
               </template>
             </el-table-column>
             <el-table-column :show-overflow-tooltip="true" prop="teacher_name" label="直播归属" align="center" />
@@ -674,6 +676,7 @@ export default {
     memberCloseFun() {
       this.getLivetList()
     },
+    //禁用用户
     changeMember(row) {
       if (row.disabled == 1) {
         putscenestatus(this.liveId, 0, { scene: 'member', scene_member_id: row.member_id }).then(res => {
