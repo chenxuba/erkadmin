@@ -61,7 +61,6 @@ export function getquestionnaire(data) {
   return request({
     url: "/study/questionnaire",
     method: 'get',
-    params:data
-    // data
+    params:data,
   })
 }
