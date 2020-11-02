@@ -2,6 +2,7 @@
   <div class="main" style="margin:10px;">
     <el-card>
       <el-row>
+        <!-- 2 -->
         <el-col :span="14">
           <el-form ref="form" :rules="rules" :model="form" label-width="100px">
             <!-- 直播名称 -->
